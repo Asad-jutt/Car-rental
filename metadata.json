@@ -1,0 +1,6 @@
+{
+  "name": "Kinetic Hypercar Fleet",
+  "description": "Architectural luxury hypercar rental atelier and logistics fleet dispatch.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

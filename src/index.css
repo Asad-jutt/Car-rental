@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-headline: 'Unbounded', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-editorial: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  [data-font-preset="unbounded"] {
+    --font-headline: 'Unbounded', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-editorial: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  [data-font-preset="syncopate"] {
+    --font-headline: 'Syncopate', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-editorial: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  [data-font-preset="chakra"] {
+    --font-headline: 'Chakra Petch', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-editorial: 'JetBrains Mono', monospace;
+  }
+
+  [data-font-preset="syne"] {
+    --font-headline: 'Syne', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-editorial: 'JetBrains Mono', monospace;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #0e0e0e;
+    color: #e2e2e2;
+    font-family: var(--font-mono);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0e0e0e;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ff5a00;
+  }
+}
+
+.font-headline {
+  font-family: var(--font-headline);
+}
+
+.font-mono-tech {
+  font-family: var(--font-mono);
+}
+
+.font-editorial {
+  font-family: var(--font-editorial);
+}
