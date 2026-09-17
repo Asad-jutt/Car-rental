@@ -3,7 +3,7 @@ import { PROTOCOL_STEPS } from '../data/fleetData';
 ---
 
 <section class="w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="protocol">
-  <div class="max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 py-10 sm:py-14 lg:py-16">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-10 sm:py-14 lg:py-16">
     {/* Header Block */}
     <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-[#1f1f1f]">
       <div>
@@ -23,7 +23,7 @@ import { PROTOCOL_STEPS } from '../data/fleetData';
     </div>
 
     {/* 4-Step Technical Linear Flow */}
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-0 border border-[#1f1f1f] bg-[#1f1f1f]">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-px overflow-hidden border border-[#1f1f1f] bg-[#1f1f1f]">
       {PROTOCOL_STEPS.map((step) => (
         <div
           class="p-5 sm:p-6 bg-[#0e0e0e] flex flex-col justify-between group hover:bg-[#141414] transition-colors relative"

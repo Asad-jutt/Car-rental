@@ -5,14 +5,14 @@ import { BRAND_LOGO } from '../data/fleetData';
 <header class="fixed top-0 left-0 right-0 z-50 select-none bg-[#0e0e0e]/80 supports-[backdrop-filter]:bg-[#0e0e0e]/45 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.45)]">
   <div class="h-12 w-full max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 flex items-center justify-between gap-3">
     {/* Left: Brand Identity */}
-    <div class="flex items-center gap-3 shrink-0">
-      <a href="#hero" class="flex items-center gap-3 group">
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
+      <a href="#hero" class="flex items-center gap-2 sm:gap-3 group min-w-0">
         <img
           alt="KINETIC Brand Mark"
-          class="h-7 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+          class="h-6 sm:h-7 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
           src={BRAND_LOGO}
         />
-        <span class="font-headline text-xl sm:text-2xl font-black uppercase tracking-tight text-[#e2e2e2]">
+        <span class="font-headline text-lg sm:text-xl xl:text-2xl font-black uppercase tracking-tight text-[#e2e2e2]">
           KINETIC
         </span>
       </a>
@@ -23,11 +23,12 @@ import { BRAND_LOGO } from '../data/fleetData';
       </span>
     </div>
 
-    {/* Center: Navigation Stages */}
-    <nav class="hidden xl:flex items-center h-full">
+{/* Center: Navigation */}
+    <nav class="hidden xl:flex items-center h-full" aria-label="Primary">
       <a
         href="#hero"
         data-nav="hero"
+        aria-current="false"
         class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
       >
         STAGE 01 // HOME
@@ -35,6 +36,7 @@ import { BRAND_LOGO } from '../data/fleetData';
       <a
         href="#inventory"
         data-nav="inventory"
+        aria-current="false"
         class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
       >
         STAGE 02 // OUR FLEET
@@ -42,6 +44,7 @@ import { BRAND_LOGO } from '../data/fleetData';
       <a
         href="#protocol"
         data-nav="protocol"
+        aria-current="false"
         class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
       >
         STAGE 03 // HOW IT WORKS
@@ -49,6 +52,7 @@ import { BRAND_LOGO } from '../data/fleetData';
       <a
         href="#tiers"
         data-nav="tiers"
+        aria-current="false"
         class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
       >
         STAGE 04 // PRICING
@@ -73,16 +77,19 @@ import { BRAND_LOGO } from '../data/fleetData';
       <button
         type="button"
         data-open-modal
-        class="w-7 h-7 bg-[#ff5a00] hover:bg-white text-black font-bold flex items-center justify-center transition-colors"
+        class="h-7 px-2.5 sm:px-3 bg-[#ff5a00] hover:bg-white text-black font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-wider flex items-center justify-center transition-colors whitespace-nowrap"
         title="Open Booking Modal"
       >
-        <span class="material-symbols-outlined text-sm">calendar_today</span>
+        BOOKING
       </button>
 
       {/* Mobile Menu Button */}
       <button
         type="button"
         data-mobile-toggle
+        aria-label="Toggle navigation menu"
+        aria-controls="mobile-drawer"
+        aria-expanded="false"
         class="xl:hidden w-7 h-7 border border-[#1f1f1f] bg-[#1b1b1b] flex items-center justify-center text-[#e2e2e2]"
       >
         <span data-mobile-icon class="material-symbols-outlined text-sm">menu</span>
@@ -91,7 +98,7 @@ import { BRAND_LOGO } from '../data/fleetData';
   </div>
 
   {/* Mobile Drawer */}
-  <div data-mobile-drawer class="hidden xl:hidden bg-[#111]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 p-4 font-mono text-xs space-y-2">
+  <nav data-mobile-drawer aria-label="Mobile navigation" class="hidden xl:hidden bg-[#111]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 p-4 font-mono text-xs space-y-2">
     <a href="#hero" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
       STAGE 01 // HOME
     </a>
@@ -104,7 +111,7 @@ import { BRAND_LOGO } from '../data/fleetData';
     <a href="#tiers" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
       STAGE 04 // PRICING
     </a>
-  </div>
+  </nav>
 </header>
 
 <style is:global>
@@ -123,11 +130,13 @@ import { BRAND_LOGO } from '../data/fleetData';
   mobileToggle?.addEventListener('click', () => {
     const isOpen = !!(mobileDrawer && !mobileDrawer.classList.contains('hidden'));
     mobileDrawer?.classList.toggle('hidden', isOpen);
+    mobileToggle.setAttribute('aria-expanded', String(!isOpen));
     if (mobileIcon) mobileIcon.textContent = isOpen ? 'menu' : 'close';
   });
   document.querySelectorAll('[data-mobile-close]').forEach((link) =>
     link.addEventListener('click', () => {
       mobileDrawer?.classList.add('hidden');
+      mobileToggle?.setAttribute('aria-expanded', 'false');
       if (mobileIcon) mobileIcon.textContent = 'menu';
     }),
   );
@@ -148,6 +157,7 @@ import { BRAND_LOGO } from '../data/fleetData';
     navLinks.forEach((link) => {
       const isActive = link.getAttribute('data-nav') === current;
       link.classList.toggle('nav-active', isActive);
+      link.setAttribute('aria-current', isActive ? 'true' : 'false');
     });
   };
   window.addEventListener('scroll', updateNav, { passive: true });

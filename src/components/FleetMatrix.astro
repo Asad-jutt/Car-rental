@@ -8,7 +8,7 @@ import { VEHICLES } from '../data/fleetData';
     class="absolute inset-x-0 top-0 bottom-0 pointer-events-none"
     style="background: radial-gradient(900px circle at 80% 5%, rgba(255,90,0,0.20), transparent 55%), radial-gradient(700px circle at 12% 90%, rgba(255,90,0,0.12), transparent 60%)"
   />
-<div class="relative w-full max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 py-10 sm:py-14 lg:py-16">
+<div class="relative w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-10 sm:py-14 lg:py-16">
     {/* Section Header */}
     <div class="flex flex-col xl:flex-row xl:items-end justify-between flex-wrap w-full min-w-0 mb-8 pb-4 border-b border-[#1f1f1f] gap-4">
       <div class="min-w-0">
@@ -36,6 +36,7 @@ import { VEHICLES } from '../data/fleetData';
             <button
               type="button"
               data-filter={f.id}
+              aria-pressed="false"
               class="px-3 py-1 font-mono text-[11px] uppercase tracking-wider font-bold transition-colors whitespace-nowrap text-[#929292] hover:text-[#ffffff]"
             >
               {f.label}
@@ -46,16 +47,16 @@ import { VEHICLES } from '../data/fleetData';
     </div>
 
   {/* Fleet Matrix Grid */}
-  <div class="relative grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {VEHICLES.map((vehicle) => (
       <article
         data-vehicle-card
         data-category={vehicle.category}
-        class="flex flex-col justify-between bg-[#0e0e0e]/40 backdrop-blur-xl border border-[#222] group hover:bg-[#0e0e0e]/25 transition-colors"
+        class="flex flex-col justify-between overflow-hidden bg-[#0e0e0e]/40 backdrop-blur-xl border border-[#222] group hover:bg-[#0e0e0e]/25 hover:border-[#333] transition-colors"
       >
         {/* Top Micro-Metadata */}
-        <div class="p-3 sm:p-4 border-b border-[#1f1f1f] flex items-center justify-between">
-          <div class="flex items-center gap-2">
+        <div class="p-3 sm:p-4 border-b border-[#1f1f1f] flex items-center justify-between gap-1.5 flex-wrap">
+          <div class="flex items-center gap-2 min-w-0">
             <span class="font-mono text-[10px] text-[#777]">CAR ID:</span>
             <span class="font-mono text-[11px] text-[#ffffff] font-bold">{vehicle.id}</span>
           </div>
@@ -77,26 +78,26 @@ import { VEHICLES } from '../data/fleetData';
             src={vehicle.imageUrl}
           />
           <div class="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-transparent to-transparent pointer-events-none" />
-          <div class="absolute bottom-3 left-4 flex items-center gap-1">
-            <span class="font-mono text-[9px] sm:text-[10px] bg-[#0e0e0e]/85 backdrop-blur px-2 py-0.5 border border-[#1f1f1f] text-[#ffffff] uppercase tracking-wider">
+          <div class="absolute bottom-3 left-4 flex items-center gap-1 max-w-[calc(100%-2rem)]">
+            <span class="font-mono text-[9px] sm:text-[10px] bg-[#0e0e0e]/85 backdrop-blur px-2 py-0.5 border border-[#1f1f1f] text-[#ffffff] uppercase tracking-wider truncate">
               {vehicle.chassis}
             </span>
           </div>
-          <div class="absolute top-3 right-4 font-mono text-[10px] text-[#888]">┌ {vehicle.rigLabel} ┐</div>
+          <div class="hidden sm:block absolute top-3 right-4 max-w-[70%] font-mono text-[10px] text-[#888] truncate">┌ {vehicle.rigLabel} ┐</div>
         </div>
 
         {/* Specs & Technical Telemetry */}
         <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
           <div>
-            <div class="flex items-baseline justify-between mb-2">
-              <h3 class="font-headline text-base sm:text-lg font-bold uppercase tracking-tight text-[#ffffff]">{vehicle.name}</h3>
-              <span class="font-mono text-[10px] text-[#888] uppercase">[CLASS: {vehicle.band}]</span>
+            <div class="flex items-baseline justify-between gap-2 mb-2">
+              <h3 class="font-headline text-base sm:text-lg font-bold uppercase tracking-tight text-[#ffffff] min-w-0 truncate">{vehicle.name}</h3>
+              <span class="font-mono text-[10px] text-[#888] uppercase shrink-0">[CLASS: {vehicle.band}]</span>
             </div>
             <p class="font-editorial text-xs sm:text-sm text-[#b0b0b0] leading-relaxed mb-4 line-clamp-2">{vehicle.desc}</p>
           </div>
 
           {/* Technical Telemetry Matrix Grid */}
-          <div class="grid grid-cols-3 gap-0 border border-[#1f1f1f] bg-[#161616]/40 backdrop-blur-sm mb-4">
+          <div class="grid grid-cols-3 gap-0 overflow-hidden border border-[#1f1f1f] bg-[#161616]/40 backdrop-blur-sm mb-4">
             <div class="p-2.5 sm:p-3 border-r border-[#1f1f1f] flex flex-col">
               <span class="font-mono text-[9px] text-[#888] uppercase">POWER</span>
               <span class="font-headline text-base sm:text-lg text-[#ffffff] font-bold tracking-tight mt-0.5">
@@ -157,6 +158,7 @@ import { VEHICLES } from '../data/fleetData';
     buttons.forEach((btn) => {
       const active = btn.getAttribute('data-filter') === id;
       btn.classList.toggle('filter-active', active);
+      btn.setAttribute('aria-pressed', String(active));
       if (!active) btn.classList.remove('text-[#ff5a00]');
     });
     cards.forEach((card) => {

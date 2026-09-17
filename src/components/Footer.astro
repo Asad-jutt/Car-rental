@@ -1,7 +1,7 @@
 <footer class="w-full bg-[#0e0e0e] border-t border-[#1f1f1f] text-[#e2e2e2] select-none">
   {/* Live Global Node Status Indicators Ribbon */}
   <div class="w-full border-b border-[#1f1f1f] bg-[#141414]/60">
-    <div class="max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 py-2.5">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-2.5">
       <div class="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] sm:text-[11px]">
       <div class="flex items-center gap-4 flex-wrap">
         <span class="text-[#888] uppercase">[BRANCHES]:</span>
@@ -25,7 +25,7 @@
 
   {/* Primary Footer Dispatch Interface */}
   <div class="w-full py-10 sm:py-12">
-    <div class="max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
     {/* Brand Info & Monospace Memo */}
     <div class="lg:col-span-4 flex flex-col justify-between space-y-4 min-w-0">
       <div>
@@ -45,37 +45,42 @@
     </div>
 
     {/* Navigation Column 1 */}
-    <div class="lg:col-span-2 flex flex-col space-y-2.5 font-mono text-[11px] min-w-0">
-      <span class="text-[#ff5a00] uppercase tracking-widest font-bold mb-1">[OUR FLEET]</span>
+    <nav class="lg:col-span-2 flex flex-col space-y-2.5 font-mono text-[11px] min-w-0" aria-label="Fleet">
+      <h2 class="text-[#ff5a00] uppercase tracking-widest font-bold mb-1">[OUR FLEET]</h2>
       {['VELOCE GT-R (EV)', 'AURELIA GT (COUPE)', 'AEGIS SUV (HYBRID)', 'CONVERTIBLE (COMING SOON)', 'VAN / SHUTTLE (COMING SOON)'].map((label) => (
         <a class="text-[#888] hover:text-[#ffffff] transition-colors py-1" href="#inventory">{label}</a>
       ))}
-    </div>
+    </nav>
 
     {/* Navigation Column 2 */}
-    <div class="lg:col-span-2 flex flex-col space-y-2.5 font-mono text-[11px] min-w-0">
-      <span class="text-[#ff5a00] uppercase tracking-widest font-bold mb-1">[SERVICES]</span>
+    <nav class="lg:col-span-2 flex flex-col space-y-2.5 font-mono text-[11px] min-w-0" aria-label="Services">
+      <h2 class="text-[#ff5a00] uppercase tracking-widest font-bold mb-1">[SERVICES]</h2>
       <a class="text-[#888] hover:text-[#ffffff] transition-colors py-1" href="#protocol">HOW BOOKING WORKS</a>
       <a class="text-[#888] hover:text-[#ffffff] transition-colors py-1" href="#protocol">AIRPORT PICKUP</a>
       <a class="text-[#888] hover:text-[#ffffff] transition-colors py-1" href="#tiers">DAILY / WEEKEND / MONTHLY</a>
       <a class="text-[#888] hover:text-[#ffffff] transition-colors py-1" href="#security">INSURANCE &amp; POLICIES</a>
-      <a class="text-[#888] hover:text-[#ffffff] transition-colors py-1" href="#security">ROADSIDE ASSISTANCE</a>
-    </div>
+<a class="text-[#888] hover:text-[#ffffff] transition-colors py-1" href="#security">ROADSIDE ASSISTANCE</a>
+    </nav>
 
-    {/* Newsletter / Terminal Cipher Input */}
+    {/* Newsletter / Offers */}
     <div class="lg:col-span-4 flex flex-col justify-between space-y-4 min-w-0">
       <div>
-        <span class="font-mono text-[10px] uppercase text-[#ff5a00] tracking-widest font-bold block mb-1">[NEWSLETTER // OFFERS]</span>
+        <h2 class="font-mono text-[10px] uppercase text-[#ff5a00] tracking-widest font-bold block mb-1">[NEWSLETTER // OFFERS]</h2>
         <p class="font-editorial text-xs text-[#a0a0a0] mb-3 leading-relaxed">
           Get seasonal discounts, new fleet drops, and early access to weekend specials straight to your inbox. No spam, unsubscribe anytime.
         </p>
 
         <form data-subscribe class="flex items-stretch border border-[#1f1f1f] bg-[#161616] min-w-0">
+          <label for="newsletter-email" class="sr-only">Email address</label>
           <input
+            id="newsletter-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
             data-cipher-input
-            class="flex-1 min-w-0 w-full bg-transparent border-0 px-3 py-2 font-mono text-xs text-[#ffffff] placeholder:text-[#666] focus:outline-none"
+            class="flex-1 min-w-0 w-full bg-transparent border-0 px-3 py-2 font-mono text-xs text-[#ffffff] placeholder:text-[#666]"
             placeholder="YOUR EMAIL ADDRESS"
-            type="text"
           />
           <button
             type="submit"
@@ -88,11 +93,11 @@
       </div>
 
       <div class="flex items-center gap-3 font-mono text-[10px] text-[#777]">
-        <span class="hover:text-[#ff5a00] cursor-pointer">SUPPORT // 24/7</span>
+        <span>SUPPORT // 24/7</span>
         <span>•</span>
-        <span class="hover:text-[#ff5a00] cursor-pointer">CAREERS</span>
+        <span>CAREERS</span>
         <span>•</span>
-        <span class="hover:text-[#ff5a00] cursor-pointer">PHONE APP</span>
+        <span>PHONE APP</span>
       </div>
     </div>
   </div>
@@ -100,15 +105,15 @@
 
   {/* Bottom Bar: Encryption Hash & Legal */}
   <div class="w-full border-t border-[#1f1f1f]">
-    <div class="max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-[10px] text-[#777]">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-[10px] text-[#777]">
     <div class="flex items-center gap-3">
       <span>SITE_REF // KINETIC-CAR-RENTAL-01</span>
       <span class="hidden sm:inline">|</span>
       <span>RATES UPDATED // SEPT 2026</span>
     </div>
     <div class="flex items-center gap-3 flex-wrap">
-      <span class="hover:text-[#ffffff] cursor-pointer uppercase">PRIVACY POLICY</span>
-      <span class="hover:text-[#ffffff] cursor-pointer uppercase">RENTAL TERMS &amp; CONDITIONS</span>
+      <span class="uppercase">PRIVACY POLICY</span>
+      <span class="uppercase">RENTAL TERMS &amp; CONDITIONS</span>
       <span class="text-[#888]">© 2026 KINETIC CAR RENTAL</span>
     </div>
     </div>

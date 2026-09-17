@@ -3,7 +3,7 @@ import { FAQS } from '../data/fleetData';
 ---
 
 <section class="w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="security">
-  <div class="max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 py-10 sm:py-14 lg:py-16">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-10 sm:py-14 lg:py-16">
     <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-[#1f1f1f]">
       <div>
         <div class="flex items-center gap-2 mb-2">
@@ -20,7 +20,7 @@ import { FAQS } from '../data/fleetData';
     </div>
 
     {/* Monospace Technical Accordions */}
-    <div class="border border-[#1f1f1f] divide-y divide-[#1f1f1f]">
+    <div class="border border-[#1f1f1f] divide-y divide-[#1f1f1f] overflow-hidden">
       {FAQS.map((faq, i) => {
         const isOpen = i === 0;
         return (
@@ -29,18 +29,19 @@ import { FAQS } from '../data/fleetData';
               type="button"
               data-faq-toggle
               aria-expanded={isOpen}
+              aria-controls={`faq-answer-${faq.id}`}
               class="w-full p-4 sm:p-6 flex items-center justify-between text-left cursor-pointer list-none select-none"
             >
               <div class="flex items-center gap-3 sm:gap-4 pr-4">
                 <span class="font-mono text-xs sm:text-sm text-[#ff5a00] font-bold shrink-0">{faq.code}</span>
-                <span class="font-headline text-xs sm:text-sm md:text-base font-bold uppercase tracking-wide text-[#ffffff]">{faq.question}</span>
+                <h3 class="font-headline text-xs sm:text-sm md:text-base font-bold uppercase tracking-wide text-[#ffffff]">{faq.question}</h3>
               </div>
               <span data-faq-icon class={`font-mono text-sm sm:text-base text-[#ff5a00] transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-45' : 'rotate-0'}`}>
                 ✛
               </span>
             </button>
 
-            <div data-faq-answer class={`px-4 sm:px-6 pb-6 pt-1 font-editorial text-xs sm:text-sm text-[#b0b0b0] border-t border-[#1f1f1f]/50 ${isOpen ? '' : 'hidden'}`}>
+            <div id={`faq-answer-${faq.id}`} data-faq-answer class={`px-4 sm:px-6 pb-6 pt-1 font-editorial text-xs sm:text-sm text-[#b0b0b0] border-t border-[#1f1f1f]/50 ${isOpen ? '' : 'hidden'}`}>
               <p class="pt-4 leading-relaxed">{faq.answer}</p>
             </div>
           </div>

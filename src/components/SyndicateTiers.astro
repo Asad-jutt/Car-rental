@@ -3,7 +3,7 @@ import { SYNDICATE_TIERS } from '../data/fleetData';
 ---
 
 <section class="w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="tiers">
-  <div class="max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 py-10 sm:py-14 lg:py-16">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-10 sm:py-14 lg:py-16">
     <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-[#1f1f1f]">
       <div>
         <div class="flex items-center gap-2 mb-2">
@@ -23,7 +23,7 @@ import { SYNDICATE_TIERS } from '../data/fleetData';
     </div>
 
     {/* 3 Bordered Data Columns */}
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-px bg-[#1f1f1f] border border-[#1f1f1f]">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-px overflow-hidden bg-[#1f1f1f] border border-[#1f1f1f]">
       {SYNDICATE_TIERS.map((tier) => (
         <div
           class={`p-5 sm:p-6 flex flex-col justify-between group transition-colors relative ${
@@ -40,7 +40,7 @@ import { SYNDICATE_TIERS } from '../data/fleetData';
           )}
 
           <div>
-            <div class="flex items-center justify-between mb-5 pb-3 border-b border-[#1f1f1f]">
+            <div class="flex items-center justify-between gap-1 flex-wrap mb-5 pb-3 border-b border-[#1f1f1f]">
               <span class={`font-mono text-[10px] uppercase ${tier.featured ? 'text-[#ff5a00] font-bold' : 'text-[#888]'}`}>
                 {tier.tierNumber}
               </span>

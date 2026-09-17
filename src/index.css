@@ -11,6 +11,13 @@
     scroll-behavior: smooth;
   }
 
+  /* Laptop range (LG): slightly tighter scale for all rem-based sizes */
+  @media (min-width: 1024px) and (max-width: 1279.9px) {
+    html {
+      font-size: 92%;
+    }
+  }
+
   html, body {
     margin: 0;
     padding: 0;
@@ -34,6 +41,19 @@
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #ff5a00;
+  }
+
+  button,
+  [role="button"],
+  a,
+  .border,
+  .border-2 {
+    border-radius: 6px;
+  }
+
+  :focus-visible {
+    outline: 2px solid #ff5a00;
+    outline-offset: 2px;
   }
 
   /* Accessibility: respect reduced motion preferences */

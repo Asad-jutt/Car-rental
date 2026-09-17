@@ -19,7 +19,7 @@ import { HERO_IMAGE } from '../data/fleetData';
 
   {/* Left Vertical Micro-Running Axis Tracker */}
   <div class="hidden md:flex absolute left-0 top-0 bottom-0 z-10 w-10 sm:w-12 flex-col items-center justify-between py-6 bg-[#0e0e0e]/70 backdrop-blur-sm border-r border-[#1f1f1f]/80">
-    <span class="font-mono text-[9px] text-[#ff5a00] tracking-widest">[RENTAL_HQ]</span>
+    
     <div class="[writing-mode:vertical-rl] rotate-180 font-mono text-[9px] tracking-[0.25em] text-[#888] uppercase">
       [KINETIC CAR RENTAL] // PICK_UP & DRIVE
     </div>
@@ -31,11 +31,10 @@ import { HERO_IMAGE } from '../data/fleetData';
 
   {/* Blueprint Vignette & Corner Bracket Overlays */}
   <div class="absolute top-4 sm:top-6 left-4 md:left-14 z-10 pointer-events-none flex items-center gap-2">
-    <span class="font-mono text-xs text-[#ff5a00] font-bold">┌</span>
     <span class="font-mono text-[10px] text-[#e2e2e2] tracking-widest uppercase">BRANCH: NYC</span>
   </div>
   <div class="absolute top-4 sm:top-6 right-4 sm:right-6 z-10 pointer-events-none text-right">
-    <span class="font-mono text-[10px] text-[#888] uppercase">OPEN 24/7 // AIRPORT PICKUP</span>
+    <span class="font-mono text-[10px] text-[#888] uppercase">OPEN 24/7<span class="hidden sm:inline"> // AIRPORT PICKUP</span></span>
     <span class="font-mono text-xs text-[#ff5a00] font-bold block">┐</span>
   </div>
   <div class="absolute bottom-4 sm:bottom-6 left-4 md:left-14 z-10 pointer-events-none">
@@ -49,7 +48,7 @@ import { HERO_IMAGE } from '../data/fleetData';
   <div class="relative z-10 flex-1 w-full flex flex-col items-center justify-center text-center px-4 sm:px-8 lg:px-16 py-10 lg:py-0">
     {/* Top Metadata Header */}
     <div class="flex items-center gap-2 flex-wrap justify-center mb-4">
-      <span class="px-1.5 py-0.5 bg-[#ff5a00] text-black font-mono text-[10px] font-bold tracking-wider uppercase">
+      <span class="px-1.5 py-0.5 bg-[#ff5a00] text-black font-mono text-[10px] font-bold tracking-wider uppercase rounded-md">
         PREMIUM CAR RENTAL
       </span>
       <span class="font-mono text-[10px] text-[#929292] tracking-widest uppercase">
@@ -58,7 +57,7 @@ import { HERO_IMAGE } from '../data/fleetData';
     </div>
 
     {/* Massive Typographic Headline // MIDDLE */}
-    <h1 class="font-headline text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-[#ffffff] uppercase tracking-tight leading-[1.08] m-0 max-w-6xl">
+    <h1 class="font-headline text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-[#ffffff] uppercase tracking-tight leading-[1.08] lg:leading-[0.92] xl:leading-[1.08] m-0 max-w-6xl">
       RENT
       <br />
       WITHOUT
@@ -84,7 +83,7 @@ import { HERO_IMAGE } from '../data/fleetData';
     <div class="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mt-8">
       <div class="p-2.5 sm:p-3 bg-[#1f1f1f]/30 backdrop-blur-xl border border-[#333]/60 flex flex-col text-left">
         <span class="font-mono text-[9px] text-[#888] uppercase">[LOCAL TIME]</span>
-        <span id="live-utc" data-utc-clock class="font-mono text-[11px] sm:text-xs text-[#ffffff] mt-0.5 font-bold tabular-nums tracking-wider">
+        <span id="live-clock" data-local-clock class="font-mono text-[11px] sm:text-xs text-[#ffffff] mt-0.5 font-bold tabular-nums tracking-wider">
           --:--:--
         </span>
       </div>
@@ -106,6 +105,8 @@ import { HERO_IMAGE } from '../data/fleetData';
       {/* Command Slot 01: Node Location */}
       <div
         data-open-modal
+        role="button"
+        tabindex="0"
         class="md:col-span-4 px-3 py-1.5 bg-[#0e0e0e] hover:bg-[#181818] transition-colors group cursor-pointer border-b md:border-b-0 md:border-r border-[#1f1f1f]"
       >
         <div class="flex items-center justify-between">
@@ -121,6 +122,8 @@ import { HERO_IMAGE } from '../data/fleetData';
       {/* Command Slot 02: Time Frame */}
       <div
         data-open-modal
+        role="button"
+        tabindex="0"
         class="md:col-span-4 px-3 py-1.5 bg-[#0e0e0e] hover:bg-[#181818] transition-colors group cursor-pointer border-b md:border-b-0 md:border-r border-[#1f1f1f]"
       >
         <div class="flex items-center justify-between">
@@ -136,6 +139,8 @@ import { HERO_IMAGE } from '../data/fleetData';
       {/* Command Slot 03: Run Engine Action */}
       <div
         data-open-modal
+        role="button"
+        tabindex="0"
         class="md:col-span-4 px-4 py-1.5 bg-[#ff5a00] hover:bg-[#ffffff] transition-colors cursor-pointer group flex items-center justify-between gap-3"
       >
         <div class="flex flex-col min-w-0">
@@ -153,12 +158,12 @@ import { HERO_IMAGE } from '../data/fleetData';
 </div>
 
 <script>
-  const clock = document.querySelector('[data-utc-clock]');
+  const clock = document.querySelector('[data-local-clock]');
   const pad = (n: number) => String(n).padStart(2, '0');
   const update = () => {
     if (!clock) return;
     const now = new Date();
-    clock.textContent = `${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())} UTC`;
+    clock.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   };
   update();
   setInterval(update, 1000);
