@@ -1,5 +1,6 @@
 ---
 import { VEHICLES } from '../data/fleetData';
+import FleetReel from '../components/FleetReel';
 ---
 
 <section class="relative w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="inventory">
@@ -8,7 +9,8 @@ import { VEHICLES } from '../data/fleetData';
     class="absolute inset-x-0 top-0 bottom-0 pointer-events-none"
     style="background: radial-gradient(900px circle at 80% 5%, rgba(255,90,0,0.20), transparent 55%), radial-gradient(700px circle at 12% 90%, rgba(255,90,0,0.12), transparent 60%)"
   />
-<div class="relative w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-10 sm:py-14 lg:py-16">
+
+  <div class="relative w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-10 sm:py-14 lg:py-16">
     {/* Section Header */}
     <div class="flex flex-col xl:flex-row xl:items-end justify-between flex-wrap w-full min-w-0 mb-8 pb-4 border-b border-[#1f1f1f] gap-4">
       <div class="min-w-0">
@@ -46,99 +48,114 @@ import { VEHICLES } from '../data/fleetData';
       </div>
     </div>
 
-  {/* Fleet Matrix Grid */}
-  <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {VEHICLES.map((vehicle) => (
-      <article
-        data-vehicle-card
-        data-category={vehicle.category}
-        class="flex flex-col justify-between overflow-hidden bg-[#0e0e0e]/40 backdrop-blur-xl border border-[#222] group hover:bg-[#0e0e0e]/25 hover:border-[#333] transition-colors"
-      >
-        {/* Top Micro-Metadata */}
-        <div class="p-3 sm:p-4 border-b border-[#1f1f1f] flex items-center justify-between gap-1.5 flex-wrap">
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="font-mono text-[10px] text-[#777]">CAR ID:</span>
-            <span class="font-mono text-[11px] text-[#ffffff] font-bold">{vehicle.id}</span>
-          </div>
-          <div class={`flex items-center gap-1.5 px-2 py-0.5 border ${vehicle.statusTone === 'orange' ? 'bg-[#ff5a00]/10 border-[#ff5a00]/40' : 'bg-[#1f1f1f] border-[#333]'}`}>
-            <span class={`w-1.5 h-1.5 inline-block ${vehicle.statusTone === 'orange' ? 'bg-[#ff5a00] shadow-[0_0_6px_#ff5a00]' : 'bg-[#777]'}`}></span>
-            <span class={`font-mono text-[9px] font-bold tracking-wider ${vehicle.statusTone === 'orange' ? 'text-[#ff5a00]' : 'text-[#888]'}`}>
-              {vehicle.statusBadge}
-            </span>
-          </div>
+    {/* Halo Reel — fleet rides the ring */}
+    <FleetReel
+      client:only="react"
+      centerLabel={
+        <div class="flex flex-col items-center gap-1 select-none">
+          <span class="font-headline text-2xl sm:text-3xl font-black uppercase tracking-tight text-[#ffffff]/95">
+            SELECTED FLEET
+          </span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#ff5a00]">
+            [SPIN TO BROWSE]
+          </span>
         </div>
+      }
+    />
 
-        {/* Vehicle Image Presentation */}
-        <div class="relative w-full aspect-[16/10] overflow-hidden bg-[#161616]">
-          <img
-            alt={`${vehicle.name} Profile`}
-            loading="lazy"
-            decoding="async"
-            class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            src={vehicle.imageUrl}
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-transparent to-transparent pointer-events-none" />
-          <div class="absolute bottom-3 left-4 flex items-center gap-1 max-w-[calc(100%-2rem)]">
-            <span class="font-mono text-[9px] sm:text-[10px] bg-[#0e0e0e]/85 backdrop-blur px-2 py-0.5 border border-[#1f1f1f] text-[#ffffff] uppercase tracking-wider truncate">
-              {vehicle.chassis}
-            </span>
-          </div>
-          <div class="hidden sm:block absolute top-3 right-4 max-w-[70%] font-mono text-[10px] text-[#888] truncate">┌ {vehicle.rigLabel} ┐</div>
-        </div>
-
-        {/* Specs & Technical Telemetry */}
-        <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
-          <div>
-            <div class="flex items-baseline justify-between gap-2 mb-2">
-              <h3 class="font-headline text-base sm:text-lg font-bold uppercase tracking-tight text-[#ffffff] min-w-0 truncate">{vehicle.name}</h3>
-              <span class="font-mono text-[10px] text-[#888] uppercase shrink-0">[CLASS: {vehicle.band}]</span>
+    {/* Fleet Matrix Grid */}
+    <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {VEHICLES.map((vehicle) => (
+        <article
+          data-vehicle-card
+          data-category={vehicle.category}
+          class="flex flex-col justify-between overflow-hidden bg-[#0e0e0e]/40 backdrop-blur-xl border border-[#222] group hover:bg-[#0e0e0e]/25 hover:border-[#333] transition-colors"
+        >
+          {/* Top Micro-Metadata */}
+          <div class="p-3 sm:p-4 border-b border-[#1f1f1f] flex items-center justify-between gap-1.5 flex-wrap">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="font-mono text-[10px] text-[#777]">CAR ID:</span>
+              <span class="font-mono text-[11px] text-[#ffffff] font-bold">{vehicle.id}</span>
             </div>
-            <p class="font-editorial text-xs sm:text-sm text-[#b0b0b0] leading-relaxed mb-4 line-clamp-2">{vehicle.desc}</p>
-          </div>
-
-          {/* Technical Telemetry Matrix Grid */}
-          <div class="grid grid-cols-3 gap-0 overflow-hidden border border-[#1f1f1f] bg-[#161616]/40 backdrop-blur-sm mb-4">
-            <div class="p-2.5 sm:p-3 border-r border-[#1f1f1f] flex flex-col">
-              <span class="font-mono text-[9px] text-[#888] uppercase">POWER</span>
-              <span class="font-headline text-base sm:text-lg text-[#ffffff] font-bold tracking-tight mt-0.5">
-                {vehicle.power}<span class="text-[10px] font-mono text-[#888] ml-1">{vehicle.powerUnit}</span>
-              </span>
-            </div>
-            <div class="p-2.5 sm:p-3 border-r border-[#1f1f1f] flex flex-col">
-              <span class="font-mono text-[9px] text-[#888] uppercase">0-60 MPH</span>
-              <span class="font-headline text-base sm:text-lg text-[#ff5a00] font-bold tracking-tight mt-0.5">
-                {vehicle.zeroToSixty}<span class="text-[10px] font-mono text-[#888] ml-1">SEC</span>
-              </span>
-            </div>
-            <div class="p-2.5 sm:p-3 flex flex-col">
-              <span class="font-mono text-[9px] text-[#888] uppercase">DRIVE</span>
-              <span class="font-headline text-base sm:text-lg text-[#ffffff] font-bold tracking-tight mt-0.5">
-                {vehicle.drive}<span class="text-[10px] font-mono text-[#888] ml-1">{vehicle.driveSub}</span>
+            <div class={`flex items-center gap-1.5 px-2 py-0.5 border ${vehicle.statusTone === 'orange' ? 'bg-[#ff5a00]/10 border-[#ff5a00]/40' : 'bg-[#1f1f1f] border-[#333]'}`}>
+              <span class={`w-1.5 h-1.5 inline-block ${vehicle.statusTone === 'orange' ? 'bg-[#ff5a00] shadow-[0_0_6px_#ff5a00]' : 'bg-[#777]'}`}></span>
+              <span class={`font-mono text-[9px] font-bold tracking-wider ${vehicle.statusTone === 'orange' ? 'text-[#ff5a00]' : 'text-[#888]'}`}>
+                {vehicle.statusBadge}
               </span>
             </div>
           </div>
 
-          {/* Pricing & Reservation Trigger */}
-          <div class="pt-3 border-t border-[#1f1f1f] flex flex-wrap items-center justify-between gap-4">
+          {/* Vehicle Image Presentation */}
+          <div class="relative w-full aspect-[16/10] overflow-hidden bg-[#161616]">
+            <img
+              alt={`${vehicle.name} Profile`}
+              loading="lazy"
+              decoding="async"
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+              src={vehicle.imageUrl}
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-transparent to-transparent pointer-events-none" />
+            <div class="absolute bottom-3 left-4 flex items-center gap-1 max-w-[calc(100%-2rem)]">
+              <span class="font-mono text-[9px] sm:text-[10px] bg-[#0e0e0e]/85 backdrop-blur px-2 py-0.5 border border-[#1f1f1f] text-[#ffffff] uppercase tracking-wider truncate">
+                {vehicle.chassis}
+              </span>
+            </div>
+            <div class="hidden sm:block absolute top-3 right-4 max-w-[70%] font-mono text-[10px] text-[#888] truncate">┌ {vehicle.rigLabel} ┐</div>
+          </div>
+
+          {/* Specs & Technical Telemetry */}
+          <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
             <div>
-              <span class="font-mono text-[9px] text-[#777] block uppercase">RENTAL RATE</span>
-              <div class="flex items-baseline gap-1">
-                <span class="font-headline text-lg sm:text-xl text-[#ffffff] font-extrabold">${vehicle.pricePer24h.toLocaleString()}</span>
-                <span class="font-mono text-[10px] text-[#888] uppercase">/ DAY</span>
+              <div class="flex items-baseline justify-between gap-2 mb-2">
+                <h3 class="font-headline text-base sm:text-lg font-bold uppercase tracking-tight text-[#ffffff] min-w-0 truncate">{vehicle.name}</h3>
+                <span class="font-mono text-[10px] text-[#888] uppercase shrink-0">[CLASS: {vehicle.band}]</span>
+              </div>
+              <p class="font-editorial text-xs sm:text-sm text-[#b0b0b0] leading-relaxed mb-4 line-clamp-2">{vehicle.desc}</p>
+            </div>
+
+            {/* Technical Telemetry Matrix Grid */}
+            <div class="grid grid-cols-3 gap-0 overflow-hidden border border-[#1f1f1f] bg-[#161616]/40 backdrop-blur-sm mb-4">
+              <div class="p-2.5 sm:p-3 border-b sm:border-b-0 md:border-b lg:border-b-0 border-r border-[#1f1f1f] flex flex-col">
+                <span class="font-mono text-[9px] text-[#888] uppercase">POWER</span>
+                <span class="font-headline text-base sm:text-lg text-[#ffffff] font-bold tracking-tight mt-0.5">
+                  {vehicle.power}<span class="text-[10px] font-mono text-[#888] ml-1">{vehicle.powerUnit}</span>
+                </span>
+              </div>
+              <div class="p-2.5 sm:p-3 border-r border-[#1f1f1f] flex flex-col">
+                <span class="font-mono text-[9px] text-[#888] uppercase">0-60 MPH</span>
+                <span class="font-headline text-base sm:text-lg text-[#ff5a00] font-bold tracking-tight mt-0.5">
+                  {vehicle.zeroToSixty}<span class="text-[10px] font-mono text-[#888] ml-1">SEC</span>
+                </span>
+              </div>
+              <div class="p-2.5 sm:p-3 flex flex-col">
+                <span class="font-mono text-[9px] text-[#888] uppercase">DRIVE</span>
+                <span class="font-headline text-base sm:text-lg text-[#ffffff] font-bold tracking-tight mt-0.5">
+                  {vehicle.drive}<span class="text-[10px] font-mono text-[#888] ml-1">{vehicle.driveSub}</span>
+                </span>
               </div>
             </div>
-            <button
-              type="button"
-              data-open-modal
-              data-vehicle={vehicle.id}
-              class="px-4 py-2 bg-[#222] hover:bg-[#ff5a00] text-[#ffffff] hover:text-black font-mono text-xs uppercase tracking-wider font-bold transition-colors border border-[#333] hover:border-[#ff5a00]"
-            >
-              BOOK NOW →
-            </button>
+
+            {/* Pricing & Reservation Trigger */}
+            <div class="pt-3 border-t border-[#1f1f1f] flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <span class="font-mono text-[9px] text-[#777] block uppercase">RENTAL RATE</span>
+                <div class="flex items-baseline gap-1">
+                  <span class="font-headline text-lg sm:text-xl text-[#ffffff] font-extrabold">${vehicle.pricePer24h.toLocaleString()}</span>
+                  <span class="font-mono text-[10px] text-[#888] uppercase">/ DAY</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                data-open-modal
+                data-vehicle={vehicle.id}
+                class="px-4 py-2 bg-[#222] hover:bg-[#ff5a00] text-[#ffffff] hover:text-black font-mono text-xs uppercase tracking-wider font-bold transition-colors border border-[#333] hover:border-[#ff5a00]"
+              >
+                BOOK NOW →
+              </button>
+            </div>
           </div>
-        </div>
-      </article>
-    ))}
+        </article>
+      ))}
     </div>
   </div>
 </section>

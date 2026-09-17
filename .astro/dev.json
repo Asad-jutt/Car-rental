@@ -1,14 +1,14 @@
 {
-	"pid": 7504,
-	"port": 3318,
-	"url": "http://localhost:3318",
+	"pid": 4192,
+	"port": 3620,
+	"url": "http://localhost:3620",
 	"urls": {
 		"local": [
-			"http://localhost:3318/"
+			"http://localhost:3620/"
 		],
 		"network": [],
 		"networkInterfaceNames": []
 	},
 	"background": false,
-	"startedAt": "2026-09-17T01:21:51.465Z"
+	"startedAt": "2026-09-17T21:42:52.845Z"
 }

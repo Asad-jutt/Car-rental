@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import HeroSection from '../components/HeroSection.astro';
 import FleetMatrix from '../components/FleetMatrix.astro';
-import WhiteGloveProtocol from '../components/WhiteGloveProtocol.astro';
+import BookingSteps from '../components/ui/booking-steps';
 import SyndicateTiers from '../components/SyndicateTiers.astro';
 import DriverLogs from '../components/DriverLogs.astro';
 import SecurityEnclave from '../components/SecurityEnclave.astro';
@@ -25,7 +25,7 @@ import AllocationModal from '../components/AllocationModal.astro';
     <FleetMatrix />
 
     {/* How Booking Works */}
-    <WhiteGloveProtocol />
+    <BookingSteps client:load />
 
     {/* Pricing Plans */}
     <SyndicateTiers />
