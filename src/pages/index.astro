@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import HeroSection from '../components/HeroSection.astro';
+import FleetMatrix from '../components/FleetMatrix.astro';
+import WhiteGloveProtocol from '../components/WhiteGloveProtocol.astro';
+import SyndicateTiers from '../components/SyndicateTiers.astro';
+import DriverLogs from '../components/DriverLogs.astro';
+import SecurityEnclave from '../components/SecurityEnclave.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Footer from '../components/Footer.astro';
+import AllocationModal from '../components/AllocationModal.astro';
+---
+
+<BaseLayout>
+  {/* Pinned Architectural Navigation Bar */}
+  <Header />
+
+  {/* Main Viewport Content */}
+  <main class="w-full pt-12 flex-1 flex flex-col">
+    {/* Stage 01: Viewport Hero */}
+    <HeroSection />
+
+    {/* Stage 02: Active Inventory & Fleet Matrix */}
+    <FleetMatrix />
+
+    {/* Stage 03: White-Glove Deployment Protocol */}
+    <WhiteGloveProtocol />
+
+    {/* Stage 04: Syndicate Membership Allocation Tiers */}
+    <SyndicateTiers />
+
+    {/* Telemetry & Verified Driver Verification Logs */}
+    <DriverLogs />
+
+    {/* Security Enclave & Protocol Compliance FAQs */}
+    <SecurityEnclave />
+
+    {/* Stage 06: Direct Dispatch Call-to-Action */}
+    <CtaSection />
+  </main>
+
+  {/* Industrial Brutalist Footer */}
+  <Footer />
+
+  {/* Interactive Reservation Modal */}
+  <AllocationModal />
+</BaseLayout>

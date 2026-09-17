@@ -3,40 +3,22 @@
 @layer base {
   :root {
     --font-headline: 'Unbounded', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-editorial: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'Montserrat', sans-serif;
+    --font-editorial: 'Montserrat', sans-serif;
   }
 
-  [data-font-preset="unbounded"] {
-    --font-headline: 'Unbounded', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-editorial: 'Plus Jakarta Sans', sans-serif;
-  }
-
-  [data-font-preset="syncopate"] {
-    --font-headline: 'Syncopate', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-editorial: 'Plus Jakarta Sans', sans-serif;
-  }
-
-  [data-font-preset="chakra"] {
-    --font-headline: 'Chakra Petch', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-editorial: 'JetBrains Mono', monospace;
-  }
-
-  [data-font-preset="syne"] {
-    --font-headline: 'Syne', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-editorial: 'JetBrains Mono', monospace;
+  html {
+    scroll-behavior: smooth;
   }
 
   html, body {
     margin: 0;
     padding: 0;
+    min-height: 100%;
     background-color: #0e0e0e;
     color: #e2e2e2;
     font-family: var(--font-mono);
+    font-weight: 500;
   }
 
   /* Custom scrollbar */
@@ -53,14 +35,22 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #ff5a00;
   }
+
+  /* Accessibility: respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 .font-headline {
   font-family: var(--font-headline);
-}
-
-.font-mono-tech {
-  font-family: var(--font-mono);
 }
 
 .font-editorial {

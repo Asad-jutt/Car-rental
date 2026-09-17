@@ -1,23 +1,16 @@
-export type FontPreset = 'unbounded' | 'syncopate' | 'chakra' | 'syne';
-
 export interface Vehicle {
   id: string;
   name: string;
   band: string;
   category: 'ev' | 'hybrid' | 'quad';
-  tag: string;
   statusBadge: string;
-  statusTone: 'orange' | 'green' | 'muted';
+  statusTone: 'orange' | 'muted';
   desc: string;
   power: number;
   powerUnit: string;
   zeroToSixty: number;
   drive: string;
   driveSub: string;
-  pwrWt: string;
-  secondarySpecLabel: string;
-  secondarySpecVal: string;
-  rangeOrEscrow: string;
   pricePer24h: number;
   imageUrl: string;
   chassis: string;

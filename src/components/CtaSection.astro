@@ -1,0 +1,65 @@
+---
+import { CTA_IMAGE } from '../data/fleetData';
+---
+
+<section id="call-to-action" class="relative w-full bg-[#0e0e0e] overflow-hidden scroll-mt-16 border-t border-[#1f1f1f]">
+  {/* Full-Bleed Background Car Image */}
+  <div class="absolute inset-0 z-0">
+    <div
+      class="absolute inset-0 bg-cover bg-center sm:bg-right transition-transform duration-1000 ease-out"
+      style={`background-image: url('${CTA_IMAGE}')`}
+    />
+    {/* Legibility Overlay Gradients */}
+    <div class="absolute inset-0 bg-gradient-to-r from-[#0e0e0e] via-[#0e0e0e]/75 to-[#0e0e0e]/20 pointer-events-none" />
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/30 to-[#0e0e0e]/50 pointer-events-none" />
+  </div>
+
+  {/* Blueprint Corner Bracket Overlays */}
+  <div class="absolute top-4 sm:top-6 left-4 sm:left-6 z-10 pointer-events-none">
+    <span class="font-mono text-xs text-[#ff5a00] font-bold">┌</span>
+  </div>
+  <div class="absolute top-4 sm:top-6 right-4 sm:right-6 z-10 pointer-events-none">
+    <span class="font-mono text-xs text-[#ff5a00] font-bold">┐</span>
+  </div>
+  <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 z-10 pointer-events-none">
+    <span class="font-mono text-xs text-[#ff5a00] font-bold">└</span>
+  </div>
+  <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-10 pointer-events-none">
+    <span class="font-mono text-xs text-[#ff5a00] font-bold">┘</span>
+  </div>
+
+  {/* CTA Content Overlay */}
+  <div class="relative z-10 max-w-[1200px] mx-auto px-3 sm:px-4 lg:px-5 py-10 sm:py-14 lg:py-16">
+    <div class="max-w-6xl mx-auto flex flex-col items-center text-center">
+      {/* Module Label */}
+      <div class="flex items-center gap-2 mb-3">
+        <span class="w-2 h-2 bg-[#ff5a00] inline-block shadow-[0_0_6px_#ff5a00] animate-pulse"></span>
+        <span class="font-mono text-[10px] uppercase tracking-widest text-[#ff5a00]">[MODULE_06 // READY WHEN YOU ARE]</span>
+      </div>
+
+      {/* Headline */}
+      <h2 class="font-headline text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-[#ffffff] leading-[0.95] m-0">
+        YOUR NEXT
+        <br />
+        RIDE
+        <br />
+        <span class="text-[#ff5a00]">IS WAITING.</span>
+      </h2>
+
+      {/* Sub Statement */}
+      <p class="font-editorial text-[13px] sm:text-sm text-[#ccc] leading-relaxed mt-4 max-w-xl">
+        Book online in minutes, skip the counter, and hit the road. Transparent rates, included insurance, and free cancellation up to 24 hours before pickup.
+      </p>
+
+      {/* Primary Dispatch Action */}
+      <button
+        type="button"
+        data-open-modal
+        class="mt-5 inline-flex items-center gap-2.5 bg-[#ff5a00] hover:bg-[#ffffff] text-black px-5 py-2.5 font-mono text-[11px] sm:text-xs font-extrabold uppercase tracking-widest transition-colors border border-[#ff5a00]"
+      >
+        <span>[BOOK YOUR RENTAL NOW]</span>
+        <span class="material-symbols-outlined text-sm">calendar_today</span>
+      </button>
+    </div>
+  </div>
+</section>

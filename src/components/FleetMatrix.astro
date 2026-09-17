@@ -1,0 +1,173 @@
+---
+import { VEHICLES } from '../data/fleetData';
+---
+
+<section class="relative w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="inventory">
+  {/* Ambient Glass Backlight Layer */}
+  <div
+    class="absolute inset-x-0 top-0 bottom-0 pointer-events-none"
+    style="background: radial-gradient(900px circle at 80% 5%, rgba(255,90,0,0.20), transparent 55%), radial-gradient(700px circle at 12% 90%, rgba(255,90,0,0.12), transparent 60%)"
+  />
+<div class="relative w-full max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 py-10 sm:py-14 lg:py-16">
+    {/* Section Header */}
+    <div class="flex flex-col xl:flex-row xl:items-end justify-between flex-wrap w-full min-w-0 mb-8 pb-4 border-b border-[#1f1f1f] gap-4">
+      <div class="min-w-0">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-2 h-2 bg-[#ff5a00] inline-block shadow-[0_0_6px_#ff5a00]"></span>
+          <span class="font-mono text-[10px] uppercase tracking-widest text-[#ff5a00]">[MODULE_01 // OUR VEHICLES]</span>
+        </div>
+        <h2 class="font-headline text-xl sm:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-[#ffffff] m-0">
+          OUR FLEET &amp; RATES
+        </h2>
+        <p class="font-mono text-[10px] sm:text-[11px] text-[#929292] uppercase tracking-widest mt-1.5">
+          TRANSPARENT PRICING // BOOK AND GO IN MINUTES
+        </p>
+      </div>
+
+      {/* Filter System Tabs */}
+      <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 mt-4 xl:mt-0 pt-4 xl:pt-0 border-t xl:border-t-0 border-[#1f1f1f] min-w-0 w-full xl:w-auto">
+        <div class="flex items-center border border-[#1f1f1f] bg-[#161616] p-1 gap-1 overflow-x-auto min-w-0 max-w-full" data-filters>
+          {[
+            { id: 'all', label: 'ALL VEHICLES' },
+            { id: 'ev', label: 'ELECTRIC' },
+            { id: 'hybrid', label: 'HYBRID SUV' },
+            { id: 'quad', label: 'SPORTS COUPE' },
+          ].map((f) => (
+            <button
+              type="button"
+              data-filter={f.id}
+              class="px-3 py-1 font-mono text-[11px] uppercase tracking-wider font-bold transition-colors whitespace-nowrap text-[#929292] hover:text-[#ffffff]"
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+  {/* Fleet Matrix Grid */}
+  <div class="relative grid grid-cols-1 lg:grid-cols-3 gap-6">
+    {VEHICLES.map((vehicle) => (
+      <article
+        data-vehicle-card
+        data-category={vehicle.category}
+        class="flex flex-col justify-between bg-[#0e0e0e]/40 backdrop-blur-xl border border-[#222] group hover:bg-[#0e0e0e]/25 transition-colors"
+      >
+        {/* Top Micro-Metadata */}
+        <div class="p-3 sm:p-4 border-b border-[#1f1f1f] flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] text-[#777]">CAR ID:</span>
+            <span class="font-mono text-[11px] text-[#ffffff] font-bold">{vehicle.id}</span>
+          </div>
+          <div class={`flex items-center gap-1.5 px-2 py-0.5 border ${vehicle.statusTone === 'orange' ? 'bg-[#ff5a00]/10 border-[#ff5a00]/40' : 'bg-[#1f1f1f] border-[#333]'}`}>
+            <span class={`w-1.5 h-1.5 inline-block ${vehicle.statusTone === 'orange' ? 'bg-[#ff5a00] shadow-[0_0_6px_#ff5a00]' : 'bg-[#777]'}`}></span>
+            <span class={`font-mono text-[9px] font-bold tracking-wider ${vehicle.statusTone === 'orange' ? 'text-[#ff5a00]' : 'text-[#888]'}`}>
+              {vehicle.statusBadge}
+            </span>
+          </div>
+        </div>
+
+        {/* Vehicle Image Presentation */}
+        <div class="relative w-full aspect-[16/10] overflow-hidden bg-[#161616]">
+          <img
+            alt={`${vehicle.name} Profile`}
+            loading="lazy"
+            decoding="async"
+            class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+            src={vehicle.imageUrl}
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-transparent to-transparent pointer-events-none" />
+          <div class="absolute bottom-3 left-4 flex items-center gap-1">
+            <span class="font-mono text-[9px] sm:text-[10px] bg-[#0e0e0e]/85 backdrop-blur px-2 py-0.5 border border-[#1f1f1f] text-[#ffffff] uppercase tracking-wider">
+              {vehicle.chassis}
+            </span>
+          </div>
+          <div class="absolute top-3 right-4 font-mono text-[10px] text-[#888]">┌ {vehicle.rigLabel} ┐</div>
+        </div>
+
+        {/* Specs & Technical Telemetry */}
+        <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="flex items-baseline justify-between mb-2">
+              <h3 class="font-headline text-base sm:text-lg font-bold uppercase tracking-tight text-[#ffffff]">{vehicle.name}</h3>
+              <span class="font-mono text-[10px] text-[#888] uppercase">[CLASS: {vehicle.band}]</span>
+            </div>
+            <p class="font-editorial text-xs sm:text-sm text-[#b0b0b0] leading-relaxed mb-4 line-clamp-2">{vehicle.desc}</p>
+          </div>
+
+          {/* Technical Telemetry Matrix Grid */}
+          <div class="grid grid-cols-3 gap-0 border border-[#1f1f1f] bg-[#161616]/40 backdrop-blur-sm mb-4">
+            <div class="p-2.5 sm:p-3 border-r border-[#1f1f1f] flex flex-col">
+              <span class="font-mono text-[9px] text-[#888] uppercase">POWER</span>
+              <span class="font-headline text-base sm:text-lg text-[#ffffff] font-bold tracking-tight mt-0.5">
+                {vehicle.power}<span class="text-[10px] font-mono text-[#888] ml-1">{vehicle.powerUnit}</span>
+              </span>
+            </div>
+            <div class="p-2.5 sm:p-3 border-r border-[#1f1f1f] flex flex-col">
+              <span class="font-mono text-[9px] text-[#888] uppercase">0-60 MPH</span>
+              <span class="font-headline text-base sm:text-lg text-[#ff5a00] font-bold tracking-tight mt-0.5">
+                {vehicle.zeroToSixty}<span class="text-[10px] font-mono text-[#888] ml-1">SEC</span>
+              </span>
+            </div>
+            <div class="p-2.5 sm:p-3 flex flex-col">
+              <span class="font-mono text-[9px] text-[#888] uppercase">DRIVE</span>
+              <span class="font-headline text-base sm:text-lg text-[#ffffff] font-bold tracking-tight mt-0.5">
+                {vehicle.drive}<span class="text-[10px] font-mono text-[#888] ml-1">{vehicle.driveSub}</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Pricing & Reservation Trigger */}
+          <div class="pt-3 border-t border-[#1f1f1f] flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <span class="font-mono text-[9px] text-[#777] block uppercase">RENTAL RATE</span>
+              <div class="flex items-baseline gap-1">
+                <span class="font-headline text-lg sm:text-xl text-[#ffffff] font-extrabold">${vehicle.pricePer24h.toLocaleString()}</span>
+                <span class="font-mono text-[10px] text-[#888] uppercase">/ DAY</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              data-open-modal
+              data-vehicle={vehicle.id}
+              class="px-4 py-2 bg-[#222] hover:bg-[#ff5a00] text-[#ffffff] hover:text-black font-mono text-xs uppercase tracking-wider font-bold transition-colors border border-[#333] hover:border-[#ff5a00]"
+            >
+              BOOK NOW →
+            </button>
+          </div>
+        </div>
+      </article>
+    ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .filter-active {
+    background-color: #ff5a00 !important;
+    color: #000 !important;
+  }
+</style>
+
+<script>
+  const buttons = Array.from(document.querySelectorAll('[data-filter]'));
+  const cards = Array.from(document.querySelectorAll('[data-vehicle-card]'));
+
+  const applyFilter = (id: string) => {
+    buttons.forEach((btn) => {
+      const active = btn.getAttribute('data-filter') === id;
+      btn.classList.toggle('filter-active', active);
+      if (!active) btn.classList.remove('text-[#ff5a00]');
+    });
+    cards.forEach((card) => {
+      const category = card.getAttribute('data-category');
+      const show = id === 'all' || category === id;
+      card.classList.toggle('hidden', !show);
+    });
+  };
+
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => applyFilter(btn.getAttribute('data-filter') ?? 'all')),
+  );
+  applyFilter('all');
+</script>

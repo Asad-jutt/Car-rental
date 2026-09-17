@@ -1,0 +1,48 @@
+---
+import { PROTOCOL_STEPS } from '../data/fleetData';
+---
+
+<section class="w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="protocol">
+  <div class="max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 py-10 sm:py-14 lg:py-16">
+    {/* Header Block */}
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-[#1f1f1f]">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-2 h-2 bg-[#ff5a00] inline-block shadow-[0_0_6px_#ff5a00]"></span>
+          <span class="font-mono text-[10px] uppercase tracking-widest text-[#ff5a00]">[MODULE_02 // BOOKING GUIDE]</span>
+        </div>
+        <h2 class="font-headline text-xl sm:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-[#ffffff] m-0">
+          BOOKING IS SIMPLE
+        </h2>
+      </div>
+      <div class="text-left md:text-right mt-4 md:mt-0 font-mono text-[10px] sm:text-xs text-[#888] uppercase tracking-wider">
+        BOOK ONLINE IN UNDER 10 MINUTES
+        <br />
+        NO HIDDEN FEES / FREE CANCELLATION
+      </div>
+    </div>
+
+    {/* 4-Step Technical Linear Flow */}
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-0 border border-[#1f1f1f] bg-[#1f1f1f]">
+      {PROTOCOL_STEPS.map((step) => (
+        <div
+          class="p-5 sm:p-6 bg-[#0e0e0e] flex flex-col justify-between group hover:bg-[#141414] transition-colors relative"
+        >
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-[#1f1f1f] mb-4">
+              <span class="font-mono text-xs text-[#ff5a00] font-bold">{step.stepNumber} // STEP</span>
+              <span class="font-mono text-[10px] text-[#888] uppercase">{step.code}</span>
+            </div>
+            <h3 class="font-headline text-sm sm:text-base font-bold uppercase tracking-tight text-[#ffffff] mb-2.5">{step.title}</h3>
+            <p class="font-editorial text-[13px] text-[#b0b0b0] leading-relaxed">{step.description}</p>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-[#1f1f1f] flex items-center justify-between text-[11px] font-mono text-[#888]">
+            <span>{step.paramLabel}</span>
+            <span class="text-[#ff5a00] font-mono font-bold">{step.stepFraction}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

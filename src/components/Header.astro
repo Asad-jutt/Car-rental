@@ -1,0 +1,155 @@
+---
+import { BRAND_LOGO } from '../data/fleetData';
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 select-none bg-[#0e0e0e]/80 supports-[backdrop-filter]:bg-[#0e0e0e]/45 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.45)]">
+  <div class="h-12 w-full max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 flex items-center justify-between gap-3">
+    {/* Left: Brand Identity */}
+    <div class="flex items-center gap-3 shrink-0">
+      <a href="#hero" class="flex items-center gap-3 group">
+        <img
+          alt="KINETIC Brand Mark"
+          class="h-7 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+          src={BRAND_LOGO}
+        />
+        <span class="font-headline text-xl sm:text-2xl font-black uppercase tracking-tight text-[#e2e2e2]">
+          KINETIC
+        </span>
+      </a>
+
+      <div class="h-3 w-px bg-[#1f1f1f] hidden sm:block"></div>
+      <span class="hidden lg:inline-block border border-[#1f1f1f] bg-[#1b1b1b] px-1.5 py-px font-mono text-[9px] uppercase tracking-wider text-[#929292]">
+        [CAR RENTAL // NYC]
+      </span>
+    </div>
+
+    {/* Center: Navigation Stages */}
+    <nav class="hidden xl:flex items-center h-full">
+      <a
+        href="#hero"
+        data-nav="hero"
+        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
+      >
+        STAGE 01 // HOME
+      </a>
+      <a
+        href="#inventory"
+        data-nav="inventory"
+        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
+      >
+        STAGE 02 // OUR FLEET
+      </a>
+      <a
+        href="#protocol"
+        data-nav="protocol"
+        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
+      >
+        STAGE 03 // HOW IT WORKS
+      </a>
+      <a
+        href="#tiers"
+        data-nav="tiers"
+        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
+      >
+        STAGE 04 // PRICING
+      </a>
+    </nav>
+
+    {/* Right: Status Chips + User Action */}
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      {/* Active Telemetry Chip */}
+      <div class="hidden sm:flex xl:hidden items-center gap-1.5 border border-[#1f1f1f] bg-[#1b1b1b] px-1.5 py-0.5 font-mono text-[9px] text-[#e2e2e2]">
+        <span class="w-1.5 h-1.5 bg-[#ff5a00] inline-block shadow-[0_0_6px_#ff5a00] animate-pulse"></span>
+        <span class="tracking-wide">[OPEN 24/7]</span>
+      </div>
+
+      {/* Global Region Indicator */}
+      <div class="hidden lg:flex xl:hidden items-center border border-[#1f1f1f] bg-[#1b1b1b] px-1.5 py-0.5 font-mono text-[9px] text-[#929292]">
+        <span class="text-[#a0a0a0]">[SUPPORT:</span>
+        <span class="text-[#e2e2e2] ml-1">1-800-KINETIC]</span>
+      </div>
+
+      {/* Direct Dispatch Quick Button */}
+      <button
+        type="button"
+        data-open-modal
+        class="w-7 h-7 bg-[#ff5a00] hover:bg-white text-black font-bold flex items-center justify-center transition-colors"
+        title="Open Booking Modal"
+      >
+        <span class="material-symbols-outlined text-sm">calendar_today</span>
+      </button>
+
+      {/* Mobile Menu Button */}
+      <button
+        type="button"
+        data-mobile-toggle
+        class="xl:hidden w-7 h-7 border border-[#1f1f1f] bg-[#1b1b1b] flex items-center justify-center text-[#e2e2e2]"
+      >
+        <span data-mobile-icon class="material-symbols-outlined text-sm">menu</span>
+      </button>
+    </div>
+  </div>
+
+  {/* Mobile Drawer */}
+  <div data-mobile-drawer class="hidden xl:hidden bg-[#111]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 p-4 font-mono text-xs space-y-2">
+    <a href="#hero" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+      STAGE 01 // HOME
+    </a>
+    <a href="#inventory" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+      STAGE 02 // OUR FLEET
+    </a>
+    <a href="#protocol" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+      STAGE 03 // HOW IT WORKS
+    </a>
+    <a href="#tiers" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+      STAGE 04 // PRICING
+    </a>
+  </div>
+</header>
+
+<style is:global>
+  .nav-active {
+    color: #e2e2e2 !important;
+    border-color: #ff5a00 !important;
+    background-color: #1b1b1b !important;
+  }
+</style>
+
+<script>
+  // Mobile drawer
+  const mobileToggle = document.querySelector('[data-mobile-toggle]');
+  const mobileDrawer = document.querySelector('[data-mobile-drawer]');
+  const mobileIcon = document.querySelector('[data-mobile-icon]');
+  mobileToggle?.addEventListener('click', () => {
+    const isOpen = !!(mobileDrawer && !mobileDrawer.classList.contains('hidden'));
+    mobileDrawer?.classList.toggle('hidden', isOpen);
+    if (mobileIcon) mobileIcon.textContent = isOpen ? 'menu' : 'close';
+  });
+  document.querySelectorAll('[data-mobile-close]').forEach((link) =>
+    link.addEventListener('click', () => {
+      mobileDrawer?.classList.add('hidden');
+      if (mobileIcon) mobileIcon.textContent = 'menu';
+    }),
+  );
+
+  // Active section tracking
+  const navLinks = Array.from(document.querySelectorAll('[data-nav]'));
+  const sectionIds = ['hero', 'inventory', 'protocol', 'tiers'];
+  const updateNav = () => {
+    const pos = window.scrollY + 200;
+    let current = 'hero';
+    for (const id of sectionIds) {
+      const el = document.getElementById(id);
+      if (el && pos >= el.offsetTop && pos < el.offsetTop + el.offsetHeight) {
+        current = id;
+        break;
+      }
+    }
+    navLinks.forEach((link) => {
+      const isActive = link.getAttribute('data-nav') === current;
+      link.classList.toggle('nav-active', isActive);
+    });
+  };
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+</script>
