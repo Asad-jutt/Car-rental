@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import BookingForm from '../components/BookingForm';
+import { HUBS } from '../data/fleetData';
 ---
 
 <BaseLayout
@@ -11,10 +13,10 @@ import Footer from '../components/Footer.astro';
   <Header />
 
   <main class="w-full pt-12 flex-1 flex flex-col">
-    <section id="booking" class="relative w-full">
+    <section id="booking" class="relative w-full flex-1">
       {/* Section Heading */}
-      <div class="w-full max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 pt-10 pb-6">
-        <div class="flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-[#929292]">
+      <div class="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8 sm:pt-12">
+        <div class="flex items-center gap-3 font-mono text-[10px] sm:text-xs uppercase tracking-widest text-[#929292]">
           <span class="w-2 h-2 bg-[#ff5a00] inline-block shadow-[0_0_6px_#ff5a00] animate-pulse"></span>
           <span>[RESERVATION MODULE // ONLINE]</span>
           <span class="hidden sm:inline border border-[#1f1f1f] bg-[#1b1b1b] px-1.5 py-px font-mono text-[9px] uppercase tracking-wider text-[#929292]">
@@ -28,6 +30,64 @@ import Footer from '../components/Footer.astro';
           Pick a hub, choose your vehicle, and confirm your driver details. Instant
           verification, included insurance, and keys ready in under ten minutes.
         </p>
+      </div>
+
+      {/* Booking Form + Info Panel */}
+      <div class="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+        <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-12 lg:gap-8">
+          {/* Form */}
+          <div class="lg:col-span-7 xl:col-span-7 min-w-0">
+            <BookingForm client:load />
+          </div>
+
+          {/* Supporting Info */}
+          <aside class="lg:col-span-5 lg:sticky lg:top-16 flex flex-col gap-4 min-w-0">
+            <div class="border border-[#222] bg-[#141414] p-4 sm:p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest text-[#ff5a00] font-bold">[WHY BOOK KINETIC]</span>
+              </div>
+              <ul class="space-y-2.5 font-mono text-[11px] sm:text-xs text-[#b0b0b0]">
+                <li class="flex items-start gap-2">
+                  <span class="text-[#ff5a00] shrink-0">+</span>
+                  <span>TRANSPARENT DAILY RATES // ZERO HIDDEN FEES</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-[#ff5a00] shrink-0">+</span>
+                  <span>COLLISION &amp; LIABILITY COVER INCLUDED</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-[#ff5a00] shrink-0">+</span>
+                  <span>24/7 ROADSIDE ASSISTANCE &amp; PRIORITY SUPPORT</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-[#ff5a00] shrink-0">+</span>
+                  <span>FREE CANCELLATION UP TO 24H BEFORE PICKUP</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="border border-[#222] bg-[#141414] p-4 sm:p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest text-[#ff5a00] font-bold">[BRANCH NETWORK]</span>
+              </div>
+              <div class="space-y-2">
+                {HUBS.map((hub) => (
+                  <div class="flex items-center justify-between gap-2 font-mono text-[11px] sm:text-xs">
+                    <span class="text-[#e2e2e2] truncate">{hub.name}</span>
+                    <span class="text-[#777] shrink-0 whitespace-nowrap">{hub.latency}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="border border-[#222] bg-gradient-to-br from-[#ff5a00]/10 to-transparent p-4 sm:p-5">
+              <span class="font-mono text-[10px] uppercase tracking-widest text-[#ff5a00] font-bold">[NEED HELP?]</span>
+              <p class="mt-2 font-mono text-[11px] sm:text-xs text-[#a0a0a0] leading-relaxed">
+                Our dispatch team is live 24/7. Call <span class="text-[#e2e2e2] font-bold">1-800-KINETIC</span> or message us in-app for instant pickup support.
+              </p>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
   </main>

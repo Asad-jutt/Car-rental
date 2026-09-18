@@ -41,18 +41,18 @@ export default function MultiStepForm({
 
   return (
     <Card className="w-full max-w-[700px] border-border p-0 shadow-md">
-      <CardHeader className="flex w-full flex-col space-y-0 bg-secondary/50 pb-0 pt-6 text-center">
+      <CardHeader className="relative flex w-full flex-col space-y-0 bg-secondary/50 pb-0 pt-6 text-center">
         {onClose && (
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-md border border-border text-xs text-muted-foreground transition-colors hover:text-foreground"
+            className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-md border border-border text-xs text-muted-foreground transition-colors hover:text-foreground sm:right-4 sm:top-4"
           >
             <X className="h-4 w-4" />
           </button>
         )}
-        <CardTitle className={cn(titleVariants())}>{title}</CardTitle>
+        <CardTitle className={cn(titleVariants(), "px-6")}>{title}</CardTitle>
         {description && (
           <CardDescription>{description}</CardDescription>
         )}
@@ -60,7 +60,7 @@ export default function MultiStepForm({
           <Progress value={progressValue} className="h-1.5 rounded-full bg-border" />
         </div>
       </CardHeader>
-      <CardContent className="pt-4">
+      <CardContent className="p-4 pt-4 sm:p-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
@@ -73,12 +73,14 @@ export default function MultiStepForm({
           </motion.div>
         </AnimatePresence>
       </CardContent>
-      <CardFooter className="justify-between">
-        <Button variant="outline" onClick={onBack} disabled={!onBack || currentStep === 1}>
-          {backButtonText}
-        </Button>
+      <CardFooter className="flex flex-col-reverse gap-3 p-4 pt-2 sm:flex-row sm:items-center sm:justify-between sm:p-6 sm:pt-0">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+          <Button variant="outline" onClick={onBack} disabled={!onBack || currentStep === 1} className="w-full sm:w-auto">
+            {backButtonText}
+          </Button>
+          <Button onClick={onNext} disabled={!onNext} className="w-full sm:w-auto">{currentStep === totalSteps ? nextButtonText : "NEXT"}</Button>
+        </div>
         {footerContent}
-        <Button onClick={onNext} disabled={!onNext}>{currentStep === totalSteps ? nextButtonText : "NEXT"}</Button>
       </CardFooter>
     </Card>
   )

@@ -68,7 +68,7 @@ const bookingStepsMedia = await Promise.all(
     <FleetMatrix />
 
     {/* How Booking Works */}
-    <BookingSteps media={bookingStepsMedia} client:load />
+    <BookingSteps media={bookingStepsMedia} client:visible />
 
     {/* Pricing Plans */}
     <SyndicateTiers />
