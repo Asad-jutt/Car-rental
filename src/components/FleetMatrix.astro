@@ -1,6 +1,5 @@
 ---
 import { VEHICLES } from '../data/fleetData';
-import FleetReel from '../components/FleetReel';
 ---
 
 <section class="relative w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="inventory">
@@ -47,21 +46,6 @@ import FleetReel from '../components/FleetReel';
         </div>
       </div>
     </div>
-
-    {/* Halo Reel — fleet rides the ring */}
-    <FleetReel
-      client:only="react"
-      centerLabel={
-        <div class="flex flex-col items-center gap-1 select-none">
-          <span class="font-headline text-2xl sm:text-3xl font-black uppercase tracking-tight text-[#ffffff]/95">
-            SELECTED FLEET
-          </span>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#ff5a00]">
-            [SPIN TO BROWSE]
-          </span>
-        </div>
-      }
-    />
 
     {/* Fleet Matrix Grid */}
     <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

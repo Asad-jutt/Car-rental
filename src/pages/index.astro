@@ -11,6 +11,48 @@ import SecurityEnclave from '../components/SecurityEnclave.astro';
 import CtaSection from '../components/CtaSection.astro';
 import Footer from '../components/Footer.astro';
 import AllocationModal from '../components/AllocationModal.astro';
+import { getImage } from 'astro:assets';
+import step1 from '../assets/booking/step-1-browse.jpg';
+import step2 from '../assets/booking/step-2-book.jpg';
+import step3 from '../assets/booking/step-3-docs.jpg';
+import step4 from '../assets/booking/step-4-drive.jpg';
+
+const BOOKING_WIDTHS = [480, 640, 960, 1280, 1600, 1920];
+const bookingStepsMedia = await Promise.all(
+  [step1, step2, step3, step4].map(async (src) => {
+    const [fallback, avif, webp] = await Promise.all([
+      getImage({
+        src,
+        width: 1600,
+        format: 'jpeg',
+        quality: 72,
+      }),
+      getImage({
+        src,
+        widths: BOOKING_WIDTHS,
+        format: 'avif',
+        quality: 72,
+        fit: 'cover',
+      }),
+      getImage({
+        src,
+        widths: BOOKING_WIDTHS,
+        format: 'webp',
+        quality: 72,
+        fit: 'cover',
+      }),
+    ]);
+    return {
+      src: fallback.src,
+      width: fallback.attributes.width,
+      height: fallback.attributes.height,
+      sources: [
+        { type: 'image/avif', srcset: avif.srcSet.attribute },
+        { type: 'image/webp', srcset: webp.srcSet.attribute },
+      ],
+    };
+  }),
+);
 ---
 
 <BaseLayout>
@@ -26,7 +68,7 @@ import AllocationModal from '../components/AllocationModal.astro';
     <FleetMatrix />
 
     {/* How Booking Works */}
-    <BookingSteps client:load />
+    <BookingSteps media={bookingStepsMedia} client:load />
 
     {/* Pricing Plans */}
     <SyndicateTiers />

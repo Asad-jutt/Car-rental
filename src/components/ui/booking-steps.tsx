@@ -5,6 +5,22 @@ import { motion, AnimatePresence } from "motion/react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+export interface BookingStepSource {
+  type: string;
+  srcset: string;
+}
+
+export interface BookingStepMedia {
+  src: string;
+  width: number;
+  height: number;
+  sources: BookingStepSource[];
+}
+
+interface BookingStepsProps {
+  media?: BookingStepMedia[];
+}
+
 const BOOKING_STEPS = [
   {
     id: "01",
@@ -26,7 +42,7 @@ const BOOKING_STEPS = [
     paramLabel: "BOOKING: ONLINE",
     fraction: "02/04",
     image:
-      "https://images.unsplash.com/photo-1454418743013-2c859087a97e?q=80&w=1200&auto=format&fit=crop",
+      "https://images.pexels.com/photos/1667071/pexels-photo-1667071.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   {
     id: "03",
@@ -54,7 +70,7 @@ const BOOKING_STEPS = [
 
 const AUTO_PLAY_DURATION = 5000;
 
-export default function BookingSteps() {
+export default function BookingSteps({ media }: BookingStepsProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -103,6 +119,7 @@ export default function BookingSteps() {
   };
 
   const step = BOOKING_STEPS[activeIndex];
+  const stepMedia = media?.[activeIndex] ?? null;
 
   return (
     <section
@@ -252,11 +269,35 @@ export default function BookingSteps() {
                     className="absolute inset-0 h-full w-full cursor-pointer"
                     onClick={handleNext}
                   >
-                    <img
-                      src={step.image}
-                      alt={step.title}
-                      className="m-0! block h-full w-full object-cover p-0! transition-transform duration-700 hover:scale-105"
-                    />
+                    {stepMedia ? (
+                      <picture>
+                        {stepMedia.sources.map((source) => (
+                          <source
+                            key={source.type}
+                            type={source.type}
+                            srcSet={source.srcset}
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 92vw, 640px"
+                          />
+                        ))}
+                        <img
+                          src={stepMedia.src}
+                          alt={step.title}
+                          width={stepMedia.width}
+                          height={stepMedia.height}
+                          decoding="async"
+                          loading="lazy"
+                          className="m-0! block h-full w-full object-cover p-0! transition-transform duration-700 hover:scale-105"
+                        />
+                      </picture>
+                    ) : (
+                      <img
+                        src={step.image}
+                        alt={step.title}
+                        decoding="async"
+                        loading="lazy"
+                        className="m-0! block h-full w-full object-cover p-0! transition-transform duration-700 hover:scale-105"
+                      />
+                    )}
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0e0e0e]/90 via-[#0e0e0e]/25 to-transparent" />
                     <div className="absolute bottom-5 left-5 right-28 flex flex-col gap-0.5">
                       <span className="font-mono text-[9px] uppercase tracking-widest text-[#ff5a00]">

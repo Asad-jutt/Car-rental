@@ -1,20 +1,30 @@
 ---
-import { HERO_IMAGE } from '../data/fleetData';
+import CarParticleCanvas from '../components/ui/car-particle-canvas';
 ---
 
 <div
   id="hero"
   class="group relative w-full min-h-[calc(100vh-3rem)] supports-[height:100svh]:min-h-[calc(100svh-3rem)] flex flex-col overflow-hidden bg-[#0e0e0e] select-none border-b border-[#1f1f1f]"
 >
-  {/* FULL-BLEED BACKGROUND IMAGE // ANCHORED RIGHT */}
+  {/* INTERACTIVE PARTICLE SILHOUETTE // HOVER TO DISPERSE */}
   <div class="absolute inset-0 z-0">
-    <div
-      class="absolute inset-0 bg-cover bg-center sm:bg-right transition-transform duration-1000 ease-out group-hover:scale-105"
-      style={`background-image: url('${HERO_IMAGE}')`}
+    <CarParticleCanvas
+      client:only="react"
+      src="/hero image car.png"
+      className="absolute inset-0 h-full w-full"
+      color="#e8e8e8"
+      particleSize={1.5}
+      radius={0.12}
+      strength={180}
+      spring={5}
+      damping={0.93}
+      depth={0.25}
+      idle={0.12}
+      opacity={1}
     />
     {/* Legibility Overlay Gradients */}
     <div class="absolute inset-0 bg-gradient-to-r from-[#0e0e0e]/35 via-transparent to-[#0e0e0e]/45 pointer-events-none" />
-    <div class="absolute inset-0 bg-gradient-to-t from-[#0e0e0e]/85 via-[#0e0e0e]/25 to-[#0e0e0e]/50 pointer-events-none" />
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0e0e0e]/80 via-[#0e0e0e]/15 to-[#0e0e0e]/50 pointer-events-none" />
   </div>
 
   {/* Left Vertical Micro-Running Axis Tracker */}
@@ -45,7 +55,7 @@ import { HERO_IMAGE } from '../data/fleetData';
   </div>
 
   {/* Centered Hero Content Overlay */}
-  <div class="relative z-10 flex-1 w-full flex flex-col items-center justify-center text-center px-4 sm:px-8 lg:px-16 py-10 lg:py-0">
+  <div class="relative z-10 flex-1 w-full flex flex-col items-center justify-center text-center px-4 sm:px-8 lg:px-16 py-10 lg:py-0 pointer-events-none">
     {/* Top Metadata Header */}
     <div class="flex items-center gap-2 flex-wrap justify-center mb-4">
       <span class="px-1.5 py-0.5 bg-[#ff5a00] text-black font-mono text-[10px] font-bold tracking-wider uppercase rounded-md">

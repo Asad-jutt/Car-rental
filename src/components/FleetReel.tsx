@@ -22,6 +22,17 @@ export default function FleetReel({
   centerLabel?: React.ReactNode;
   className?: string;
 }) {
+  const resolvedCenterLabel = centerLabel ?? (
+    <div className="pointer-events-none flex flex-col items-center gap-1 select-none">
+      <span className="font-headline text-2xl sm:text-3xl font-black uppercase tracking-tight text-[#ffffff]/95">
+        SELECTED FLEET
+      </span>
+      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#ff5a00]">
+        [SPIN TO BROWSE]
+      </span>
+    </div>
+  );
+
   return (
     <HaloReel
       items={ITEMS}
@@ -37,7 +48,7 @@ export default function FleetReel({
       minScale={0.42}
       radiusXRatio={0.45}
       radiusYRatio={0.36}
-      centerLabel={centerLabel}
+      centerLabel={resolvedCenterLabel}
       showCenterLabel
       className={className}
       aria-label="Fleet carousel"
