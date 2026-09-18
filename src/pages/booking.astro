@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="KINETIC // Booking | Reserve Your Ride Online"
+  description="Reserve a premium EV, sports coupe, or family SUV at KINETIC. Pick your hub, dates, and vehicle in three quick steps."
+>
+  <Header />
+
+  <main class="w-full pt-12 flex-1 flex flex-col">
+    <section id="booking" class="relative w-full">
+      {/* Section Heading */}
+      <div class="w-full max-w-[1200px] mx-auto px-3 sm:px-6 lg:px-8 pt-10 pb-6">
+        <div class="flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-[#929292]">
+          <span class="w-2 h-2 bg-[#ff5a00] inline-block shadow-[0_0_6px_#ff5a00] animate-pulse"></span>
+          <span>[RESERVATION MODULE // ONLINE]</span>
+          <span class="hidden sm:inline border border-[#1f1f1f] bg-[#1b1b1b] px-1.5 py-px font-mono text-[9px] uppercase tracking-wider text-[#929292]">
+            [SUPPORT: 1-800-KINETIC]
+          </span>
+        </div>
+        <h1 class="font-headline text-3xl sm:text-4xl xl:text-5xl font-black uppercase tracking-tight text-[#e2e2e2] mt-4">
+          Book Your Ride
+        </h1>
+        <p class="mt-3 max-w-xl font-mono text-sm text-[#a0a0a0]">
+          Pick a hub, choose your vehicle, and confirm your driver details. Instant
+          verification, included insurance, and keys ready in under ten minutes.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

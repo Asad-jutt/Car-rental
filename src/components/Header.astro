@@ -57,6 +57,20 @@ import { BRAND_LOGO } from '../data/fleetData';
       >
         STAGE 04 // PRICING
       </a>
+      <a
+        href="#sales-team"
+        data-nav="sales-team"
+        aria-current="false"
+        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
+      >
+        STAGE 05 // SALES TEAM
+      </a>
+      <a
+        href="/booking"
+        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#ff5a00] hover:text-[#e2e2e2]"
+      >
+        STAGE 06 // BOOK NOW
+      </a>
     </nav>
 
     {/* Right: Status Chips + User Action */}
@@ -111,6 +125,12 @@ import { BRAND_LOGO } from '../data/fleetData';
     <a href="#tiers" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
       STAGE 04 // PRICING
     </a>
+    <a href="#sales-team" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+      STAGE 05 // SALES TEAM
+    </a>
+    <a href="/booking" data-mobile-close class="block py-2 px-3 border border-[#ff5a00] bg-[#ff5a00]/10 text-[#ff5a00] hover:border-[#ff5a00]">
+      STAGE 06 // BOOK NOW
+    </a>
   </nav>
 </header>
 
@@ -143,7 +163,7 @@ import { BRAND_LOGO } from '../data/fleetData';
 
   // Active section tracking
   const navLinks = Array.from(document.querySelectorAll('[data-nav]'));
-  const sectionIds = ['hero', 'inventory', 'protocol', 'tiers'];
+  const sectionIds = ['hero', 'inventory', 'protocol', 'tiers', 'sales-team'];
   const updateNav = () => {
     const pos = window.scrollY + 200;
     let current = 'hero';

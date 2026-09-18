@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import CtaSection from '../components/CtaSection.astro';
+import Footer from '../components/Footer.astro';
+import AllocationModal from '../components/AllocationModal.astro';
+import CardsRotateSlider from '../components/ui/cards-rotate-slider';
+import { VEHICLES } from '../data/fleetData';
+
+const U = (id: string) =>
+  `https://images.unsplash.com/${id}?q=80&w=1200&auto=format&fit=crop`;
+
+// Verified-working fleet angle pool (same Unsplash sources used site-wide).
+const ANGLE_POOL = [
+  'photo-1502161254066-6c74afbf07aa',
+  'photo-1552519507-da3b142c6e3d',
+  'photo-1542362567-b07e54358753',
+  'photo-1553440569-bcc63803a83d',
+  'photo-1549399542-7e3f8b79c341',
+  'photo-1583121274602-3e2820c69888',
+  'photo-1493238792000-8113da705763',
+  'photo-1502877338535-766e1452684a',
+];
+
+// Each real vehicle rides the wheel from its own press shot plus three
+// dynamic angles — a rotating "spin to browse" fleet index.
+const SLIDES = VEHICLES.map((vehicle, i) => {
+  const angles = [vehicle.imageUrl, ...(ANGLE_POOL.slice(i * 3, i * 3 + 3) ?? [])];
+  return angles.map((src) => ({
+    src: src.startsWith('http') ? src : U(src),
+    text: vehicle.name,
+    sub: `[${vehicle.band} // ${vehicle.category.toUpperCase()}]`,
+    spec: `${vehicle.power}${vehicle.powerUnit} / ${vehicle.zeroToSixty}S / ${vehicle.drive}`,
+    price: `$${vehicle.pricePer24h}`,
+    vehicleId: vehicle.id,
+  }));
+}).flat();
+---
+
+<BaseLayout
+  title="KINETIC // Fleet Index | Book Premium Cars Online"
+  description="Rotate through the KINETIC fleet — EVs, sports coupes, and family SUVs. Transparent daily rates, included insurance, and instant online booking."
+>
+  <Header />
+
+  <main class="w-full pt-12 flex-1 flex flex-col">
+    {/* Module 00 — Page Intro */}
+    <section class="relative w-full bg-[#0e0e0e] border-b border-[#1f1f1f]">
+      <div
+        class="absolute inset-0 pointer-events-none"
+        style="background: radial-gradient(900px circle at 78% 20%, rgba(255,90,0,0.18), transparent 55%), radial-gradient(700px circle at 10% 90%, rgba(255,90,0,0.10), transparent 60%)"
+      />
+      <div class="relative max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-10 sm:py-14">
+        <div class="font-mono text-[10px] text-[#777] uppercase tracking-widest mb-6">
+          <a href="/" class="inline-flex items-center gap-1.5 text-[#a0a0a0] hover:text-[#ff5a00] transition-colors">
+            <span aria-hidden>←</span> BACK TO HOMEPAGE
+          </a>
+        </div>
+
+        <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-4 mb-8 pb-4 border-b border-[#1f1f1f]">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-2 h-2 bg-[#ff5a00] inline-block shadow-[0_0_6px_#ff5a00]"></span>
+              <span class="font-mono text-[10px] uppercase tracking-widest text-[#ff5a00]">[MODULE_00 // FLEET INDEX]</span>
+            </div>
+            <h1 class="font-headline text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-[#ffffff] m-0">
+              THE FLEET<span class="text-[#ff5a00]">.</span>
+            </h1>
+            <p class="font-mono text-[10px] sm:text-[11px] text-[#929292] uppercase tracking-widest mt-1.5">
+              ROTATE THE WHEEL // SETTLE ON A CAR // BOOK IMMEDIATELY
+            </p>
+          </div>
+          <div class="text-left xl:text-right font-mono text-[10px] sm:text-xs text-[#888] uppercase tracking-wider">
+            {SLIDES.length} SLOTS ONLINE
+            <br />
+            RATES INCLUDE BASIC INSURANCE + ROADSIDE 24/7
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Rotating Wheel Slider */}
+    <CardsRotateSlider
+      client:load
+      images={SLIDES}
+      rotationAmount={1.1}
+      verticalDrift={1.2}
+      perspective={1100}
+      textColor="#f2f2f2"
+    />
+
+    <CtaSection />
+  </main>
+
+  <Footer />
+  <AllocationModal />
+</BaseLayout>
