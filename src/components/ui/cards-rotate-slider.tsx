@@ -144,6 +144,11 @@ export default function CardsRotateSlider({
     const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
     const isTablet = window.innerWidth >= MOBILE_BREAKPOINT && window.innerWidth < TABLET_BREAKPOINT;
 
+    // Size the pin container synchronously with trigger setup so ScrollTrigger
+    // never measures a section that reports zero height at refresh time.
+    const travel = track.scrollWidth - window.innerWidth;
+    outer.style.height = `${travel + window.innerHeight}px`;
+
     const context = gsap.context(() => {
       const horizontalTween = gsap.to(track, {
         x: () => -(track.scrollWidth - window.innerWidth),
@@ -155,7 +160,9 @@ export default function CardsRotateSlider({
           // Reduced motion: scrub:true tracks scroll position
           // directly (no smoothing lag) instead of the ~1s
           // catch-up delay - the "lerp" here is that scrub value.
-          scrub: reducedMotion ? true : scrollSmoothing,
+          // Default scrollSmoothing (1) is treated as 1:1 tracking so
+          // the cards never trail behind the scrollbar.
+          scrub: reducedMotion ? true : scrollSmoothing > 1 ? scrollSmoothing : true,
           invalidateOnRefresh: true,
         },
       });
@@ -347,14 +354,12 @@ const RotationCard = forwardRef<HTMLDivElement, RotationCardProps>(
                     <span className="ml-1 text-[0.55em] font-bold opacity-80">/ DAY</span>
                   </span>
                 )}
-                <button
-                  type="button"
-                  data-open-modal
-                  data-vehicle={vehicleId}
+                <a
+                  href="/booking"
                   className="pointer-events-auto inline-flex cursor-pointer items-center gap-[0.55vw] border border-[#ff5a00] bg-[#ff5a00] px-[1vw] py-[0.7vh] font-mono text-[0.7vw] font-extrabold uppercase tracking-widest text-black transition-colors hover:border-[#ffffff] hover:bg-[#ffffff] max-md:text-[1.8vw] max-md:px-3 max-md:py-1"
                 >
                   BOOK IMMEDIATELY <span aria-hidden>→</span>
-                </button>
+                </a>
               </div>
             </div>
           )}

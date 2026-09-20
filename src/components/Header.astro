@@ -6,7 +6,7 @@ import { BRAND_LOGO } from '../data/fleetData';
   <div class="h-12 w-full max-w-[1200px] mx-auto px-2 sm:px-3 lg:px-4 flex items-center justify-between gap-3">
     {/* Left: Brand Identity */}
     <div class="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
-      <a href="#hero" class="flex items-center gap-2 sm:gap-3 group min-w-0">
+      <a href="/" class="flex items-center gap-2 sm:gap-3 group min-w-0">
         <img
           alt="KINETIC Brand Mark"
           fetchpriority="high"
@@ -28,7 +28,7 @@ import { BRAND_LOGO } from '../data/fleetData';
 {/* Center: Navigation */}
     <nav class="hidden xl:flex items-center h-full" aria-label="Primary">
       <a
-        href="#hero"
+        href="/"
         data-nav="hero"
         aria-current="false"
         class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
@@ -36,7 +36,7 @@ import { BRAND_LOGO } from '../data/fleetData';
         STAGE 01 // HOME
       </a>
       <a
-        href="#inventory"
+        href="/#inventory"
         data-nav="inventory"
         aria-current="false"
         class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
@@ -44,7 +44,7 @@ import { BRAND_LOGO } from '../data/fleetData';
         STAGE 02 // OUR FLEET
       </a>
       <a
-        href="#protocol"
+        href="/#protocol"
         data-nav="protocol"
         aria-current="false"
         class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
@@ -52,7 +52,7 @@ import { BRAND_LOGO } from '../data/fleetData';
         STAGE 03 // HOW IT WORKS
       </a>
       <a
-        href="#tiers"
+        href="/#tiers"
         data-nav="tiers"
         aria-current="false"
         class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
@@ -60,7 +60,7 @@ import { BRAND_LOGO } from '../data/fleetData';
         STAGE 04 // PRICING
       </a>
       <a
-        href="#sales-team"
+        href="/#sales-team"
         data-nav="sales-team"
         aria-current="false"
         class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
@@ -90,14 +90,13 @@ import { BRAND_LOGO } from '../data/fleetData';
       </div>
 
       {/* Direct Dispatch Quick Button */}
-      <button
-        type="button"
-        data-open-modal
+      <a
+        href="/booking"
         class="h-7 px-2.5 sm:px-3 bg-[#ff5a00] hover:bg-white text-black font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-wider flex items-center justify-center transition-colors whitespace-nowrap"
-        title="Open Booking Modal"
+        aria-label="Go to booking page"
       >
         BOOKING
-      </button>
+      </a>
 
       {/* Mobile Menu Button */}
       <button
@@ -115,19 +114,19 @@ import { BRAND_LOGO } from '../data/fleetData';
 
   {/* Mobile Drawer */}
   <nav data-mobile-drawer aria-label="Mobile navigation" class="hidden xl:hidden bg-[#111]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 p-4 font-mono text-xs space-y-2">
-    <a href="#hero" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+    <a href="/" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
       STAGE 01 // HOME
     </a>
-    <a href="#inventory" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+    <a href="/#inventory" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
       STAGE 02 // OUR FLEET
     </a>
-    <a href="#protocol" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+    <a href="/#protocol" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
       STAGE 03 // HOW IT WORKS
     </a>
-    <a href="#tiers" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+    <a href="/#tiers" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
       STAGE 04 // PRICING
     </a>
-    <a href="#sales-team" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+    <a href="/#sales-team" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
       STAGE 05 // SALES TEAM
     </a>
     <a href="/booking" data-mobile-close class="block py-2 px-3 border border-[#ff5a00] bg-[#ff5a00]/10 text-[#ff5a00] hover:border-[#ff5a00]">

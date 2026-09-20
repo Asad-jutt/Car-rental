@@ -68,17 +68,16 @@ import { SYNDICATE_TIERS } from '../data/fleetData';
             </ul>
           </div>
 
-          <button
-            type="button"
-            data-open-modal
-            class={`w-full py-2.5 font-mono text-xs uppercase tracking-wider font-bold transition-colors ${
+          <a
+            href="/booking"
+            class={`w-full inline-block text-center py-2.5 font-mono text-xs uppercase tracking-wider font-bold transition-colors ${
               tier.featured
                 ? 'bg-[#ff5a00] hover:bg-[#ffffff] text-black'
                 : 'bg-[#202020] hover:bg-[#ff5a00] text-[#ffffff] hover:text-black border border-[#333]'
             }`}
           >
             {tier.buttonText}
-          </button>
+          </a>
         </div>
       ))}
     </div>

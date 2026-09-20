@@ -90,8 +90,7 @@ export default function BookingForm() {
   const footerContent = (
     <div className="flex justify-end flex-1">
       <a
-        href="#"
-        onClick={(e) => e.preventDefault()}
+        href="tel:+18005463842"
         className="font-mono text-[10px] uppercase tracking-wider text-[#929292] hover:text-[#e2e2e2] flex items-center gap-1"
       >
         <HelpCircle className="h-3.5 w-3.5" />

@@ -44,6 +44,12 @@ import { VEHICLES } from '../data/fleetData';
             </button>
           ))}
         </div>
+        <a
+          href="/fleet"
+          class="inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff5a00] bg-[#ff5a00] text-black font-mono text-[11px] font-extrabold uppercase tracking-widest transition-colors hover:border-[#ffffff] hover:bg-[#ffffff] group/fleet"
+        >
+          VIEW FULL FLEET <span class="transition-transform group-hover/fleet:translate-x-0.5">→</span>
+        </a>
       </div>
     </div>
 
@@ -128,14 +134,12 @@ import { VEHICLES } from '../data/fleetData';
                   <span class="font-mono text-[10px] text-[#888] uppercase">/ DAY</span>
                 </div>
               </div>
-              <button
-                type="button"
-                data-open-modal
-                data-vehicle={vehicle.id}
-                class="px-4 py-2 bg-[#222] hover:bg-[#ff5a00] text-[#ffffff] hover:text-black font-mono text-xs uppercase tracking-wider font-bold transition-colors border border-[#333] hover:border-[#ff5a00]"
+              <a
+                href="/booking"
+                class="px-4 py-2 bg-[#222] hover:bg-[#ff5a00] text-[#ffffff] hover:text-black font-mono text-xs uppercase tracking-wider font-bold transition-colors border border-[#333] hover:border-[#ff5a00] inline-block"
               >
                 BOOK NOW →
-              </button>
+              </a>
             </div>
           </div>
         </article>

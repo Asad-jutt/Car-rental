@@ -8,9 +8,7 @@ import SyndicateTiers from '../components/SyndicateTiers.astro';
 import SalesTeam from '../components/SalesTeam.astro';
 import DriverLogs from '../components/DriverLogs.astro';
 import SecurityEnclave from '../components/SecurityEnclave.astro';
-import CtaSection from '../components/CtaSection.astro';
 import Footer from '../components/Footer.astro';
-import AllocationModal from '../components/AllocationModal.astro';
 import { getImage } from 'astro:assets';
 import step1 from '../assets/booking/step-1-browse.jpg';
 import step2 from '../assets/booking/step-2-book.jpg';
@@ -81,14 +79,8 @@ const bookingStepsMedia = await Promise.all(
 
     {/* FAQs & Policies */}
     <SecurityEnclave />
-
-    {/* Call to Action */}
-    <CtaSection />
   </main>
 
   {/* Footer */}
   <Footer />
-
-  {/* Booking Modal */}
-  <AllocationModal />
 </BaseLayout>
