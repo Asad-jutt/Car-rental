@@ -4,13 +4,13 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
 
 <div
   id="hero"
-  class="group relative w-full min-h-[calc(100vh-3rem)] supports-[height:100svh]:min-h-[calc(100svh-3rem)] flex flex-col overflow-hidden bg-[#0e0e0e] select-none border-b border-[#1f1f1f]"
+  class="group relative w-full min-h-screen supports-[height:100svh]:min-h-[100svh] flex flex-col overflow-hidden bg-[#0e0e0e] select-none border-b border-[#1f1f1f]"
 >
   {/* INTERACTIVE PARTICLE SILHOUETTE // HOVER TO DISPERSE */}
   <div class="absolute inset-0 z-0">
     <CarParticleCanvas
       client:only="react"
-      src="/hero image car.webp"
+      src="/hero-car.webp"
       className="absolute inset-0 h-full w-full"
       color="#e8e8e8"
       particleSize={1.5}
@@ -76,21 +76,12 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
     </h1>
 
     {/* Editorial Sub-Statement */}
-    <p class="font-editorial text-[13px] sm:text-sm text-[#ccc] leading-relaxed max-w-3xl mt-5">
+    <p class="font-editorial text-[13px] sm:text-sm text-[#ccc] leading-relaxed max-w-3xl mt-4">
       Book a car online in minutes and pick it up at any branch. Transparent daily rates, included insurance, and 24/7 roadside support on every trip.
     </p>
 
-    {/* Reference Meta Row */}
-    <div class="flex items-center gap-2 flex-wrap justify-center mt-5 text-[#777] font-mono text-[11px]">
-      <span>FROM:</span>
-      <span class="text-[#e2e2e2] font-semibold">$89 / DAY</span>
-      <span class="text-[#555]">/</span>
-      <span>PICKUP:</span>
-      <span class="text-[#ff5a00]">6 CITIES</span>
-    </div>
-
     {/* Industrial Telemetry Widgets Array */}
-    <div class="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mt-8">
+    <div class="hidden sm:grid w-full max-w-3xl grid-cols-3 gap-2 sm:gap-3 mt-6">
       <div class="p-2.5 sm:p-3 bg-[#1f1f1f]/30 backdrop-blur-xl border border-[#333]/60 flex flex-col text-left">
         <span class="font-mono text-[9px] text-[#888] uppercase">[LOCAL TIME]</span>
         <span id="live-clock" data-local-clock class="font-mono text-[11px] sm:text-xs text-[#ffffff] mt-0.5 font-bold tabular-nums tracking-wider">
@@ -106,63 +97,22 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
         <span class="font-mono text-[11px] sm:text-xs text-[#ff5a00] mt-0.5 font-bold tracking-tight">12 CARS READY</span>
       </div>
     </div>
-  </div>
 
-  {/* Base Integrated Command Strip (Interactive Dispatch Bar) */}
-  <div class="relative z-20 w-full bg-[#0e0e0e] shrink-0 border-t border-[#1f1f1f]">
-    <div class="w-full">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 bg-[#1f1f1f]">
-      {/* Command Slot 01: Node Location */}
-      <div
-        data-open-modal
-        role="button"
-        tabindex="0"
-        class="md:col-span-4 px-3 py-1.5 bg-[#0e0e0e] hover:bg-[#181818] transition-colors group cursor-pointer border-b md:border-b-0 md:border-r border-[#1f1f1f]"
-      >
-        <div class="flex items-center justify-between">
-          <span class="font-mono text-[9px] text-[#888] group-hover:text-[#ff5a00] transition-colors uppercase tracking-widest">[PICKUP: SELECT LOCATION]</span>
-          <span class="font-mono text-[9px] text-[#666] group-hover:text-[#ffffff]">BRANCH_ID: 001</span>
-        </div>
-        <div class="mt-0.5 flex items-center justify-between">
-          <span class="font-mono text-xs sm:text-sm text-[#ffffff] font-bold uppercase tracking-wider truncate">NEW YORK // LOWER MANHATTAN</span>
-          <span class="material-symbols-outlined text-[#888] group-hover:text-[#ff5a00] text-[13px]">arrow_drop_down</span>
-        </div>
+    {/* Run Engine Action */}
+    <div
+      data-open-modal
+      role="button"
+      tabindex="0"
+      class="pointer-events-auto mt-6 inline-flex items-center justify-between gap-3 sm:gap-5 px-7 sm:px-9 py-3 bg-[#ff5a00] hover:bg-[#ffffff] transition-colors cursor-pointer group shrink-0"
+    >
+      <div class="flex flex-col items-start min-w-0">
+        <span class="font-mono text-[10px] text-black font-bold uppercase tracking-widest">[BOOK]</span>
+        <span class="font-headline text-base sm:text-lg text-black font-black uppercase tracking-tight leading-tight whitespace-nowrap">RESERVE NOW →</span>
       </div>
-
-      {/* Command Slot 02: Time Frame */}
-      <div
-        data-open-modal
-        role="button"
-        tabindex="0"
-        class="md:col-span-4 px-3 py-1.5 bg-[#0e0e0e] hover:bg-[#181818] transition-colors group cursor-pointer border-b md:border-b-0 md:border-r border-[#1f1f1f]"
-      >
-        <div class="flex items-center justify-between">
-          <span class="font-mono text-[9px] text-[#888] group-hover:text-[#ff5a00] transition-colors uppercase tracking-widest">[RENTAL: SELECT DATES]</span>
-          <span class="font-mono text-[9px] text-[#666] group-hover:text-[#ffffff]">TYPE: DAILY</span>
-        </div>
-        <div class="mt-0.5 flex items-center justify-between">
-          <span class="font-mono text-xs sm:text-sm text-[#ffffff] font-bold uppercase tracking-wider truncate">DAILY · WEEKEND · MONTHLY RENTALS</span>
-          <span class="material-symbols-outlined text-[#888] group-hover:text-[#ff5a00] text-[13px]">schedule</span>
-        </div>
+      <div class="hidden lg:flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-black/15 px-2 py-0.5">
+        <span class="font-mono text-[10px] text-black font-bold tracking-widest uppercase">FREE CANCELLATION</span>
+        <span class="material-symbols-outlined text-black text-sm">calendar_today</span>
       </div>
-
-      {/* Command Slot 03: Run Engine Action */}
-      <div
-        data-open-modal
-        role="button"
-        tabindex="0"
-        class="md:col-span-4 px-4 py-1.5 bg-[#ff5a00] hover:bg-[#ffffff] transition-colors cursor-pointer group flex items-center justify-between gap-3"
-      >
-        <div class="flex flex-col min-w-0">
-          <span class="font-mono text-[10px] text-black font-bold uppercase tracking-widest">[BOOK]</span>
-          <span class="font-headline text-base sm:text-lg text-black font-black uppercase tracking-tight truncate leading-tight whitespace-nowrap">RESERVE NOW →</span>
-        </div>
-        <div class="hidden lg:flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-black/15 px-2 py-0.5">
-          <span class="font-mono text-[10px] text-black font-bold tracking-widest uppercase">FREE CANCELLATION</span>
-          <span class="material-symbols-outlined text-black text-sm">calendar_today</span>
-        </div>
-      </div>
-    </div>
     </div>
   </div>
 </div>

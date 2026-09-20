@@ -91,6 +91,22 @@
   }
 }
 
+/* Booking form step transition (CSS-only, replaces framer-motion) */
+@keyframes kinetic-step-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kinetic-step-in {
+  animation: kinetic-step-in 0.3s ease-out both;
+}
+
 .font-headline {
   font-family: var(--font-headline);
 }

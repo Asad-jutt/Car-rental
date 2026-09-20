@@ -310,7 +310,7 @@ const RotationCard = forwardRef<HTMLDivElement, RotationCardProps>(
     return (
       <div
         ref={ref}
-        className="absolute h-[50vh] w-[38vw] origin-right overflow-hidden opacity-0 max-md:h-[40vh] max-md:w-[75vw]"
+        className="absolute h-[50vh] w-[38vw] origin-right overflow-hidden max-md:h-[40vh] max-md:w-[75vw]"
         style={{
           transformStyle: "preserve-3d",
           zIndex: total - index,
@@ -319,7 +319,7 @@ const RotationCard = forwardRef<HTMLDivElement, RotationCardProps>(
         {/* Frame */}
         <div className="absolute inset-0 border border-[#262626] bg-[#161616]" />
         <div className="relative h-full w-full" style={{ transformStyle: "preserve-3d" }}>
-          <img src={src} alt={text || "slide"} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]" />
+          <img src={src} alt={text || "slide"} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]" />
           {/* Legibility gradient */}
           <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#0e0e0e]/85 via-[#0e0e0e]/20 to-transparent" />
           {showCaptions && text && (

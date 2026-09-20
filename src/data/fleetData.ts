@@ -1,7 +1,9 @@
 import type { Vehicle, ProtocolStep, SyndicateTier, DriverLog, FaqItem } from '../types';
 
-export const BRAND_LOGO = 'https://lh3.googleusercontent.com/aida/AEtjO1UZlP5AMQ717wcVFiDQblACHoyGuh-8f80S5efIdbIkzE1-db1RBwmZGU87_y_YEqS7bbTUOiagNKiWXaNCOX-16Lsbcvqv8TbRp0WyA0F-x9NV231hQBqNfLn-9R0_ReOsFxe7uYbfhzs21pQJ1-7AXG2R47CtvC3MouDV_MeEWHmquOKt9TNV7qVBBV-1ykMjZ8gcdzE4Z5hekld-lOQlaQ3oQAy618vuzP6vRP7EFxnAv_NjJb8sG68';
-export const HERO_IMAGE = 'https://lh3.googleusercontent.com/aida/AEtjO1W9yeeTAn8SzanJ8Gz6SB1HTw92kZTABKJqyUs2ymix0d5nRhUBuHFoLiicplnIkHemM42y07SltRzK1S9iwWTndtMyQTRA-eUGTjAKYlQoHzJo7oCqkmSvmgH5frlwESXWi3LQo05NpHJtMGgFNyIC6NsoevgsObdxbYOIPBN9zYhu8EqmLS_HK5yhsdd_XTU7j5yZ6ENqbHv0VuSeIAuboSgNR8mFh-aMwvHQYHXMHkFDYI_bxfHUw_Y';
+export const BRAND_LOGO =
+  'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23ff5a00%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27Arial%27 font-size=%2718%27 font-weight=%27bold%27 fill=%27%23000%27 text-anchor=%27middle%27%3EK%3C/text%3E%3C/svg%3E';
+export const HERO_IMAGE =
+  'https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=1200&auto=format&fit=crop';
 
 export const CTA_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCvPqDBevHzE2mjhsF-JMeVghgad9qSYUTzgvCLzI0KkvxmRieRfZr0pwqm5RJeDuGssRaz3nVlO6nuYFLMo-T2k_kWyCHubPlqkE8a4gSmW-YbVfhrYBnl2nXmbA6nK3k60Yi1EFVUN3odiBL66PDl3PHh-CJxNyQwMlP3doFiVs_wKSeb221Iug-aJR58X0DZ6YnJK_ju-yNmjt-inq3ZD38ijsjMnfz-O-bEC5KMnJtmOFSrn0jx';
 
@@ -20,7 +22,7 @@ export const VEHICLES: Vehicle[] = [
     drive: 'AWD',
     driveSub: 'EV',
     pricePer24h: 199,
-    imageUrl: 'https://lh3.googleusercontent.com/aida/AEtjO1WKUYCziC9aYkMeY209KWuxLlggnaLiWKaAGwoFSXourNK40Ogqi31_7_akHlIScNU5cx3dsGaTcNmWjW_XgGEqBi48HgmihqIcjIJoRMwqF_oCsXwRTmjqH77yzr9xG4cq5wqPsXxnYOc2fdU323i1xkkHYYkyDLnpsbhog4ZudLYMv9EDoks0P3c7hcbWyt73TaAuqB_yszzrkdev1TGCWpOg5jUWiGYGZEC0HbC6RXusC5-Vyb9cn1c',
+    imageUrl: 'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?q=80&w=1000&auto=format&fit=crop',
     chassis: 'PREMIUM EV PACKAGE',
     rigLabel: 'AUTO + CHARGING INCLUDED',
   },

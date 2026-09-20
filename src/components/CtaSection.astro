@@ -7,7 +7,17 @@ import { CTA_IMAGE } from '../data/fleetData';
   <div class="absolute inset-0 z-0">
     <div
       class="absolute inset-0 bg-cover bg-center sm:bg-right transition-transform duration-1000 ease-out"
-      style={`background-image: url('${CTA_IMAGE}')`}
+      data-bg-target
+    />
+    <img
+      src={CTA_IMAGE}
+      alt=""
+      loading="lazy"
+      decoding="async"
+      fetchpriority="low"
+      class="pointer-events-none absolute inset-0 h-px w-px opacity-0"
+      onload="const el = this.parentElement && this.parentElement.querySelector('[data-bg-target]'); if (el) el.style.backgroundImage = 'url(' + this.src + ')'; this.remove();"
+      onerror="this.remove();"
     />
     {/* Legibility Overlay Gradients */}
     <div class="absolute inset-0 bg-gradient-to-r from-[#0e0e0e] via-[#0e0e0e]/75 to-[#0e0e0e]/20 pointer-events-none" />

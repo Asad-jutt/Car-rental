@@ -161,6 +161,7 @@ export default function BookingForm() {
       onNext={handleNext}
       onClose={handleClose}
       nextButtonText={currentStep === totalSteps ? "CONFIRM BOOKING" : undefined}
+      nextDisabled={!canProceed()}
       footerContent={footerContent}
     >
       {currentStep === 1 && (
@@ -171,7 +172,7 @@ export default function BookingForm() {
                 PICKUP HUB
               </Label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#929292]" />
+                <MapPin className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#929292]" />
                 <Select value={hubId} onValueChange={setHubId}>
                   <SelectTrigger className="pl-9 bg-background border-border text-[#e2e2e2]">
                     <SelectValue placeholder="SELECT BRANCH" />
@@ -191,7 +192,7 @@ export default function BookingForm() {
                 PICKUP DATE
               </Label>
               <div className="relative">
-                <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#929292]" />
+                <CalendarDays className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#929292]" />
                 <Input
                   type="date"
                   value={startDate}
@@ -240,6 +241,7 @@ export default function BookingForm() {
                     alt={v.name}
                     className="w-full aspect-[16/9] object-cover mb-3"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="font-mono text-[9px] uppercase tracking-wider text-[#929292]">
                     {v.band} // ${v.pricePer24h}/DAY
@@ -261,7 +263,7 @@ export default function BookingForm() {
               LICENSE COUNTRY
             </Label>
             <div className="relative">
-              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#929292]" />
+              <Globe className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#929292]" />
               <Select>
                 <SelectTrigger className="pl-9 bg-background border-border text-[#e2e2e2]">
                   <SelectValue placeholder="SELECT COUNTRY" />

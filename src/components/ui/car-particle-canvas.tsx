@@ -80,6 +80,10 @@ export function CarParticleCanvas({
     let handle: CarParticlesHandle | null = null;
     let last = performance.now();
     const reduced = prefersReducedMotion();
+    let inView = true;
+    let pageHidden = document.hidden;
+
+    const shouldRun = () => inView && !pageHidden;
 
     const resize = () => {
       if (!handle) return;
@@ -102,14 +106,33 @@ export function CarParticleCanvas({
       handle?.clearPointer();
     };
 
-    const animate = (now: number) => {
-      frame = requestAnimationFrame(animate);
+    const step = (now: number) => {
+      // Pause the render loop entirely while the hero is off-screen or the
+      // tab is hidden, so the particle simulation never burns GPU/CPU below
+      // the fold or in a background tab.
+      if (!shouldRun()) {
+        frame = 0;
+        return;
+      }
+      frame = requestAnimationFrame(step);
       if (!handle) return;
       const delta = (now - last) / 1000;
       last = now;
       if (!reduced) handle.update(delta);
       handle.render();
     };
+
+    const startIfVisible = () => {
+      if (cancelled || frame !== 0) return;
+      last = performance.now();
+      frame = requestAnimationFrame(step);
+    };
+
+    const onVisibility = () => {
+      pageHidden = document.hidden;
+      startIfVisible();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     if (interactive) {
       container.addEventListener("pointermove", onPointerMove);
@@ -119,9 +142,19 @@ export function CarParticleCanvas({
 
     const observer = new ResizeObserver(resize);
     observer.observe(container);
-    frame = requestAnimationFrame(animate);
 
-    const resolvedCount = count ?? (window.innerWidth < 768 ? 20000 : 42000);
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry?.isIntersecting ?? true;
+        startIfVisible();
+      },
+      { rootMargin: "256px" },
+    );
+    visibilityObserver.observe(container);
+
+    startIfVisible();
+
+    const resolvedCount = count ?? (window.innerWidth < 768 ? 16000 : 32000);
 
     void import("@/lib/car-particles")
       .then(({ createCarParticles }) => {
@@ -159,6 +192,8 @@ export function CarParticleCanvas({
 
     return () => {
       cancelled = true;
+      document.removeEventListener("visibilitychange", onVisibility);
+      visibilityObserver.disconnect();
       cancelAnimationFrame(frame);
       observer.disconnect();
       if (interactive) {

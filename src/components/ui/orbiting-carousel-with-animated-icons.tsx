@@ -109,20 +109,20 @@ const safeImage = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
 // --- Responsive detection ---
 type ScreenSize = "xs" | "sm" | "md" | "lg";
 
+const getScreenSize = (): ScreenSize => {
+  if (typeof window === "undefined") return "lg";
+  const width = window.innerWidth;
+  if (width < 480) return "xs";
+  else if (width < 640) return "sm";
+  else if (width < 768) return "md";
+  else return "lg";
+};
+
 const useResponsive = (): ScreenSize => {
-  const [screenSize, setScreenSize] = React.useState<ScreenSize>("lg");
+  const [screenSize, setScreenSize] = React.useState<ScreenSize>(getScreenSize);
 
   React.useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const checkScreenSize = () => {
-      const width = window.innerWidth;
-      if (width < 480) setScreenSize("xs");
-      else if (width < 640) setScreenSize("sm");
-      else if (width < 768) setScreenSize("md");
-      else setScreenSize("lg");
-    };
-
+    const checkScreenSize = () => setScreenSize(getScreenSize());
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
@@ -268,6 +268,8 @@ export default function OrbitCarousel() {
               transition={{ duration: 0.3, delay: 0.1 }}
               src={people[activeIndex].profile}
               alt={people[activeIndex].name}
+              loading="lazy"
+              decoding="async"
               onError={safeImage}
               className={`${avatarSize} mx-auto rounded-full border-4 border-[#0e0e0e] object-cover shadow-md ${avatarMargin}`}
             />
@@ -364,6 +366,8 @@ export default function OrbitCarousel() {
                 <motion.img
                   src={p.avatar}
                   alt={p.name}
+                  loading="lazy"
+                  decoding="async"
                   onError={safeImage}
                   onClick={() => handleProfileClick(i)}
                   whileHover={{

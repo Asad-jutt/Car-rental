@@ -57,7 +57,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
     <link rel="dns-prefetch" href="https://images.pexels.com" />
 
     {Astro.url.pathname === '/' && (
-      <link rel="preload" as="image" href="/hero image car.webp" fetchpriority="high" />
+      <link rel="preload" as="image" href="/hero-car.webp" fetchpriority="high" />
     )}
 
     {/* Non-blocking font payloads (display=swap keeps render identical) */}

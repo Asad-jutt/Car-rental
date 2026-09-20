@@ -6,6 +6,7 @@ import path from 'node:path';
 export default defineConfig({
   site: 'https://kinetic-car-rental.example.com',
   compressHTML: true,
+  prefetch: true,
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],

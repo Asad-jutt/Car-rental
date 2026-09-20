@@ -1,6 +1,5 @@
 "use client"
 
-import { AnimatePresence, motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { X } from "lucide-react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,6 +17,7 @@ export interface MultiStepFormProps {
   onClose?: () => void
   backButtonText?: string
   nextButtonText?: string
+  nextDisabled?: boolean
   footerContent?: React.ReactNode
   children: React.ReactNode
 }
@@ -34,6 +34,7 @@ export default function MultiStepForm({
   onClose,
   backButtonText = "BACK",
   nextButtonText = "NEXT",
+  nextDisabled = false,
   footerContent,
   children,
 }: MultiStepFormProps) {
@@ -61,24 +62,16 @@ export default function MultiStepForm({
         </div>
       </CardHeader>
       <CardContent className="p-4 pt-4 sm:p-6">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
+        <div key={currentStep} className="kinetic-step-in">
+          {children}
+        </div>
       </CardContent>
       <CardFooter className="flex flex-col-reverse gap-3 p-4 pt-2 sm:flex-row sm:items-center sm:justify-between sm:p-6 sm:pt-0">
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
           <Button variant="outline" onClick={onBack} disabled={!onBack || currentStep === 1} className="w-full sm:w-auto">
             {backButtonText}
           </Button>
-          <Button onClick={onNext} disabled={!onNext} className="w-full sm:w-auto">{currentStep === totalSteps ? nextButtonText : "NEXT"}</Button>
+          <Button onClick={onNext} disabled={!onNext || nextDisabled} className="w-full sm:w-auto">{currentStep === totalSteps ? nextButtonText : "NEXT"}</Button>
         </div>
         {footerContent}
       </CardFooter>
