@@ -6,7 +6,8 @@ import FleetMatrix from '../components/FleetMatrix.astro';
 import BookingSteps from '../components/ui/booking-steps';
 import SyndicateTiers from '../components/SyndicateTiers.astro';
 import SalesTeam from '../components/SalesTeam.astro';
-import DriverLogs from '../components/DriverLogs.astro';
+import { TestimonialsSection } from '../components/ui/testimonials-with-marquee';
+import { DRIVER_LOGS } from '../data/fleetData';
 import SecurityEnclave from '../components/SecurityEnclave.astro';
 import Footer from '../components/Footer.astro';
 import { getImage } from 'astro:assets';
@@ -51,6 +52,21 @@ const bookingStepsMedia = await Promise.all(
     };
   }),
 );
+
+const TESTIMONIAL_AVATARS = [
+  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop&crop=face',
+  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&h=200&auto=format&fit=crop&crop=face',
+  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop&crop=face',
+];
+
+const testimonials = DRIVER_LOGS.map((log, i) => ({
+  text: log.quote,
+  author: {
+    name: log.author,
+    handle: log.title,
+    avatar: TESTIMONIAL_AVATARS[i % TESTIMONIAL_AVATARS.length],
+  },
+}));
 ---
 
 <BaseLayout>
@@ -75,7 +91,12 @@ const bookingStepsMedia = await Promise.all(
     <SalesTeam />
 
     {/* Customer Reviews */}
-    <DriverLogs />
+    <TestimonialsSection
+      title="WHAT OUR DRIVERS SAY"
+      description="PASSENGER & FLEET NODE FEEDBACK // VERIFIED AGAINST LIVE BOOKING RECORDS"
+      testimonials={testimonials}
+      client:visible
+    />
 
     {/* FAQs & Policies */}
     <SecurityEnclave />
