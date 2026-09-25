@@ -24,7 +24,13 @@ const ANGLE_POOL = [
 // Each real vehicle rides the wheel from its own press shot plus three
 // dynamic angles — a rotating "spin to browse" fleet index.
 const SLIDES = VEHICLES.map((vehicle, i) => {
-  const angles = [vehicle.imageUrl, ...(ANGLE_POOL.slice(i * 3, i * 3 + 3) ?? [])];
+  // Wrap the pool so every vehicle gets the same number of dynamic angles. A
+  // plain slice() runs dry once i * 3 passes the end of the pool, which left
+  // the last vehicle with fewer cards than the first.
+  const angles = [
+    vehicle.imageUrl,
+    ...Array.from({ length: 3 }, (_, k) => ANGLE_POOL[(i * 3 + k) % ANGLE_POOL.length]),
+  ];
   return angles.map((src) => ({
     src: src.startsWith('http') ? src : U(src),
     text: vehicle.name,

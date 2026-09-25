@@ -74,7 +74,12 @@ export interface CardsRotateSliderProps {
   rotationAmount?: number;
   /** Multiplier on the built-in per-breakpoint vertical offset each card travels while scrolling past. */
   verticalDrift?: number;
-  /** GSAP ScrollTrigger scrub value on the main horizontal track — higher lags/smooths more, lower tracks scroll 1:1. */
+  /**
+   * Seconds the horizontal track takes to catch up to the scroll position
+   * (GSAP `scrub`). `0` tracks the scrollbar exactly 1:1; higher values add a
+   * lerp catch-up so the wheel glides instead of snapping. Ignored under
+   * `prefers-reduced-motion`, which always tracks 1:1.
+   */
   scrollSmoothing?: number;
   /** 3D perspective distance, in pixels, applied to the sticky track — lower values look deeper/more distorted. */
   perspective?: number;
@@ -98,7 +103,7 @@ export default function CardsRotateSlider({
   images = DEFAULT_IMAGES,
   rotationAmount = 1,
   verticalDrift = 1,
-  scrollSmoothing = 1,
+  scrollSmoothing = 0.7,
   perspective = 1200,
   showCaptions = true,
   textColor = "#ffffff",
@@ -157,12 +162,13 @@ export default function CardsRotateSlider({
           trigger: outer,
           start: "top top",
           end: () => `+=${track.scrollWidth - window.innerWidth}`,
-          // Reduced motion: scrub:true tracks scroll position
-          // directly (no smoothing lag) instead of the ~1s
-          // catch-up delay - the "lerp" here is that scrub value.
-          // Default scrollSmoothing (1) is treated as 1:1 tracking so
-          // the cards never trail behind the scrollbar.
-          scrub: reducedMotion ? true : scrollSmoothing > 1 ? scrollSmoothing : true,
+          // A numeric scrub lerps the track toward the scroll position, so the
+          // cards glide instead of snapping 1:1 to the scrollbar. The per-card
+          // triggers below stay on `scrub: true` because they read their
+          // position from this tween via `containerAnimation` — smoothing them
+          // too would let the cards detach from the track.
+          // Reduced motion: `true` (1:1), no catch-up lag at all.
+          scrub: reducedMotion ? true : scrollSmoothing,
           invalidateOnRefresh: true,
         },
       });
@@ -355,7 +361,12 @@ const RotationCard = forwardRef<HTMLDivElement, RotationCardProps>(
                   </span>
                 )}
                 <a
-                  href="/booking"
+                  href={
+                    vehicleId
+                      ? `/booking?vehicle=${encodeURIComponent(vehicleId)}`
+                      : "/booking"
+                  }
+                  data-vehicle={vehicleId}
                   className="pointer-events-auto inline-flex cursor-pointer items-center gap-[0.55vw] border border-[#ff5a00] bg-[#ff5a00] px-[1vw] py-[0.7vh] font-mono text-[0.7vw] font-extrabold uppercase tracking-widest text-black transition-colors hover:border-[#ffffff] hover:bg-[#ffffff] max-md:text-[1.8vw] max-md:px-3 max-md:py-1"
                 >
                   BOOK IMMEDIATELY <span aria-hidden>→</span>

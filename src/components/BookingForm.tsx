@@ -53,6 +53,15 @@ export default function BookingForm() {
   const [showHelp, setShowHelp] = React.useState(false)
   const [submitted, setSubmitted] = React.useState(false)
 
+  // Preselect the vehicle carried over from the fleet wheel (?vehicle=ID).
+  // Runs on mount only — reading the URL during render would break SSR.
+  React.useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("vehicle")
+    if (requested && VEHICLES.some((v) => v.id === requested)) {
+      setVehicleId(requested)
+    }
+  }, [])
+
   const totalSteps = 3
 
   const selectedVehicle = VEHICLES.find((v) => v.id === vehicleId)
