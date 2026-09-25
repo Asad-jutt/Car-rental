@@ -2,10 +2,8 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import type {
-  CarParticlesHandle,
-  CarParticlesReadyInfo,
-} from "@/lib/car-particles";
+import type { CarParticlesHandle, CarParticlesReadyInfo } from "@/lib/car-particles";
+import { createCarParticles } from "@/lib/car-particles";
 
 export interface CarParticleCanvasProps
   extends Omit<React.ComponentPropsWithoutRef<"div">, "children"> {
@@ -107,9 +105,6 @@ export function CarParticleCanvas({
     };
 
     const step = (now: number) => {
-      // Pause the render loop entirely while the hero is off-screen or the
-      // tab is hidden, so the particle simulation never burns GPU/CPU below
-      // the fold or in a background tab.
       if (!shouldRun()) {
         frame = 0;
         return;
@@ -156,39 +151,31 @@ export function CarParticleCanvas({
 
     const resolvedCount = count ?? (window.innerWidth < 768 ? 16000 : 32000);
 
-    void import("@/lib/car-particles")
-      .then(({ createCarParticles }) => {
-        if (cancelled) return;
-        handle = createCarParticles({
-          canvas,
-          src,
-          color,
-          particleSize,
-          targetCount: resolvedCount,
-          threshold,
-          radius,
-          strength,
-          spring,
-          damping,
-          depth,
-          idle,
-          opacity,
-          padding,
-          maxDpr,
-          onReady: (info) => onReadyRef.current?.(info),
-          onError: (error) => {
-            if (cancelled) return;
-            setFailed(true);
-            onErrorRef.current?.(error);
-          },
-        });
-        resize();
-      })
-      .catch((error) => {
+    handle = createCarParticles({
+      canvas,
+      src,
+      color,
+      particleSize,
+      targetCount: resolvedCount,
+      threshold,
+      radius,
+      strength,
+      spring,
+      damping,
+      depth,
+      idle,
+      opacity,
+      padding,
+      maxDpr,
+      onReady: (info) => onReadyRef.current?.(info),
+      onError: (error) => {
         if (cancelled) return;
         setFailed(true);
         onErrorRef.current?.(error);
-      });
+      },
+    });
+
+    resize();
 
     return () => {
       cancelled = true;

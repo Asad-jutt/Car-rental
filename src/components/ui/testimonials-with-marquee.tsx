@@ -84,8 +84,8 @@ export function TestimonialsSection({
         <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 bg-gradient-to-l from-background sm:block" />
       </div>
 
-      {/* Bottom Breathing Room */}
-      <div aria-hidden className="relative h-10 sm:h-14 lg:h-16" />
+      {/* Bottom Bleed */}
+      <div aria-hidden className="relative h-0" />
     </section>
   );
 }
