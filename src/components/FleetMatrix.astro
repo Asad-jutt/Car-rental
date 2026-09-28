@@ -1,5 +1,6 @@
 ---
 import { getCars, getCarFilters, matrixImage } from '../lib/cms';
+import { carPath, carTitle, carGalleryAlt } from '../lib/vehicle-meta';
 
 const cars = await getCars();
 const filters = await getCarFilters();
@@ -104,7 +105,7 @@ const filters = await getCarFilters();
           {/* Vehicle Image Presentation */}
           <div class="relative w-full aspect-[16/10] overflow-hidden bg-[#161616]">
             <img
-              alt={`${vehicle.name} — exterior view`}
+              alt={carGalleryAlt(vehicle, `${vehicle.name} — exterior view`)}
               loading="lazy"
               decoding="async"
               width="1000"
@@ -125,10 +126,20 @@ const filters = await getCarFilters();
           {/* Specs & Technical Telemetry */}
           <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
             <div>
-              <div class="flex items-baseline justify-between gap-2 mb-2">
-                <h3 class="font-headline text-base sm:text-lg font-bold uppercase tracking-tight text-[#ffffff] min-w-0 truncate">{vehicle.name}</h3>
+              <div class="flex items-baseline justify-between gap-2 mb-1">
+                {/* Heading is the real manufacturer and model, and links to that
+                    car's own page. This is the internal link that turns ten
+                    carousel cards into an indexable topical cluster. */}
+                <h3 class="font-headline text-base sm:text-lg font-bold uppercase tracking-tight text-[#ffffff] min-w-0 truncate">
+                  <a href={carPath(vehicle)} class="hover:text-[#ff5a00] transition-colors">
+                    {carTitle(vehicle)}
+                  </a>
+                </h3>
                 <span class="font-mono text-[10px] text-[#888] uppercase shrink-0">[CLASS: {vehicle.band}]</span>
               </div>
+              <p class="font-mono text-[9px] uppercase tracking-wider text-[#777] mb-2 truncate">
+                FLEET DESIGNATION // {vehicle.name}
+              </p>
               <p class="font-editorial text-xs sm:text-sm text-[#b0b0b0] leading-relaxed mb-4 line-clamp-2">{vehicle.desc}</p>
             </div>
 
@@ -164,10 +175,16 @@ const filters = await getCarFilters();
                 </div>
               </div>
               <a
-                href={`/booking?vehicle=${vehicle.id}`}
+                href={`/booking/?vehicle=${vehicle.id}`}
                 class="px-4 py-2 bg-[#222] hover:bg-[#ff5a00] text-[#ffffff] hover:text-black font-mono text-xs uppercase tracking-wider font-bold transition-colors border border-[#333] hover:border-[#ff5a00] inline-block"
               >
                 BOOK NOW →
+              </a>
+              <a
+                href={carPath(vehicle)}
+                class="font-mono text-[10px] uppercase tracking-wider text-[#8a8a8a] hover:text-[#ff5a00] transition-colors"
+              >
+                SPECS →
               </a>
             </div>
           </div>

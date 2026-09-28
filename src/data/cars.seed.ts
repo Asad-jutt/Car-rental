@@ -26,7 +26,11 @@ export const CARS: Car[] = [
     make: 'Audi',
     model: 'R8',
     band: 'S-SPORT',
-    category: 'ev',
+    // Was `ev`, which put a petrol V10 car under the "ELECTRIC" filter tab and
+    // fed `fuelType: electricity` into the Product schema. The rest of the
+    // record says petrol (PREMIUM UNLEADED, V10), and a structured-data claim
+    // that contradicts its own fuel field is a manual-action risk.
+    category: 'quad',
     statusBadge: '[AVAILABLE // NYC]',
     statusTone: 'orange',
     desc: 'Mid-engined all-wheel drive supercar with a permanent quattro drivetrain, adaptive magnetic ride, and a carbon monocoque that keeps it razor sharp on switchbacks.',
@@ -37,8 +41,8 @@ export const CARS: Car[] = [
     driveSub: 'V10',
     pricePer24h: 399,
     imageUrl: UNSPLASH('photo-1502161254066-6c74afbf07aa'),
-    chassis: 'PREMIUM EV PACKAGE',
-    rigLabel: 'AUTO + CHARGING INCLUDED',
+    chassis: 'S-LINE SPORT PACKAGE',
+    rigLabel: 'S TRONIC AUTO + SPORT EXHAUST',
     seats: 2,
     luggage: 1,
     transmission: '7-SPEED S TRONIC',
@@ -47,7 +51,7 @@ export const CARS: Car[] = [
     topSpeed: 205,
     featured: true,
     available: true,
-    hubs: ['nyc', 'lon', 'dxb'],
+    hubs: ['nyc', 'lon', 'chi'],
     gallery: [
       { url: UNSPLASH('photo-1502161254066-6c74afbf07aa'), alt: 'VELOCE GT-R front three-quarter exterior' },
       { url: UNSPLASH('photo-1552519507-da3b142c6e3d'), alt: 'VELOCE GT-R rear three-quarter exterior' },
@@ -119,7 +123,7 @@ export const CARS: Car[] = [
     topSpeed: 132,
     featured: false,
     available: true,
-    hubs: ['tyo', 'zrh', 'dxb'],
+    hubs: ['sfo', 'mia', 'chi'],
     gallery: [
       { url: UNSPLASH('photo-1755287497140-40647d6cb9fd'), alt: 'AEGIS APEX SUV front three-quarter exterior' },
       { url: UNSPLASH('photo-1758223165251-70e3f82e4752'), alt: 'AEGIS APEX SUV side profile exterior' },
@@ -155,7 +159,7 @@ export const CARS: Car[] = [
     topSpeed: 217,
     featured: true,
     available: true,
-    hubs: ['zrh', 'nyc', 'tyo'],
+    hubs: ['mia', 'nyc', 'sfo'],
     gallery: [
       { url: UNSPLASH('photo-1571607388263-1044f9ea01dd'), alt: 'NOVA SCUDERIA rear exterior at sunset' },
       { url: UNSPLASH('photo-1752959814043-722bfdbc0f51'), alt: 'NOVA SCUDERIA front three-quarter exterior' },
@@ -227,7 +231,7 @@ export const CARS: Car[] = [
     topSpeed: 202,
     featured: false,
     available: true,
-    hubs: ['nyc', 'tyo', 'lon'],
+    hubs: ['nyc', 'sfo', 'lon'],
     gallery: [
       { url: UNSPLASH('photo-1707399720697-b1d1502fac58'), alt: 'FERRO GT front exterior' },
       { url: UNSPLASH('photo-1767277974245-12996755e7b1'), alt: 'FERRO GT nose exterior at night' },
@@ -263,7 +267,7 @@ export const CARS: Car[] = [
     topSpeed: 190,
     featured: false,
     available: true,
-    hubs: ['dxb', 'nyc', 'lon'],
+    hubs: ['chi', 'nyc', 'lon'],
     gallery: [
       { url: UNSPLASH('photo-1553440569-bcc63803a83d'), alt: 'VANGUARD GT front three-quarter exterior' },
       { url: UNSPLASH('photo-1506610654-064fbba4780c'), alt: 'VANGUARD GT front exterior' },
@@ -299,7 +303,7 @@ export const CARS: Car[] = [
     topSpeed: 145,
     featured: true,
     available: true,
-    hubs: ['tyo', 'zrh', 'nyc', 'lon', 'dxb'],
+    hubs: ['sfo', 'mia', 'nyc', 'lon', 'chi'],
     gallery: [
       { url: UNSPLASH('photo-1747454654392-899416fed853'), alt: 'VOLT SHIFT S rear three-quarter exterior' },
       { url: UNSPLASH('photo-1758411898152-5fde4b5eef56'), alt: 'VOLT SHIFT S side profile exterior' },
@@ -335,7 +339,7 @@ export const CARS: Car[] = [
     topSpeed: 155,
     featured: false,
     available: true,
-    hubs: ['zrh', 'tyo', 'lon'],
+    hubs: ['mia', 'sfo', 'lon'],
     gallery: [
       { url: UNSPLASH('photo-1758411898152-5fde4b5eef56'), alt: 'POLAR AERO 3 side profile exterior' },
       { url: UNSPLASH('photo-1747454654392-899416fed853'), alt: 'POLAR AERO 3 rear three-quarter exterior' },
@@ -371,7 +375,7 @@ export const CARS: Car[] = [
     topSpeed: 125,
     featured: false,
     available: false,
-    hubs: ['dxb', 'zrh'],
+    hubs: ['chi', 'mia'],
     gallery: [
       { url: UNSPLASH('photo-1758223165251-70e3f82e4752'), alt: 'TERRA GT side profile exterior' },
       { url: UNSPLASH('photo-1758411898152-5fde4b5eef56'), alt: 'TERRA GT rear three-quarter exterior' },

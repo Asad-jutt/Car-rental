@@ -1,0 +1,366 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCars } from '../../lib/cms';
+import { ASPECT, sizedImage } from '../../lib/cms';
+import { vehicleSchema, breadcrumbSchema, faqPageSchema } from '../../lib/schema';
+import {
+  carPath,
+  carTitle,
+  carDesignation,
+  carSeoTitle,
+  carSeoDescription,
+  carAnswerFirst,
+  carSpecRows,
+  carHubNames,
+  carGalleryAlt,
+  carQuestions,
+  carCategoryLabel,
+} from '../../lib/vehicle-meta';
+import type { FaqItem } from '../../types';
+
+/**
+ * One static page per vehicle, built from the same CMS feed the fleet matrix
+ * and the booking picker read.
+ *
+ * These are the long-tail commercial pages: "Audi R8 rental", "McLaren 720S
+ * hire London", "how fast is a Polestar 3". Before this route existed, ten cars
+ * with full specification data were only reachable inside a JavaScript carousel,
+ * so none of that data was indexable and none of it was citable.
+ *
+ * The page is written answer-first — price, class and headline spec in the first
+ * sentence — because that sentence is what a featured snippet and an AI Overview
+ * lift. The spec table, the question section and the JSON-LD all derive from the
+ * same helpers, so a spec can never disagree with itself across formats.
+ */
+export async function getStaticPaths() {
+  const cars = await getCars();
+  return cars.map((car) => ({
+    params: { slug: car.slug },
+    props: { car },
+  }));
+}
+
+const { car } = Astro.props;
+
+const trail = [
+  { name: 'Home', path: '/' },
+  { name: 'Fleet', path: '/fleet/' },
+  { name: carTitle(car), path: carPath(car) },
+];
+
+const specs = carSpecRows(car);
+const hubs = carHubNames(car);
+const questions = carQuestions(car);
+
+/* FAQPage markup is generated from the same array the page renders, so the
+ * structured answers are the visible answers. */
+const faqSchemaItems: FaqItem[] = questions.map((q, i) => ({
+  id: `${car.slug}-q-${i}`,
+  code: '',
+  question: q.question,
+  answer: q.answer,
+}));
+
+const allCars = await getCars();
+const related = allCars
+  .filter((c) => c.slug !== car.slug && c.category === car.category && c.available)
+  .slice(0, 3);
+const relatedFallback = related.length
+  ? related
+  : allCars.filter((c) => c.slug !== car.slug && c.available).slice(0, 3);
+
+const heroSrc = sizedImage(car.imageUrl, ASPECT.detailHero);
+const angles = [car.imageUrl, ...car.gallery.map((g) => g.url)]
+  .filter((url, i, arr) => url && arr.indexOf(url) === i)
+  .slice(0, 4);
+
+const bookingHref = `/booking/?vehicle=${encodeURIComponent(car.id)}`;
+---
+
+<BaseLayout
+  title={carSeoTitle(car)}
+  description={carSeoDescription(car)}
+  image={car.imageUrl}
+  imageAlt={`${carTitle(car)} available to rent from KINETIC`}
+  schema={[
+    vehicleSchema(car),
+    breadcrumbSchema(trail),
+    faqPageSchema(faqSchemaItems),
+  ]}
+>
+  <Header />
+
+  <main class="w-full pt-12 flex-1 flex flex-col">
+    <article class="w-full">
+      {/* Breadcrumb. Mirrors the BreadcrumbList JSON-LD emitted above. */}
+      <nav aria-label="Breadcrumb" class="w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 pt-6">
+        <ol class="flex flex-wrap items-center gap-1.5 font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-[#777]">
+          {trail.map((crumb, i) => (
+            <li class="flex items-center gap-1.5">
+              {i < trail.length - 1 ? (
+                <a href={crumb.path} class="text-[#a0a0a0] hover:text-[#ff5a00] transition-colors">{crumb.name}</a>
+              ) : (
+                <span aria-current="page" class="text-[#e2e2e2]">{crumb.name}</span>
+              )}
+              {i < trail.length - 1 && <span aria-hidden="true" class="text-[#3a3a3a]">/</span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      {/* Masthead: entity name, designation, price, availability, primary CTA */}
+      <header class="w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 pt-6 pb-8 sm:pb-10">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5">
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="w-2 h-2 bg-[#ff5a00] inline-block shadow-[0_0_6px_#ff5a00]"></span>
+              <span class="font-mono text-[10px] uppercase tracking-widest text-[#ff5a00]">
+                [{carCategoryLabel(car)} // {car.band}]
+              </span>
+            </div>
+            {/* H1 carries the real manufacturer and model: this is the entity a
+                search engine matches and an answer engine resolves. */}
+            <h1 class="font-headline text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[#ffffff] leading-[1.05] m-0">
+              {carTitle(car)}<span class="text-[#ff5a00]">.</span>
+            </h1>
+            <p class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-[#929292] mt-2">
+              KINETIC FLEET DESIGNATION // {carDesignation(car)}
+            </p>
+          </div>
+
+          <div class="lg:text-right shrink-0">
+            <div class="font-headline text-4xl sm:text-5xl font-black text-[#ff5a00] leading-none tabular-nums">
+              ${car.pricePer24h}
+            </div>
+            <div class="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-[#929292] mt-1.5">
+              PER 24 HOURS // INCLUDED INSURANCE
+            </div>
+            <div
+              class:list={[
+                'inline-block mt-3 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest border',
+                car.available
+                  ? 'border-[#2f6b3a] bg-[#12210f] text-[#6ee787]'
+                  : 'border-[#6b5a2f] bg-[#211a0f] text-[#e3b341]',
+              ]}
+            >
+              {car.available ? 'AVAILABLE TO BOOK' : 'BETWEEN BOOKINGS'}
+            </div>
+          </div>
+        </div>
+
+        {/* Primary conversion: preselects this car in the booking form. */}
+        <div class="flex flex-wrap items-center gap-3 mt-7">
+          <a
+            href={bookingHref}
+            class="h-11 px-7 inline-flex items-center bg-[#ff5a00] hover:bg-white text-black font-mono text-xs font-bold uppercase tracking-wider transition-colors"
+          >
+            BOOK THIS CAR →
+          </a>
+          <a
+            href="/fleet/"
+            class="h-11 px-6 inline-flex items-center border border-[#2e2e2e] text-[#e2e2e2] hover:border-[#ff5a00] font-mono text-xs uppercase tracking-wider transition-colors"
+          >
+            View full fleet
+          </a>
+        </div>
+      </header>
+
+      {/* Hero image. Explicit dimensions so the slot is reserved before the
+          remote image resolves - this is the LCP element on the page. */}
+      <div class="w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6">
+        <img
+          src={heroSrc}
+          width={ASPECT.detailHero.w}
+          height={ASPECT.detailHero.h}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          alt={carGalleryAlt(car, `${carDesignation(car)} front three-quarter exterior`)}
+          class="w-full h-auto object-cover border border-[#1f1f1f]"
+        />
+      </div>
+
+      {/* Answer-first summary. First sentence is the liftable answer. */}
+      <div class="w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 mt-10">
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+          <div class="lg:col-span-7 min-w-0">
+            <h2 class="font-headline text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-[#ffffff] m-0 mb-4">
+              About the {carTitle(car)}
+            </h2>
+            <p class="text-base sm:text-lg leading-relaxed text-[#e2e2e2] m-0">
+              {carAnswerFirst(car)}
+            </p>
+            <p class="text-sm sm:text-base leading-relaxed text-[#b3b3b3] mt-4 m-0">
+              {car.desc}
+            </p>
+            <p class="text-sm sm:text-base leading-relaxed text-[#b3b3b3] mt-4 m-0">
+              Every KINETIC rental includes collision and liability cover, 24/7 roadside
+              assistance, and a free walkaround before you drive away. Rates are quoted
+              per 24 hours and cover the vehicle as listed; additional drivers, child
+              seats, and delivery can be added at checkout.
+            </p>
+
+            <h2 class="font-headline text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-[#ffffff] mt-10 mb-4">
+              Where you can collect it
+            </h2>
+            {
+              hubs.length ? (
+                <ul class="list-none p-0 m-0 space-y-2">
+                  {hubs.map((hub) => (
+                    <li class="flex items-start gap-2 text-sm sm:text-base text-[#b3b3b3]">
+                      <span class="text-[#ff5a00] shrink-0" aria-hidden="true">
+                        ▸
+                      </span>
+                      <span>{hub}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="text-sm sm:text-base text-[#b3b3b3] m-0">
+                  Collection hubs are selected during booking.
+                </p>
+              )
+            }
+          </div>
+
+          {/* Spec table. A real <table> with a <caption> is the structure a
+              retrieval engine can lift for "specs" queries; a <dl> of styled
+              divs is not. */}
+          <div class="lg:col-span-5 min-w-0">
+            <div class="lg:sticky lg:top-16 border border-[#222] bg-[#141414]">
+              <h2 class="font-headline text-sm sm:text-base font-extrabold uppercase tracking-tight text-[#ffffff] m-0 p-4 border-b border-[#222]">
+                Full specifications
+              </h2>
+              <table class="w-full border-collapse text-left">
+                <caption class="sr-only">
+                  {carTitle(car)} technical specifications and daily rental rate
+                </caption>
+                <tbody>
+                  {
+                    specs.map((row) => (
+                      <tr class="border-b border-[#1c1c1c] last:border-b-0">
+                        <th
+                          scope="row"
+                          class="font-mono text-[11px] uppercase tracking-wider text-[#8a8a8a] font-normal px-4 py-2.5 whitespace-nowrap"
+                        >
+                          {row.label}
+                        </th>
+                        <td class="font-mono text-[12px] text-[#e2e2e2] px-4 py-2.5 text-right tabular-nums">
+                          {row.value}
+                        </td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+              <div class="p-4 border-t border-[#222]">
+                <a
+                  href={bookingHref}
+                  class="w-full h-11 inline-flex items-center justify-center bg-[#ff5a00] hover:bg-white text-black font-mono text-xs font-bold uppercase tracking-wider transition-colors"
+                >
+                  BOOK FROM ${car.pricePer24h}/DAY →
+                </a>
+                <p class="font-mono text-[10px] text-[#777] uppercase tracking-wider mt-2.5 text-center m-0">
+                  Free cancellation up to 24h before pickup
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Gallery */}
+      {
+        angles.length > 1 && (
+          <section class="w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 mt-12">
+            <h2 class="font-headline text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-[#ffffff] m-0 mb-4">
+              {carTitle(car)} exterior angles
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {angles.map((url) => (
+                <img
+                  src={sizedImage(url, ASPECT.detailAngle)}
+                  width={ASPECT.detailAngle.w}
+                  height={ASPECT.detailAngle.h}
+                  loading="lazy"
+                  decoding="async"
+                  alt={carGalleryAlt(car, `${carDesignation(car)} exterior view`)}
+                  class="w-full h-auto object-cover border border-[#1f1f1f]"
+                />
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {/* Question section. Question-shaped H3s with the answer in the first
+          sentence — the shape a featured snippet and an AI answer both want. */}
+      <section class="w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 mt-14">
+        <h2 class="font-headline text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-[#ffffff] m-0 mb-5">
+          {carTitle(car)} rental questions
+        </h2>
+        <div class="max-w-3xl space-y-6">
+          {
+            questions.map((q) => (
+              <div>
+                <h3 class="font-headline text-base sm:text-lg font-bold uppercase tracking-tight text-[#ff5a00] m-0 mb-2">
+                  {q.question}
+                </h3>
+                <p class="text-sm sm:text-base leading-relaxed text-[#b3b3b3] m-0">{q.answer}</p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* Internal linking. Sibling vehicles in the same category, so the pages
+          form a topical cluster instead of ten orphans. */}
+      {
+        relatedFallback.length > 0 && (
+          <section class="w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 mt-14 pb-4">
+            <h2 class="font-headline text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-[#ffffff] m-0 mb-5">
+              Similar cars in the fleet
+            </h2>
+            <ul class="list-none p-0 m-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {relatedFallback.map((other) => (
+                <li>
+                  <a
+                    href={carPath(other)}
+                    class="group block border border-[#222] bg-[#141414] hover:border-[#ff5a00] transition-colors"
+                  >
+                    <img
+                      src={sizedImage(other.imageUrl, ASPECT.matrixCard)}
+                      width={ASPECT.matrixCard.w}
+                      height={ASPECT.matrixCard.h}
+                      loading="lazy"
+                      decoding="async"
+                      alt={carGalleryAlt(other, `${other.name} exterior view`)}
+                      class="w-full h-auto object-cover"
+                    />
+                    <div class="p-3.5">
+                      <h3 class="font-headline text-sm sm:text-base font-bold uppercase tracking-tight text-[#ffffff] m-0">
+                        {carTitle(other)}
+                      </h3>
+                      <p class="font-mono text-[10px] uppercase tracking-wider text-[#8a8a8a] mt-1.5 mb-0">
+                        {other.power} {other.powerUnit} · {other.zeroToSixty}S · ${other.pricePer24h}/DAY
+                      </p>
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p class="mt-5 mb-0">
+              <a href="/fleet/" class="font-mono text-[11px] uppercase tracking-widest text-[#a0a0a0] hover:text-[#ff5a00] transition-colors">
+                ← Back to the full fleet index
+              </a>
+            </p>
+          </section>
+        )
+      }
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>

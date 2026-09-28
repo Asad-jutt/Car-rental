@@ -14,6 +14,8 @@ export const ASPECT = {
   reelCard: { w: 600, h: 800 }, // FleetReel card      -> 3/4
   wheelCard: { w: 900, h: 600 }, // rotating fleet wheel -> 3/2
   thumb: { w: 640, h: 360 }, // booking picker       -> 16/9
+  detailHero: { w: 1200, h: 750 }, // vehicle detail hero  -> 8/5
+  detailAngle: { w: 640, h: 427 }, // vehicle detail gallery -> ~3/2
 } as const;
 
 /**

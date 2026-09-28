@@ -1,20 +1,41 @@
 ---
 import '../index.css';
 import { HERO_IMAGE } from '../data/fleetData';
+import { BRAND, absoluteUrl } from '../lib/site';
+import { organizationSchema, webSiteSchema } from '../lib/schema';
 
 interface Props {
   title?: string;
   description?: string;
+  /** Extra JSON-LD nodes, appended to the always-present Organization + WebSite. */
+  schema?: Record<string, unknown>[];
+  /** Per-page social card image. Relative paths are resolved against the site origin. */
+  image?: string;
+  imageAlt?: string;
+  /** Staging / preview builds set this so a non-production host is never indexed. */
+  noindex?: boolean;
 }
 
 const {
-  title = 'KINETIC // Premium Car Rental | Book Online in Minutes',
+  title = `${BRAND.name} // Premium Car Rental | Book Online in Minutes`,
   description = 'Rent premium EVs, sports coupes, and family SUVs by the day, weekend, or month. Transparent rates, included insurance, and 24/7 roadside support.',
+  schema = [],
+  image = HERO_IMAGE,
+  imageAlt = 'Premium sports cars available to rent from KINETIC',
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
----
 
+// Social images must be absolute or the scraper has nothing to fetch. Vehicle
+// pages pass a relative path, so resolve once here rather than at every call site.
+const socialImage = image.startsWith('http') ? image : absoluteUrl(image);
+
+/* One @graph, one @context. Every node keeps a stable @id, so the Organization
+ * referenced by each `seller` / `publisher` resolves to a single node in the
+ * graph rather than being an orphaned duplicate document. */
+const graph = [organizationSchema(), webSiteSchema(), ...schema];
+---
 <!doctype html>
 <html lang="en" class="dark">
   <head>
@@ -22,8 +43,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0e0e0e" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta
+      name="robots"
+      content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+    />
     <meta name="generator" content={Astro.generator} />
+    <meta name="author" content={BRAND.name} />
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="canonical" href={canonical} />
@@ -33,13 +58,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="KINETIC Car Rental" />
+    <meta property="og:site_name" content={BRAND.name} />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:image" content={HERO_IMAGE} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={HERO_IMAGE} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
     <link
       rel="icon"
@@ -75,6 +102,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
         rel="stylesheet"
       />
     </noscript>
+
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} is:inline />
   </head>
   <body class="min-h-screen flex flex-col bg-[#0e0e0e] text-[#e2e2e2] antialiased selection:bg-[#ff5a00] selection:text-[#0e0e0e]">
     <slot />

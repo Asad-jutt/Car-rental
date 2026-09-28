@@ -15,6 +15,8 @@ import step1 from '../assets/booking/step-1-browse.jpg';
 import step2 from '../assets/booking/step-2-book.jpg';
 import step3 from '../assets/booking/step-3-docs.jpg';
 import step4 from '../assets/booking/step-4-drive.jpg';
+import { getCars } from '../lib/cms';
+import { faqPageSchema, fleetListSchema, offerCatalogSchema, RATE_TIERS } from '../lib/schema';
 
 // The panel is `lg:col-span-7` of a 1200px shell, so the `sizes` below never
 // asks for more than ~640 CSS pixels. The old ladder ran to 1920w, which meant
@@ -72,9 +74,18 @@ const testimonials = DRIVER_LOGS.map((log, i) => ({
     avatar: TESTIMONIAL_AVATARS[i % TESTIMONIAL_AVATARS.length],
   },
 }));
+
+/* Structured data for the homepage. Every node is generated from the same
+ * arrays the visible sections render (FAQS, getCars(), the rate tiers), so the
+ * machine-readable layer cannot drift from the page. */
+const cars = await getCars();
 ---
 
-<BaseLayout>
+<BaseLayout
+  title="Car Rental in NYC & London — EVs, Sports Cars, SUVs | KINETIC"
+  description="Rent EVs, sports coupes and family SUVs by the day, weekend or month from $89/day. Insurance and 24/7 roadside included. Hubs in New York, London, San Francisco, Chicago and Miami."
+  schema={[faqPageSchema(FAQS), fleetListSchema(cars), offerCatalogSchema([...RATE_TIERS])]}
+>
   {/* Sticky Navigation */}
   <Header />
 
@@ -115,3 +126,30 @@ const testimonials = DRIVER_LOGS.map((log, i) => ({
   {/* Footer */}
   <Footer />
 </BaseLayout>
+
+<script>
+  // Start the testimonials marquee only once its section is on screen.
+  //
+  // The marquee is a plain CSS animation on server-rendered markup, so there is
+  // no React to hydrate here. Toggling a data attribute and letting the
+  // play-state live in CSS keeps the hover-pause rule working; the previous
+  // `group-hover:` variant and an attribute selector cannot both live on the
+  // same property without one silently losing.
+  const marquees = document.querySelectorAll('[data-marquee]');
+  if (marquees.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.setAttribute('data-marquee', 'in-view');
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      // Start a little before the strip's leading edge clears the fold so it is
+      // already moving by the time the cards are readable.
+      { rootMargin: '0px 0px -15% 0px' },
+    );
+    for (const marquee of marquees) observer.observe(marquee);
+  }
+</script>

@@ -42,7 +42,7 @@ const BOOKING_STEPS = [
     paramLabel: "BOOKING: ONLINE",
     fraction: "02/04",
     image:
-      "https://images.pexels.com/photos/1667071/pexels-photo-1667071.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "https://images.pexels.com/photos/36730225/pexels-photo-36730225.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   {
     id: "03",
@@ -124,7 +124,12 @@ export default function BookingSteps({ media }: BookingStepsProps) {
   return (
     <section
       id="protocol"
-      className="w-full scroll-mt-12 border-b border-[#1f1f1f] bg-[#0e0e0e]"
+      /* `overflow-x-clip` (not `hidden`): clip does not create a scroll
+         container, so nothing inside loses the sticky/fixed containing block it
+         would with `overflow: hidden`. The ambient glow below is inset
+         negatively and would otherwise bleed a few px past the `px-4` gutter
+         and hand the whole page a horizontal scrollbar on a phone. */
+      className="w-full scroll-mt-12 overflow-x-clip border-b border-[#1f1f1f] bg-[#0e0e0e]"
     >
       <div className="mx-auto max-w-[1200px] px-4 py-10 sm:px-5 sm:py-14 lg:px-6 lg:py-16">
         {/* Section Header */}
@@ -246,8 +251,11 @@ export default function BookingSteps({ media }: BookingStepsProps) {
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              {/* Ambient glow */}
-              <div className="pointer-events-none absolute -inset-5 -z-10 rounded-[2.5rem] bg-[#ff5a00]/10 blur-3xl" />
+              {/* Ambient glow. Inset by 12px rather than 20px on phones so it
+                  stays inside the 16px `px-4` gutter on its own, and the
+                  section's `overflow-x-clip` is the backstop rather than the
+                  only defence. */}
+              <div className="pointer-events-none absolute -inset-3 -z-10 rounded-[2.5rem] bg-[#ff5a00]/10 blur-3xl sm:-inset-5" />
 
               <div className="relative aspect-4/5 overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] md:aspect-4/3 lg:aspect-16/11">
                 <AnimatePresence

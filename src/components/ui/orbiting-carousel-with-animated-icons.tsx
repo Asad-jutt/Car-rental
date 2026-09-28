@@ -5,6 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Briefcase, ChevronLeft, ChevronRight } from "lucide-react";
 
 // --- Data: sales team ---
+// One photo per person, held in `avatar`. There used to be a second `profile`
+// field pointing at the same Unsplash ID in a wider crop, used only by the
+// centre card, which meant the active person was on screen twice: once large in
+// the middle and again in the ring. The ring is the single source of imagery
+// now, so every face appears exactly once.
 export type SalesTeamMember = {
   id: number;
   name: string;
@@ -13,7 +18,6 @@ export type SalesTeamMember = {
   phone: string;
   hub: string;
   bookings: string;
-  profile: string;
   avatar: string;
 };
 
@@ -26,10 +30,8 @@ const SALES_TEAM: SalesTeamMember[] = [
     phone: "+1 (212) 555-0147",
     hub: "NYC // LOWER MANHATTAN",
     bookings: "1,240",
-    profile:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop&h=500&crop=faces",
     avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=250&h=250&auto=format&fit=crop&crop=entropy",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=320&h=320&auto=format&fit=crop&crop=entropy",
   },
   {
     id: 2,
@@ -39,10 +41,8 @@ const SALES_TEAM: SalesTeamMember[] = [
     phone: "+44 20 7946 0812",
     hub: "LON // KENSINGTON",
     bookings: "986",
-    profile:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop&h=500&crop=faces",
     avatar:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250&h=250&auto=format&fit=crop&crop=entropy",
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=320&h=320&auto=format&fit=crop&crop=entropy",
   },
   {
     id: 3,
@@ -52,10 +52,8 @@ const SALES_TEAM: SalesTeamMember[] = [
     phone: "+1 (415) 555-0193",
     hub: "SFO // AIRPORT T-1",
     bookings: "1,102",
-    profile:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop&h=500&crop=faces",
     avatar:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=250&h=250&auto=format&fit=crop&crop=entropy",
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=320&h=320&auto=format&fit=crop&crop=entropy",
   },
   {
     id: 4,
@@ -65,10 +63,8 @@ const SALES_TEAM: SalesTeamMember[] = [
     phone: "+1 (305) 555-0176",
     hub: "MIA // CONVENTION CENTER",
     bookings: "874",
-    profile:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400&auto=format&fit=crop&h=500&crop=faces",
     avatar:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=250&h=250&auto=format&fit=crop&crop=entropy",
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=320&h=320&auto=format&fit=crop&crop=entropy",
   },
   {
     id: 5,
@@ -78,10 +74,8 @@ const SALES_TEAM: SalesTeamMember[] = [
     phone: "+1 (312) 555-0164",
     hub: "CHI // LOOP DOWNTOWN",
     bookings: "758",
-    profile:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop&h=500&crop=faces",
     avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=250&h=250&auto=format&fit=crop&crop=entropy",
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=320&h=320&auto=format&fit=crop&crop=entropy",
   },
   {
     id: 6,
@@ -91,15 +85,13 @@ const SALES_TEAM: SalesTeamMember[] = [
     phone: "+1 (212) 555-0158",
     hub: "NYC // LOWER MANHATTAN",
     bookings: "693",
-    profile:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400&auto=format&fit=crop&h=500&crop=faces",
     avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=250&h=250&auto=format&fit=crop&crop=entropy",
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=320&h=320&auto=format&fit=crop&crop=entropy",
   },
 ];
 
 const AVATAR_FALLBACK =
-  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=320&auto=format&fit=crop";
 
 const safeImage = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
   const target = e.target as HTMLImageElement;
@@ -164,46 +156,46 @@ export default function OrbitCarousel() {
     switch (screenSize) {
       case "xs":
         return {
-          containerRadius: 100,
-          profileSize: 45,
+          // At 320px the stage gets 320 - 32 (section gutters) - 16 (this
+          // component's own p-2) = 272px, so the orbit has to fit a half-extent
+          // of 136px. 112 + 62/2 = 143px overflowed by ~7px per side and pushed
+          // the outer profiles into the page gutter.
+          containerRadius: 96,
+          profileSize: 58,
           cardWidth: "w-36",
-          avatarSize: "w-12 h-12",
-          avatarMargin: "-mt-8",
           fontSize: { name: "text-sm", role: "text-xs", email: "text-xs" },
         };
       case "sm":
         return {
-          containerRadius: 120,
-          profileSize: 55,
+          containerRadius: 132,
+          profileSize: 74,
           cardWidth: "w-40",
-          avatarSize: "w-14 h-14",
-          avatarMargin: "-mt-9",
           fontSize: { name: "text-base", role: "text-xs", email: "text-xs" },
         };
       case "md":
         return {
-          containerRadius: 150,
-          profileSize: 65,
+          containerRadius: 162,
+          profileSize: 88,
           cardWidth: "w-44",
-          avatarSize: "w-16 h-16",
-          avatarMargin: "-mt-10",
           fontSize: { name: "text-base", role: "text-sm", email: "text-xs" },
         };
       default:
         return {
-          containerRadius: 200,
-          profileSize: 80,
+          containerRadius: 208,
+          profileSize: 108,
           cardWidth: "w-52",
-          avatarSize: "w-20 h-20",
-          avatarMargin: "-mt-12",
           fontSize: { name: "text-lg", role: "text-sm", email: "text-xs" },
         };
     }
   };
 
-  const { containerRadius, profileSize, cardWidth, avatarSize, avatarMargin, fontSize } =
-    getResponsiveValues();
-  const containerSize = containerRadius * 2 + 100;
+  const { containerRadius, profileSize, cardWidth, fontSize } = getResponsiveValues();
+  /* Sized from the geometry it has to hold - the ring plus half a profile
+   * hanging off each side - rather than a flat `radius * 2 + 100`. The old
+   * constant was wider than the smallest tier needed and narrower than the
+   * largest needed, so the stage was either clipped or left floating in space
+   * depending on the breakpoint. */
+  const containerSize = containerRadius * 2 + profileSize + 16;
 
   // Calculate position for each profile
   const getPosition = React.useCallback(
@@ -297,12 +289,19 @@ export default function OrbitCarousel() {
     >
       <div
         ref={stageRef}
-        className="relative flex items-center justify-center overflow-visible px-2"
-        style={{ width: containerSize, height: containerSize, maxWidth: "100%" }}
+        className="relative aspect-square flex items-center justify-center overflow-visible px-2"
+        /* `aspect-square` (rather than a second fixed length) is what keeps the
+         * stage square once `max-width` clamps it on a 320px screen. With two
+         * independent lengths the box went 266x266 -> 272x266, so the centre
+         * card drifted off the vertical midline. */
+        style={{ width: containerSize, maxWidth: "100%" }}
       >
-        {/* Orbit guide ring */}
+        {/* Orbit guide ring. An absolutely positioned box with no offsets is
+            laid out at its static position, which for a flex child is the
+            start of the container - so the ring was pinned to the top-left
+            while the profiles orbited the middle. */}
         <div
-          className="pointer-events-none absolute rounded-full border border-[#1f1f1f]"
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#1f1f1f]"
           style={{ width: containerRadius * 2, height: containerRadius * 2 }}
         />
 
@@ -318,25 +317,21 @@ export default function OrbitCarousel() {
               stiffness: 300,
               damping: 25,
             }}
-            className={`z-10 rounded-xl border border-[#222] bg-[#0e0e0e]/40 p-2 text-center shadow-xl backdrop-blur-xl sm:p-3 md:p-4 ${cardWidth}`}
+            className={`z-10 rounded-xl border border-[#222] bg-[#0e0e0e]/40 p-3 text-center shadow-xl backdrop-blur-xl sm:p-4 md:p-5 ${cardWidth}`}
           >
-            <motion.img
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              src={people[activeIndex].profile}
-              alt={people[activeIndex].name}
-              loading="lazy"
-              decoding="async"
-              onError={safeImage}
-              className={`${avatarSize} mx-auto rounded-full border-4 border-[#0e0e0e] object-cover shadow-md ${avatarMargin}`}
-            />
+            {/* No portrait here on purpose: the ring below already shows this
+                person, and rendering a second copy of the same face in the
+                middle made them appear twice per rotation. */}
             <motion.div
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.15 }}
             >
-              <h2 className={`mt-2 font-headline font-bold uppercase tracking-tight text-[#ffffff] ${fontSize.name}`}>
+              <div className="mb-2 flex items-center justify-center gap-1.5 border-b border-[#222] pb-2 font-mono text-[9px] uppercase tracking-widest text-[#ff5a00]">
+                <Briefcase size={11} className="flex-none" />
+                <span>Agent {String(activeIndex + 1).padStart(2, "0")} // {people.length}</span>
+              </div>
+              <h2 className={`font-headline font-bold uppercase tracking-tight text-[#ffffff] ${fontSize.name}`}>
                 {people[activeIndex].name}
               </h2>
               <div className={`mt-1 flex items-center justify-center font-mono uppercase tracking-wider text-[#ff5a00] ${fontSize.role}`}>
@@ -433,9 +428,12 @@ export default function OrbitCarousel() {
                     boxShadow: "0 10px 25px -5px rgba(255,90,0,0.35), 0 10px 10px -5px rgba(255,90,0,0.15)",
                   }}
                   whileTap={{ scale: 0.95 }}
+                  // Border width is not a fixed 2/4 any more: the circles grew
+                  // by roughly a third, and a 2px ring on a 108px face reads as
+                  // an artefact rather than a deliberate frame.
                   className={`h-full w-full cursor-pointer rounded-full object-cover transition-all duration-300 ${
                     isActive
-                      ? "border-4 border-[#ff5a00] shadow-[0_0_12px_rgba(255,90,0,0.6)]"
+                      ? "border-[3px] border-[#ff5a00] shadow-[0_0_16px_rgba(255,90,0,0.6)]"
                       : "border-2 border-[#333] hover:border-[#ff5a00]"
                   }`}
                 />

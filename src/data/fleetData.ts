@@ -166,10 +166,37 @@ export const FAQS: FaqItem[] = [
   },
 ];
 
+/** Collection hubs. `id` is the join key used by `Car.hubs`, so it must match
+ *  the city - it used to be `tyo` for San Francisco and `dxb` for Chicago, which
+ *  shipped the wrong city into every hub lookup, every LocalBusiness-style
+ *  markup, and the llms.txt branch list. Names and codes were always correct;
+ *  only the ids were wrong. */
 export const HUBS = [
   { id: 'nyc', name: 'NEW YORK // LOWER MANHATTAN', code: 'NYC', status: 'OPEN NOW', latency: '5 MIN' },
   { id: 'lon', name: 'LONDON // KENSINGTON', code: 'LON', status: 'OPEN NOW', latency: '4 MIN' },
-  { id: 'tyo', name: 'SAN FRANCISCO // AIRPORT T-1', code: 'SFO', status: 'OPEN NOW', latency: '6 MIN' },
-  { id: 'dxb', name: 'CHICAGO // LOOP DOWNTOWN', code: 'CHI', status: 'OPEN NOW', latency: '7 MIN' },
-  { id: 'zrh', name: 'MIAMI // CONVENTION CENTER', code: 'MIA', status: 'OPEN NOW', latency: '5 MIN' },
+  { id: 'sfo', name: 'SAN FRANCISCO // AIRPORT T-1', code: 'SFO', status: 'OPEN NOW', latency: '6 MIN' },
+  { id: 'chi', name: 'CHICAGO // LOOP DOWNTOWN', code: 'CHI', status: 'OPEN NOW', latency: '7 MIN' },
+  { id: 'mia', name: 'MIAMI // CONVENTION CENTER', code: 'MIA', status: 'OPEN NOW', latency: '5 MIN' },
 ];
+
+/** Hub lookup by the `id` a car stores, so pages can render human-readable
+ *  locations instead of echoing an internal key. */
+export const HUBS_BY_ID = new Map(HUBS.map((hub) => [hub.id, hub]));
+
+export function hubName(hubId: string): string {
+  return HUBS_BY_ID.get(hubId)?.name ?? hubId.toUpperCase();
+}
+
+/** The city only, in sentence case: "New York". Store is "NEW YORK //
+ *  LOWER MANHATTAN", so this is what turns a shouty UI constant into prose that
+ *  reads correctly in a meta description or a sentence. */
+export function hubCity(hubId: string): string {
+  const city = hubName(hubId).split(' // ')[0];
+  return city.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+/** City and district as a readable pair: "New York — Lower Manhattan". */
+export function hubFull(hubId: string): string {
+  const [city, district] = hubName(hubId).split(' // ');
+  return district ? `${hubCity(hubId)} — ${district.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}` : city;
+}

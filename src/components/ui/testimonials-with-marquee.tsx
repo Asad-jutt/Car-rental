@@ -74,8 +74,16 @@ export function TestimonialsSection({
           {/* Two passes is exactly what a seamless `-100%` loop needs: the row
               is N cards plus N-1 gaps, so shifting by 100% plus one more gap
               lands pass two where pass one started. It was four passes, which
-              doubled the avatar requests for a loop nobody perceives. */}
-          <div className="flex shrink-0 flex-row justify-around [gap:var(--gap)] animate-marquee group-hover:[animation-play-state:paused]">
+              doubled the avatar requests for a loop nobody perceives.
+
+              `data-marquee` is set to "in-view" by the observer in
+              src/pages/index.astro, which is what lets the animation start
+              only once this section reaches the viewport instead of running
+              from first paint while it is still off screen. */}
+          <div
+            data-marquee=""
+            className="marquee flex shrink-0 flex-row justify-around [gap:var(--gap)] animate-marquee"
+          >
             {Array.from({ length: 2 }).map((_, setIndex) =>
               testimonials.map((testimonial, i) => (
                 <TestimonialCard

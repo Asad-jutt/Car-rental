@@ -5,13 +5,20 @@ import Footer from '../components/Footer.astro';
 import BookingForm from '../components/BookingForm';
 import { HUBS } from '../data/fleetData';
 import { getAvailableCars } from '../lib/cms';
+import { breadcrumbSchema } from '../lib/schema';
 
 const cars = await getAvailableCars();
 ---
 
 <BaseLayout
-  title="KINETIC // Booking | Reserve Your Ride Online"
-  description="Reserve a premium EV, sports coupe, or family SUV at KINETIC. Pick your hub, dates, and vehicle in three quick steps."
+  title="Book Your Car Online — Rates From $89/Day | KINETIC"
+  description="Reserve a premium EV, sports coupe or family SUV in three steps. Pick your hub, dates and vehicle, then confirm driver details. Insurance and roadside included."
+  schema={[
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Booking', path: '/booking/' },
+    ]),
+  ]}
 >
   <Header />
 

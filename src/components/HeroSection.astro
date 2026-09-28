@@ -53,74 +53,63 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
   </div>
 
   {/* Centered Hero Content Overlay */}
-  <div class="relative z-10 flex-1 w-full flex flex-col items-center justify-center text-center px-4 sm:px-8 lg:px-16 py-10 lg:py-0 pointer-events-none">
-    {/* Top Metadata Header */}
-    <div class="flex items-center gap-2 flex-wrap justify-center mb-4">
-      <span class="px-1.5 py-0.5 bg-[#ff5a00] text-black font-mono text-[10px] font-bold tracking-wider uppercase rounded-md">
-        PREMIUM CAR RENTAL
-      </span>
-      <span class="font-mono text-[10px] text-[#929292] tracking-widest uppercase">
-        [KINETIC RENTAL GROUP]
-      </span>
-    </div>
+  <div class="relative z-10 flex-1 w-full flex flex-col items-center justify-start text-center px-4 sm:px-8 lg:px-16 pt-28 sm:pt-36 lg:pt-44 pb-10 pointer-events-none">
+    {/* Top Metadata Label */}
+    <span class="mb-4 sm:mb-6 px-2 py-0.5 bg-[#ff5a00] text-black font-mono text-[9px] sm:text-[10px] font-bold tracking-widest uppercase rounded-sm">
+      Premium car rental
+    </span>
 
-    {/* Massive Typographic Headline // MIDDLE */}
-    <h1 class="font-headline text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-[#ffffff] uppercase tracking-tight leading-[1.08] m-0 max-w-6xl">
-      RENT
+    {/* Typographic Headline */}
+    <h1 class="font-headline text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-[#ffffff] uppercase tracking-tight leading-[1.05] m-0 max-w-4xl">
+      Rent without
       <br />
-      WITHOUT
-      <br />
-      <span class="text-[#ff5a00]">THE RUNAROUND.</span>
+      <span class="text-[#ff5a00]">the runaround.</span>
     </h1>
 
-    {/* Editorial Sub-Statement */}
-    <p class="font-editorial text-[13px] sm:text-sm text-[#ccc] leading-relaxed max-w-3xl mt-4">
-      Book a car online in minutes and pick it up at any branch. Transparent daily rates, included insurance, and 24/7 roadside support on every trip.
+    {/* Editorial Sub-Statement. Reads as brand copy, but does the entity work:
+        the first paragraph a crawler sees now names the service category and
+        every collection city, which the H1 deliberately does not. */}
+    <p class="font-editorial text-xs sm:text-sm text-[#b3b3b3] leading-relaxed max-w-md mt-5 sm:mt-6">
+      Premium car rental in New York, London, San Francisco, Chicago and Miami.
+      Transparent daily rates, insurance included, 24/7 roadside support.
     </p>
 
-    {/* Industrial Telemetry Widgets Array */}
-    <div class="hidden sm:grid w-full max-w-3xl grid-cols-3 gap-2 sm:gap-3 mt-6">
-      <div class="p-2.5 sm:p-3 bg-[#1f1f1f]/30 backdrop-blur-xl border border-[#333]/60 flex flex-col text-left">
-        <span class="font-mono text-[9px] text-[#888] uppercase">[LOCAL TIME]</span>
-        <span id="live-clock" data-local-clock class="font-mono text-[11px] sm:text-xs text-[#ffffff] mt-0.5 font-bold tabular-nums tracking-wider">
+    {/* Telemetry Strip */}
+    <div class="hidden sm:flex items-center mt-6 sm:mt-8 border border-[#2e2e2e] bg-[#141414]/50 backdrop-blur-xl divide-x divide-[#2e2e2e]">
+      <span class="px-3 py-1.5 font-mono text-[10px] text-[#7a7a7a] uppercase tracking-widest">
+        Local
+        <span id="live-clock" data-local-clock class="ml-1.5 text-[#e2e2e2] font-bold tabular-nums tracking-wider">
           --:--:--
         </span>
-      </div>
-      <div class="p-2.5 sm:p-3 bg-[#1f1f1f]/30 backdrop-blur-xl border border-[#333]/60 flex flex-col text-left">
-        <span class="font-mono text-[9px] text-[#888] uppercase">[RENTAL TYPE]</span>
-        <span class="font-mono text-[11px] sm:text-xs text-[#ffffff] mt-0.5 font-bold tracking-tight truncate">DAILY · WEEKEND · MONTHLY</span>
-      </div>
-      <div class="p-2.5 sm:p-3 bg-[#1f1f1f]/30 backdrop-blur-xl border border-[#333]/60 flex flex-col text-left">
-        <span class="font-mono text-[9px] text-[#888] uppercase">[FLEET STATUS]</span>
-        <span class="font-mono text-[11px] sm:text-xs text-[#ff5a00] mt-0.5 font-bold tracking-tight">12 CARS READY</span>
-      </div>
+      </span>
+      <span class="px-3 py-1.5 font-mono text-[10px] text-[#7a7a7a] uppercase tracking-widest">
+        Fleet
+        <span class="ml-1.5 text-[#ff5a00] font-bold">12 ready</span>
+      </span>
     </div>
 
     {/* Run Engine Action */}
     <a
       href="/booking"
-      class="pointer-events-auto mt-6 inline-flex items-center justify-between gap-3 sm:gap-5 px-7 sm:px-9 py-3 bg-[#ff5a00] hover:bg-[#ffffff] transition-colors cursor-pointer group shrink-0"
+      class="pointer-events-auto group mt-6 sm:mt-8 inline-flex items-center gap-2 px-4 py-2 bg-[#ff5a00] hover:bg-[#ffffff] text-black transition-colors cursor-pointer shrink-0"
     >
-      <div class="flex flex-col items-start min-w-0">
-        <span class="font-mono text-[10px] text-black font-bold uppercase tracking-widest">[BOOK]</span>
-        <span class="font-headline text-base sm:text-lg text-black font-black uppercase tracking-tight leading-tight whitespace-nowrap">RESERVE NOW →</span>
-      </div>
-      <div class="hidden lg:flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-black/15 px-2 py-0.5">
-        <span class="font-mono text-[10px] text-black font-bold tracking-widest uppercase">FREE CANCELLATION</span>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          class="w-3.5 h-3.5 text-black"
-          aria-hidden="true"
-        >
-          <rect x="3" y="5" width="18" height="16" rx="2" />
-          <path d="M8 3v4M16 3v4M3 11h18" />
-        </svg>
-      </div>
+      <span class="font-mono text-[11px] font-extrabold uppercase tracking-[0.15em]">Reserve now</span>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
+        aria-hidden="true"
+      >
+        <path d="M5 12h14M13 6l6 6-6 6" />
+      </svg>
     </a>
+    <span class="font-mono text-[9px] text-[#7a7a7a] uppercase tracking-widest mt-3 sm:mt-3.5">
+      Free cancellation up to 24h before pickup
+    </span>
   </div>
 </div>
 

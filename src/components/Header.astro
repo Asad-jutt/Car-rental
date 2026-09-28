@@ -25,56 +25,6 @@ import { BRAND_LOGO } from '../data/fleetData';
       </span>
     </div>
 
-{/* Center: Navigation */}
-    <nav class="hidden xl:flex items-center h-full" aria-label="Primary">
-      <a
-        href="/"
-        data-nav="hero"
-        aria-current="false"
-        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
-      >
-        STAGE 01 // HOME
-      </a>
-      <a
-        href="/#inventory"
-        data-nav="inventory"
-        aria-current="false"
-        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
-      >
-        STAGE 02 // OUR FLEET
-      </a>
-      <a
-        href="/#protocol"
-        data-nav="protocol"
-        aria-current="false"
-        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
-      >
-        STAGE 03 // HOW IT WORKS
-      </a>
-      <a
-        href="/#tiers"
-        data-nav="tiers"
-        aria-current="false"
-        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
-      >
-        STAGE 04 // PRICING
-      </a>
-      <a
-        href="/#sales-team"
-        data-nav="sales-team"
-        aria-current="false"
-        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#a0a0a0] hover:text-[#e2e2e2]"
-      >
-        STAGE 05 // SALES TEAM
-      </a>
-      <a
-        href="/booking"
-        class="h-full flex items-center px-2 font-mono text-[9px] uppercase tracking-wider transition-colors border-b-2 border-transparent text-[#ff5a00] hover:text-[#e2e2e2]"
-      >
-        STAGE 06 // BOOK NOW
-      </a>
-    </nav>
-
     {/* Right: Status Chips + User Action */}
     <div class="flex items-center gap-2 sm:gap-3 shrink-0">
       {/* Active Telemetry Chip */}
@@ -88,6 +38,14 @@ import { BRAND_LOGO } from '../data/fleetData';
         <span class="text-[#a0a0a0]">[SUPPORT:</span>
         <span class="text-[#e2e2e2] ml-1">1-800-KINETIC]</span>
       </div>
+
+      {/* Fleet Link */}
+      <a
+        href="/fleet"
+        class="hidden xl:inline-flex h-7 px-2.5 items-center font-mono text-[9px] uppercase tracking-wider text-[#a0a0a0] hover:text-[#e2e2e2] transition-colors whitespace-nowrap"
+      >
+        OUR FLEET
+      </a>
 
       {/* Direct Dispatch Quick Button */}
       <a
@@ -126,34 +84,14 @@ import { BRAND_LOGO } from '../data/fleetData';
 
   {/* Mobile Drawer */}
   <nav data-mobile-drawer aria-label="Mobile navigation" class="hidden xl:hidden bg-[#111]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 p-4 font-mono text-xs space-y-2">
-    <a href="/" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
-      STAGE 01 // HOME
-    </a>
-    <a href="/#inventory" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
-      STAGE 02 // OUR FLEET
-    </a>
-    <a href="/#protocol" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
-      STAGE 03 // HOW IT WORKS
-    </a>
-    <a href="/#tiers" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
-      STAGE 04 // PRICING
-    </a>
-    <a href="/#sales-team" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
-      STAGE 05 // SALES TEAM
+    <a href="/fleet" data-mobile-close class="block py-2 px-3 border border-[#222] bg-[#161616] text-[#e2e2e2] hover:border-[#ff5a00]">
+      OUR FLEET
     </a>
     <a href="/booking" data-mobile-close class="block py-2 px-3 border border-[#ff5a00] bg-[#ff5a00]/10 text-[#ff5a00] hover:border-[#ff5a00]">
-      STAGE 06 // BOOK NOW
+      BOOK NOW
     </a>
   </nav>
 </header>
-
-<style is:global>
-  .nav-active {
-    color: #e2e2e2 !important;
-    border-color: #ff5a00 !important;
-    background-color: #1b1b1b !important;
-  }
-</style>
 
 <script>
   // Mobile drawer
@@ -173,79 +111,4 @@ import { BRAND_LOGO } from '../data/fleetData';
   document.querySelectorAll('[data-mobile-close]').forEach((link) =>
     link.addEventListener('click', () => setDrawer(false)),
   );
-
-  // Active section tracking.
-  //
-  // This used to run on every scroll event and re-measure all five sections
-  // inside the handler, which forces a synchronous layout on every scroll
-  // frame. Measurements are now cached, the work is coalesced into one
-  // animation frame, and the nav links are only touched when the active
-  // section actually changes.
-  const navLinks = Array.from(document.querySelectorAll('[data-nav]'));
-  const sectionIds = ['hero', 'inventory', 'protocol', 'tiers', 'sales-team'];
-  const sections = sectionIds
-    .map((id) => document.getElementById(id))
-    .filter((el): el is HTMLElement => el !== null);
-
-  let bounds: { top: number; bottom: number }[] = [];
-  let active = '';
-  let pending = 0;
-  let stale = true;
-
-  const measure = () => {
-    const scrollY = window.scrollY;
-    bounds = sections.map((el) => {
-      const top = el.getBoundingClientRect().top + scrollY;
-      return { top, bottom: top + el.offsetHeight };
-    });
-    stale = false;
-  };
-
-  const updateNav = () => {
-    pending = 0;
-    if (stale) measure();
-
-    const pos = window.scrollY + 200;
-    let current = sectionIds[0] ?? 'hero';
-    for (let i = 0; i < bounds.length; i += 1) {
-      if (pos >= bounds[i].top && pos < bounds[i].bottom) {
-        current = sections[i].id;
-        break;
-      }
-    }
-    if (current === active) return;
-    active = current;
-    for (const link of navLinks) {
-      const isActive = link.getAttribute('data-nav') === active;
-      link.classList.toggle('nav-active', isActive);
-      link.setAttribute('aria-current', isActive ? 'true' : 'false');
-    }
-  };
-
-  // Coalesce a burst of scroll events into a single pass per frame.
-  const onScroll = () => {
-    if (pending) return;
-    pending = requestAnimationFrame(updateNav);
-  };
-
-  // A cached offset is only valid while the sections keep their heights, and
-  // they do not: lazy images resolve, webfonts swap, and deferred-paint
-  // sections replace their intrinsic-size estimate with the real thing once they
-  // are rendered. Watching the sections themselves keeps the cache honest
-  // without putting a layout read back on the scroll path.
-  const sectionObserver = new ResizeObserver(() => {
-    stale = true;
-    onScroll();
-  });
-  for (const section of sections) sectionObserver.observe(section);
-
-  const invalidate = () => {
-    stale = true;
-    onScroll();
-  };
-  window.addEventListener('resize', invalidate, { passive: true });
-  window.addEventListener('scroll', onScroll, { passive: true });
-  // Late-loading imagery changes section heights after first paint.
-  window.addEventListener('load', invalidate);
-  document.fonts?.ready.then(invalidate);
 </script>

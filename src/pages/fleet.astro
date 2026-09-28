@@ -5,6 +5,8 @@ import CtaSection from '../components/CtaSection.astro';
 import Footer from '../components/Footer.astro';
 import CardsRotateSlider from '../components/ui/cards-rotate-slider';
 import { getCars, wheelAnglesFor, sizedImage, ASPECT } from '../lib/cms';
+import { fleetListSchema, breadcrumbSchema } from '../lib/schema';
+import { carPath, carTitle, carCategoryLabel } from '../lib/vehicle-meta';
 
 const CARS = await getCars();
 
@@ -26,8 +28,15 @@ const SLIDES = CARS.map((vehicle) => {
 ---
 
 <BaseLayout
-  title="KINETIC // Fleet Index | Book Premium Cars Online"
-  description="Rotate through the KINETIC fleet — EVs, sports coupes, and family SUVs. Transparent daily rates, included insurance, and instant online booking."
+  title="Rental Fleet Index — EVs, Sports Coupes & SUVs | KINETIC"
+  description={`Browse every car available from KINETIC: electric vehicles, sports coupes and family SUVs from $109/day. Full specs, daily rates and collection hubs for all ${CARS.length} vehicles.`}
+  schema={[
+    fleetListSchema(CARS),
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Fleet', path: '/fleet/' },
+    ]),
+  ]}
 >
   <Header />
 
@@ -76,6 +85,59 @@ const SLIDES = CARS.map((vehicle) => {
       perspective={1100}
       textColor="#f2f2f2"
     />
+
+    {/* Static, crawlable fleet index.
+        The rotating wheel above is a JS carousel: it renders server-side, but it
+        is a browsing affordance, not a link graph. Without this section the ten
+        per-vehicle pages had no inbound internal link from /fleet, which is the
+        strongest topical signal available for them. This is plain server-rendered
+        markup - no hydration - so it is in the HTML a crawler and a retrieval
+        engine both read. */}
+    <section class="w-full bg-[#0e0e0e] border-t border-[#1f1f1f]">
+      <div class="w-full max-w-[1200px] mx-auto px-4 sm:px-5 lg:px-6 py-12 sm:py-16">
+        <h2 class="font-headline text-xl sm:text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-[#ffffff] m-0">
+          Every vehicle, with specs
+        </h2>
+        <p class="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#929292] mt-1.5 mb-0">
+          {CARS.length} VEHICLES // RATES PER 24 HOURS // INSURANCE INCLUDED
+        </p>
+
+        <ul class="list-none p-0 m-0 mt-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {
+            CARS.map((car) => (
+              <li class="border border-[#222] bg-[#141414]">
+                <a
+                  href={carPath(car)}
+                  class="block p-4 hover:border-[#ff5a00] transition-colors"
+                >
+                  <h3 class="font-headline text-base sm:text-lg font-bold uppercase tracking-tight text-[#ffffff] m-0">
+                    {carTitle(car)}
+                  </h3>
+                  <p class="font-mono text-[10px] uppercase tracking-wider text-[#777] mt-1 mb-3">
+                    {carCategoryLabel(car)} // {car.name}
+                  </p>
+                  <dl class="font-mono text-[11px] text-[#b0b0b0] m-0 grid grid-cols-2 gap-x-3 gap-y-1">
+                    <dt class="text-[#777]">POWER</dt>
+                    <dd class="m-0 text-right tabular-nums">
+                      {car.power} {car.powerUnit}
+                    </dd>
+                    <dt class="text-[#777]">0-60 MPH</dt>
+                    <dd class="m-0 text-right tabular-nums">{car.zeroToSixty}S</dd>
+                    <dt class="text-[#777]">SEATS</dt>
+                    <dd class="m-0 text-right tabular-nums">{car.seats}</dd>
+                    <dt class="text-[#777]">RATE</dt>
+                    <dd class="m-0 text-right tabular-nums text-[#ff5a00]">${car.pricePer24h}/DAY</dd>
+                  </dl>
+                  <p class="font-mono text-[10px] uppercase tracking-wider mt-3 mb-0 text-[#8a8a8a]">
+                    {car.available ? 'Available to book' : 'Between bookings'} · View specs →
+                  </p>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
 
     <CtaSection />
   </main>

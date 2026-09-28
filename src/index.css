@@ -161,3 +161,19 @@
     animation: none !important;
   }
 }
+
+/* The marquee row sits idle until the observer in src/pages/index.astro marks
+   it in view, so the strip is not translating from first paint while it is
+   still below the fold. Play state is driven from CSS rather than from a
+   `running`/`paused` class toggle so the attribute can compose with hover. */
+.marquee {
+  animation-play-state: paused;
+}
+
+.marquee[data-marquee='in-view'] {
+  animation-play-state: running;
+}
+
+.marquee[data-marquee='in-view']:hover {
+  animation-play-state: paused;
+}
