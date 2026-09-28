@@ -30,7 +30,9 @@ import {
 } from "./ui/tooltip"
 import { Alert, AlertDescription } from "./ui/alert"
 import { Card, CardContent } from "./ui/card"
-import { VEHICLES, HUBS } from "../data/fleetData"
+import { HUBS } from "../data/fleetData"
+import { sizedImage, ASPECT } from "../lib/cms/image"
+import type { Car } from "../types"
 
 const INSURANCE_TIERS = [
   { id: "essential", name: "ESSENTIAL", pricePer24h: 24, note: "BASIC LIABILITY // THEFT EXCESS $2,500" },
@@ -38,7 +40,8 @@ const INSURANCE_TIERS = [
   { id: "vault", name: "VAULT", pricePer24h: 96, note: "UNLIMITED ON-ROAD COVER // PRIORITY SUPPORT" },
 ]
 
-export default function BookingForm() {
+/** Listings arrive from the server so the client bundle never talks to the CMS. */
+export default function BookingForm({ cars = [] }: { cars?: Car[] }) {
   const [currentStep, setCurrentStep] = React.useState(1)
   const [vehicleId, setVehicleId] = React.useState("")
   const [hubId, setHubId] = React.useState("")
@@ -57,14 +60,14 @@ export default function BookingForm() {
   // Runs on mount only — reading the URL during render would break SSR.
   React.useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get("vehicle")
-    if (requested && VEHICLES.some((v) => v.id === requested)) {
+    if (requested && cars.some((v) => v.id === requested)) {
       setVehicleId(requested)
     }
   }, [])
 
   const totalSteps = 3
 
-  const selectedVehicle = VEHICLES.find((v) => v.id === vehicleId)
+  const selectedVehicle = cars.find((v) => v.id === vehicleId)
   const selectedHub = HUBS.find((h) => h.id === hubId)
   const days = Number(duration) || 1
   const insurance = INSURANCE_TIERS.find((t) => t.id === insuranceTier)
@@ -233,7 +236,7 @@ export default function BookingForm() {
               SELECT VEHICLE
             </Label>
             <div className="grid sm:grid-cols-3 gap-3">
-              {VEHICLES.map((v) => (
+              {cars.map((v) => (
                 <button
                   key={v.id}
                   type="button"
@@ -245,8 +248,10 @@ export default function BookingForm() {
                   }`}
                 >
                   <img
-                    src={v.imageUrl}
-                    alt={v.name}
+                    src={sizedImage(v.imageUrl, ASPECT.thumb)}
+                    alt={`${v.name} — exterior view`}
+                    width={640}
+                    height={360}
                     className="w-full aspect-[16/9] object-cover mb-3"
                     loading="lazy"
                     decoding="async"

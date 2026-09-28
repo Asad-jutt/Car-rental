@@ -4,42 +4,25 @@ import Header from '../components/Header.astro';
 import CtaSection from '../components/CtaSection.astro';
 import Footer from '../components/Footer.astro';
 import CardsRotateSlider from '../components/ui/cards-rotate-slider';
-import { VEHICLES } from '../data/fleetData';
+import { getCars, wheelAnglesFor, sizedImage, ASPECT } from '../lib/cms';
 
-const U = (id: string) =>
-  `https://images.unsplash.com/${id}?q=80&w=1200&auto=format&fit=crop`;
+const CARS = await getCars();
 
-// Verified-working fleet angle pool (same Unsplash sources used site-wide).
-const ANGLE_POOL = [
-  'photo-1502161254066-6c74afbf07aa',
-  'photo-1552519507-da3b142c6e3d',
-  'photo-1542362567-b07e54358753',
-  'photo-1553440569-bcc63803a83d',
-  'photo-1549399542-7e3f8b79c341',
-  'photo-1583121274602-3e2820c69888',
-  'photo-1493238792000-8113da705763',
-  'photo-1502877338535-766e1452684a',
-];
-
-// Each real vehicle rides the wheel from its own press shot plus three
-// dynamic angles — a rotating "spin to browse" fleet index.
-const SLIDES = VEHICLES.map((vehicle, i) => {
-  // Wrap the pool so every vehicle gets the same number of dynamic angles. A
-  // plain slice() runs dry once i * 3 passes the end of the pool, which left
-  // the last vehicle with fewer cards than the first.
-  const angles = [
-    vehicle.imageUrl,
-    ...Array.from({ length: 3 }, (_, k) => ANGLE_POOL[(i * 3 + k) % ANGLE_POOL.length]),
-  ];
-  return angles.map((src) => ({
-    src: src.startsWith('http') ? src : U(src),
+// One card per listed vehicle. This previously asked for seven exterior angles
+// per car off the CMS gallery, which put 70 cards on the wheel for 10 cars —
+// seven ScrollTriggers each, and a page that read as a slideshow of angles
+// rather than a fleet. The wheel is a fleet index, so it shows the fleet.
+const SLIDES = CARS.map((vehicle) => {
+  const [src] = wheelAnglesFor(vehicle, 1);
+  return {
+    src: sizedImage(src ?? vehicle.imageUrl, ASPECT.wheelCard),
     text: vehicle.name,
     sub: `[${vehicle.band} // ${vehicle.category.toUpperCase()}]`,
     spec: `${vehicle.power}${vehicle.powerUnit} / ${vehicle.zeroToSixty}S / ${vehicle.drive}`,
     price: `$${vehicle.pricePer24h}`,
     vehicleId: vehicle.id,
-  }));
-}).flat();
+  };
+});
 ---
 
 <BaseLayout

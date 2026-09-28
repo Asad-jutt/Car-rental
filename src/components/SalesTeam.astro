@@ -26,6 +26,8 @@ import OrbitCarousel from './ui/orbiting-carousel-with-animated-icons';
       </div>
     </div>
 
-    <OrbitCarousel client:load />
+    {/* Below the fold and carries no critical content, so it hydrates on
+        approach rather than competing with the hero for the main thread. */}
+    <OrbitCarousel client:visible />
   </div>
 </section>

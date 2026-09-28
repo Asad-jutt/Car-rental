@@ -2,16 +2,9 @@
 // Adapted for the KINETIC dark automotive design language.
 "use client";
 
-import { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
+import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// True when the user has asked the OS to minimise animation. Safe to call
-// during render - returns false on the server.
-function prefersReducedMotion() {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-}
 
 // Reduced motion: a much larger perspective distance flattens the 3D card
 // rotation (less depth distortion) instead of removing it outright.
@@ -114,7 +107,18 @@ export default function CardsRotateSlider({
   const trackRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const wrappersRef = useRef<(HTMLDivElement | null)[]>([]);
-  const reducedMotion = prefersReducedMotion();
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  // Read on mount rather than during render: `prefers-reduced-motion` is a
+  // client-only fact, and branching on it mid-render guarantees the hydrated
+  // output disagrees with the server HTML.
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReducedMotion(query.matches);
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     const outer = outerRef.current;
@@ -163,25 +167,50 @@ export default function CardsRotateSlider({
           start: "top top",
           end: () => `+=${track.scrollWidth - window.innerWidth}`,
           // A numeric scrub lerps the track toward the scroll position, so the
-          // cards glide instead of snapping 1:1 to the scrollbar. The per-card
-          // triggers below stay on `scrub: true` because they read their
-          // position from this tween via `containerAnimation` — smoothing them
-          // too would let the cards detach from the track.
+          // cards glide instead of snapping 1:1 to the scrollbar.
           // Reduced motion: `true` (1:1), no catch-up lag at all.
           scrub: reducedMotion ? true : scrollSmoothing,
           invalidateOnRefresh: true,
         },
       });
 
+      const total = images.length;
+      const mid = Math.floor(total / 2);
+      const step =
+        (isMobile ? MOBILE_STEP : isTablet ? TABLET_STEP : DESKTOP_STEP) *
+        verticalDrift;
+      const rotationScale = reducedMotion ? ROTATION_REDUCTION_FACTOR : 1;
+      const rotateInValue =
+        (isMobile
+          ? MOBILE_ROTATE_IN
+          : isTablet
+            ? TABLET_ROTATE_IN
+            : DESKTOP_ROTATE_IN) *
+        rotationScale *
+        rotationAmount;
+      const rotateOutValue =
+        (isMobile
+          ? MOBILE_ROTATE_OUT
+          : isTablet
+            ? TABLET_ROTATE_OUT
+            : DESKTOP_ROTATE_OUT) *
+        rotationScale *
+        rotationAmount;
+
+      // Each card keeps its own `ScrollTrigger` + timeline, driven off the
+      // pinned tween through `containerAnimation`. This is the behaviour the
+      // component has always had, and it is what GSAP's own
+      // start/end-to-container-progress mapping is tuned for.
+      //
+      // It is affordable at this card count: the wheel now renders one card per
+      // listed vehicle, so this is ~11 triggers rather than the ~71 that the
+      // seven-angles-per-car version mounted. That count was the reason to
+      // hand-roll the maths in the first place, and with the wheel trimmed
+      // there is nothing left to win.
       cardsRef.current.forEach((card, index) => {
         const wrapper = wrappersRef.current[index];
 
         if (!card || !wrapper) return;
-
-        const total = images.length;
-        const mid = Math.floor(total / 2);
-
-        const step = (isMobile ? MOBILE_STEP : isTablet ? TABLET_STEP : DESKTOP_STEP) * verticalDrift;
 
         let offset: number;
 
@@ -191,15 +220,7 @@ export default function CardsRotateSlider({
           offset = (index - mid + 1) * step;
         }
 
-        const rotationScale = reducedMotion ? ROTATION_REDUCTION_FACTOR : 1;
-
         const rotateXValue = (offset < 0 ? ROTATE_X_NEGATIVE : ROTATE_X_POSITIVE) * rotationScale;
-
-        const rotateInValue =
-          (isMobile ? MOBILE_ROTATE_IN : isTablet ? TABLET_ROTATE_IN : DESKTOP_ROTATE_IN) * rotationScale * rotationAmount;
-
-        const rotateOutValue =
-          (isMobile ? MOBILE_ROTATE_OUT : isTablet ? TABLET_ROTATE_OUT : DESKTOP_ROTATE_OUT) * rotationScale * rotationAmount;
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -238,7 +259,7 @@ export default function CardsRotateSlider({
     });
 
     return () => context.revert();
-  }, [images, rotationAmount, verticalDrift, scrollSmoothing]);
+  }, [images, rotationAmount, verticalDrift, scrollSmoothing, reducedMotion]);
 
   // overflowX set inline, not via a Tailwind class: "clip" (not "hidden") is
   // required so this doesn't hijack the sticky track's containing block
@@ -252,6 +273,7 @@ export default function CardsRotateSlider({
     >
       <div
         className="sticky top-0 flex h-screen items-center overflow-hidden"
+        data-sticky-track
         style={{ perspective: reducedMotion ? REDUCED_PERSPECTIVE : `${perspective}px` }}
       >
         {/* Ambient orange glow behind the track */}

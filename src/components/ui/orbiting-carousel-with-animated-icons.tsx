@@ -124,8 +124,27 @@ const useResponsive = (): ScreenSize => {
   React.useEffect(() => {
     const checkScreenSize = () => setScreenSize(getScreenSize());
     checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-    return () => window.removeEventListener("resize", checkScreenSize);
+
+    // Resize fires continuously during a drag, and every call re-runs the
+    // render below. Coalesce to one update per frame and skip the setState
+    // entirely when the breakpoint has not actually changed.
+    let frame = 0;
+    const onResize = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        setScreenSize((prev) => {
+          const next = getScreenSize();
+          return next === prev ? prev : next;
+        });
+      });
+    };
+
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return screenSize;
@@ -136,6 +155,8 @@ export default function OrbitCarousel() {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isHovering, setIsHovering] = React.useState(false);
   const screenSize = useResponsive();
+  const stageRef = React.useRef<HTMLDivElement | null>(null);
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
   const people = SALES_TEAM;
 
   // Responsive sizing
@@ -213,6 +234,11 @@ export default function OrbitCarousel() {
   // Keyboard navigation
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
+      // Arrow keys only drive the carousel while it actually holds focus.
+      // Listening on `window` meant a slider off the bottom of the page
+      // captured arrow keys from the booking form and every other control.
+      const root = stageRef.current;
+      if (!root || !root.contains(document.activeElement)) return;
       if (event.key === "ArrowLeft") prev();
       else if (event.key === "ArrowRight") next();
     };
@@ -221,24 +247,56 @@ export default function OrbitCarousel() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Auto-rotation
+  // Auto-rotation. Held while the pointer is over the carousel, while it is off
+  // screen, and while the tab is in the background — a timer that keeps firing
+  // for a section nobody is looking at costs a re-render every five seconds.
   React.useEffect(() => {
     if (isHovering) return;
 
-    const interval = setInterval(() => {
-      next();
-    }, 5000);
+    let inView = true;
+    const start = () => {
+      if (inView && !document.hidden) interval = window.setInterval(next, 5000);
+    };
+    let interval = 0;
+    const stop = () => {
+      if (interval) {
+        window.clearInterval(interval);
+        interval = 0;
+      }
+    };
 
-    return () => clearInterval(interval);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry?.isIntersecting ?? true;
+        stop();
+        start();
+      },
+      { rootMargin: "128px" },
+    );
+    observer.observe(containerRef.current ?? document.body);
+    const onVisibility = () => {
+      stop();
+      start();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    start();
+
+    return () => {
+      stop();
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, [isHovering]);
 
   return (
     <div
+      ref={containerRef}
       className="relative flex flex-col items-center bg-transparent p-2 sm:p-4"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
       <div
+        ref={stageRef}
         className="relative flex items-center justify-center overflow-visible px-2"
         style={{ width: containerSize, height: containerSize, maxWidth: "100%" }}
       >

@@ -7,8 +7,8 @@ import BookingSteps from '../components/ui/booking-steps';
 import SyndicateTiers from '../components/SyndicateTiers.astro';
 import SalesTeam from '../components/SalesTeam.astro';
 import { TestimonialsSection } from '../components/ui/testimonials-with-marquee';
-import { DRIVER_LOGS } from '../data/fleetData';
-import SecurityEnclave from '../components/SecurityEnclave.astro';
+import { FaqAccordion } from '../components/ui/faq-chat-accordion';
+import { DRIVER_LOGS, FAQS } from '../data/fleetData';
 import Footer from '../components/Footer.astro';
 import { getImage } from 'astro:assets';
 import step1 from '../assets/booking/step-1-browse.jpg';
@@ -16,28 +16,33 @@ import step2 from '../assets/booking/step-2-book.jpg';
 import step3 from '../assets/booking/step-3-docs.jpg';
 import step4 from '../assets/booking/step-4-drive.jpg';
 
-const BOOKING_WIDTHS = [480, 640, 960, 1280, 1600, 1920];
+// The panel is `lg:col-span-7` of a 1200px shell, so the `sizes` below never
+// asks for more than ~640 CSS pixels. The old ladder ran to 1920w, which meant
+// every image carried four extra AVIF/WebP encodes that no browser could ever
+// pick - dead weight in the build and in the repo, and the largest of them were
+// 275KB each.
+const BOOKING_WIDTHS = [400, 560, 720, 900];
 const bookingStepsMedia = await Promise.all(
   [step1, step2, step3, step4].map(async (src) => {
     const [fallback, avif, webp] = await Promise.all([
       getImage({
         src,
-        width: 1600,
+        width: 900,
         format: 'jpeg',
-        quality: 72,
+        quality: 70,
       }),
       getImage({
         src,
         widths: BOOKING_WIDTHS,
         format: 'avif',
-        quality: 72,
+        quality: 60,
         fit: 'cover',
       }),
       getImage({
         src,
         widths: BOOKING_WIDTHS,
         format: 'webp',
-        quality: 72,
+        quality: 70,
         fit: 'cover',
       }),
     ]);
@@ -90,16 +95,21 @@ const testimonials = DRIVER_LOGS.map((log, i) => ({
     {/* Sales Team */}
     <SalesTeam />
 
-    {/* Customer Reviews */}
+    {/* Customer Reviews. Static markup and a CSS marquee, so it is rendered on
+        the server with no hydration at all - `client:visible` here shipped
+        React plus a 12-card reconciliation pass for content that never changes. */}
     <TestimonialsSection
       title="WHAT OUR DRIVERS SAY"
       description="PASSENGER & FLEET NODE FEEDBACK // VERIFIED AGAINST LIVE BOOKING RECORDS"
       testimonials={testimonials}
-      client:visible
     />
 
     {/* FAQs & Policies */}
-    <SecurityEnclave />
+    <FaqAccordion
+      data={FAQS}
+      timestamp="SUPPORT DESK // MEDIAN REPLY 4 MIN"
+      client:visible
+    />
   </main>
 
   {/* Footer */}

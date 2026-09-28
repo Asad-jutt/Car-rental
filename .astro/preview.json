@@ -1,20 +1,14 @@
 {
-	"pid": 15520,
-	"port": 4322,
-	"url": "http://localhost:4322",
+	"pid": 12828,
+	"port": 4399,
+	"url": "http://localhost:4399",
 	"urls": {
 		"local": [
-			"http://localhost:4322/"
+			"http://localhost:4399/"
 		],
-		"network": [
-			"http://192.168.56.1:4322/",
-			"http://192.168.0.102:4322/"
-		],
-		"networkInterfaceNames": [
-			"Ethernet 2",
-			"Wi-Fi"
-		]
+		"network": [],
+		"networkInterfaceNames": []
 	},
 	"background": true,
-	"startedAt": "2026-09-20T23:02:44.228Z"
+	"startedAt": "2026-09-28T01:12:00.721Z"
 }

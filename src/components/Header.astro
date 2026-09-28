@@ -107,7 +107,19 @@ import { BRAND_LOGO } from '../data/fleetData';
         aria-expanded="false"
         class="xl:hidden w-7 h-7 border border-[#1f1f1f] bg-[#1b1b1b] flex items-center justify-center text-[#e2e2e2]"
       >
-        <span data-mobile-icon class="material-symbols-outlined text-sm">menu</span>
+        <svg
+          data-mobile-icon
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          class="w-4 h-4"
+          aria-hidden="true"
+        >
+          <path data-icon-open d="M4 7h16M4 12h16M4 17h16" />
+          <path data-icon-close d="M6 6l12 12M18 6L6 18" class="hidden" />
+        </svg>
       </button>
     </div>
   </div>
@@ -147,40 +159,93 @@ import { BRAND_LOGO } from '../data/fleetData';
   // Mobile drawer
   const mobileToggle = document.querySelector('[data-mobile-toggle]');
   const mobileDrawer = document.querySelector('[data-mobile-drawer]');
-  const mobileIcon = document.querySelector('[data-mobile-icon]');
+  const iconOpen = document.querySelector('[data-icon-open]');
+  const iconClose = document.querySelector('[data-icon-close]');
+  const setDrawer = (open: boolean) => {
+    mobileDrawer?.classList.toggle('hidden', !open);
+    mobileToggle?.setAttribute('aria-expanded', String(open));
+    iconOpen?.classList.toggle('hidden', open);
+    iconClose?.classList.toggle('hidden', !open);
+  };
   mobileToggle?.addEventListener('click', () => {
-    const isOpen = !!(mobileDrawer && !mobileDrawer.classList.contains('hidden'));
-    mobileDrawer?.classList.toggle('hidden', isOpen);
-    mobileToggle.setAttribute('aria-expanded', String(!isOpen));
-    if (mobileIcon) mobileIcon.textContent = isOpen ? 'menu' : 'close';
+    setDrawer(!!mobileDrawer && mobileDrawer.classList.contains('hidden'));
   });
   document.querySelectorAll('[data-mobile-close]').forEach((link) =>
-    link.addEventListener('click', () => {
-      mobileDrawer?.classList.add('hidden');
-      mobileToggle?.setAttribute('aria-expanded', 'false');
-      if (mobileIcon) mobileIcon.textContent = 'menu';
-    }),
+    link.addEventListener('click', () => setDrawer(false)),
   );
 
-  // Active section tracking
+  // Active section tracking.
+  //
+  // This used to run on every scroll event and re-measure all five sections
+  // inside the handler, which forces a synchronous layout on every scroll
+  // frame. Measurements are now cached, the work is coalesced into one
+  // animation frame, and the nav links are only touched when the active
+  // section actually changes.
   const navLinks = Array.from(document.querySelectorAll('[data-nav]'));
   const sectionIds = ['hero', 'inventory', 'protocol', 'tiers', 'sales-team'];
+  const sections = sectionIds
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => el !== null);
+
+  let bounds: { top: number; bottom: number }[] = [];
+  let active = '';
+  let pending = 0;
+  let stale = true;
+
+  const measure = () => {
+    const scrollY = window.scrollY;
+    bounds = sections.map((el) => {
+      const top = el.getBoundingClientRect().top + scrollY;
+      return { top, bottom: top + el.offsetHeight };
+    });
+    stale = false;
+  };
+
   const updateNav = () => {
+    pending = 0;
+    if (stale) measure();
+
     const pos = window.scrollY + 200;
-    let current = 'hero';
-    for (const id of sectionIds) {
-      const el = document.getElementById(id);
-      if (el && pos >= el.offsetTop && pos < el.offsetTop + el.offsetHeight) {
-        current = id;
+    let current = sectionIds[0] ?? 'hero';
+    for (let i = 0; i < bounds.length; i += 1) {
+      if (pos >= bounds[i].top && pos < bounds[i].bottom) {
+        current = sections[i].id;
         break;
       }
     }
-    navLinks.forEach((link) => {
-      const isActive = link.getAttribute('data-nav') === current;
+    if (current === active) return;
+    active = current;
+    for (const link of navLinks) {
+      const isActive = link.getAttribute('data-nav') === active;
       link.classList.toggle('nav-active', isActive);
       link.setAttribute('aria-current', isActive ? 'true' : 'false');
-    });
+    }
   };
-  window.addEventListener('scroll', updateNav, { passive: true });
-  updateNav();
+
+  // Coalesce a burst of scroll events into a single pass per frame.
+  const onScroll = () => {
+    if (pending) return;
+    pending = requestAnimationFrame(updateNav);
+  };
+
+  // A cached offset is only valid while the sections keep their heights, and
+  // they do not: lazy images resolve, webfonts swap, and deferred-paint
+  // sections replace their intrinsic-size estimate with the real thing once they
+  // are rendered. Watching the sections themselves keeps the cache honest
+  // without putting a layout read back on the scroll path.
+  const sectionObserver = new ResizeObserver(() => {
+    stale = true;
+    onScroll();
+  });
+  for (const section of sections) sectionObserver.observe(section);
+
+  const invalidate = () => {
+    stale = true;
+    onScroll();
+  };
+  window.addEventListener('resize', invalidate, { passive: true });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // Late-loading imagery changes section heights after first paint.
+  window.addEventListener('load', invalidate);
+  document.fonts?.ready.then(invalidate);
 </script>

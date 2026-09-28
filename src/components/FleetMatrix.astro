@@ -1,5 +1,8 @@
 ---
-import { VEHICLES } from '../data/fleetData';
+import { getCars, getCarFilters, matrixImage } from '../lib/cms';
+
+const cars = await getCars();
+const filters = await getCarFilters();
 ---
 
 <section class="relative w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="inventory">
@@ -28,12 +31,7 @@ import { VEHICLES } from '../data/fleetData';
       {/* Filter System Tabs */}
       <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 mt-4 xl:mt-0 pt-4 xl:pt-0 border-t xl:border-t-0 border-[#1f1f1f] min-w-0 w-full xl:w-auto">
         <div class="flex items-center border border-[#1f1f1f] bg-[#161616] p-1 gap-1 overflow-x-auto min-w-0 max-w-full" data-filters>
-          {[
-            { id: 'all', label: 'ALL VEHICLES' },
-            { id: 'ev', label: 'ELECTRIC' },
-            { id: 'hybrid', label: 'HYBRID SUV' },
-            { id: 'quad', label: 'SPORTS COUPE' },
-          ].map((f) => (
+          {filters.map((f) => (
             <button
               type="button"
               data-filter={f.id}
@@ -55,7 +53,7 @@ import { VEHICLES } from '../data/fleetData';
 
     {/* Fleet Matrix Grid */}
     <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {VEHICLES.map((vehicle) => (
+      {cars.map((vehicle) => (
         <article
           data-vehicle-card
           data-category={vehicle.category}
@@ -78,11 +76,14 @@ import { VEHICLES } from '../data/fleetData';
           {/* Vehicle Image Presentation */}
           <div class="relative w-full aspect-[16/10] overflow-hidden bg-[#161616]">
             <img
-              alt={`${vehicle.name} Profile`}
+              alt={`${vehicle.name} — exterior view`}
               loading="lazy"
               decoding="async"
+              width="1000"
+              height="625"
+              sizes="(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw"
               class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-              src={vehicle.imageUrl}
+              src={matrixImage(vehicle.imageUrl)}
             />
             <div class="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-transparent to-transparent pointer-events-none" />
             <div class="absolute bottom-3 left-4 flex items-center gap-1 max-w-[calc(100%-2rem)]">
@@ -135,7 +136,7 @@ import { VEHICLES } from '../data/fleetData';
                 </div>
               </div>
               <a
-                href="/booking"
+                href={`/booking?vehicle=${vehicle.id}`}
                 class="px-4 py-2 bg-[#222] hover:bg-[#ff5a00] text-[#ffffff] hover:text-black font-mono text-xs uppercase tracking-wider font-bold transition-colors border border-[#333] hover:border-[#ff5a00] inline-block"
               >
                 BOOK NOW →

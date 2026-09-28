@@ -1,4 +1,9 @@
-import type { Vehicle, ProtocolStep, SyndicateTier, DriverLog, FaqItem } from '../types';
+import type { ProtocolStep, SyndicateTier, DriverLog, FaqItem } from '../types';
+
+/* Car listings deliberately do NOT live here. They are served by the CMS layer
+ * in `src/lib/cms` (Sanity, with the local seed as a fallback) so a single edit
+ * updates the fleet matrix, the fleet wheel, the booking picker, and every
+ * detail page. Import `getCars()` from `../lib/cms` instead. */
 
 export const BRAND_LOGO =
   'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23ff5a00%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-family=%27Arial%27 font-size=%2718%27 font-weight=%27bold%27 fill=%27%23000%27 text-anchor=%27middle%27%3EK%3C/text%3E%3C/svg%3E';
@@ -6,63 +11,6 @@ export const HERO_IMAGE =
   'https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=1200&auto=format&fit=crop';
 
 export const CTA_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCvPqDBevHzE2mjhsF-JMeVghgad9qSYUTzgvCLzI0KkvxmRieRfZr0pwqm5RJeDuGssRaz3nVlO6nuYFLMo-T2k_kWyCHubPlqkE8a4gSmW-YbVfhrYBnl2nXmbA6nK3k60Yi1EFVUN3odiBL66PDl3PHh-CJxNyQwMlP3doFiVs_wKSeb221Iug-aJR58X0DZ6YnJK_ju-yNmjt-inq3ZD38ijsjMnfz-O-bEC5KMnJtmOFSrn0jx';
-
-export const VEHICLES: Vehicle[] = [
-  {
-    id: 'KC-VLK-01',
-    name: 'VELOCE GT-R',
-    band: 'S-SPORT',
-    category: 'ev',
-    statusBadge: '[AVAILABLE // NYC]',
-    statusTone: 'orange',
-    desc: 'A premium all-electric grand tourer with long-range comfort, instant torque, and a refined cabin for highway and city drives.',
-    power: 620,
-    powerUnit: 'HP',
-    zeroToSixty: 3.4,
-    drive: 'AWD',
-    driveSub: 'EV',
-    pricePer24h: 199,
-    imageUrl: 'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?q=80&w=1000&auto=format&fit=crop',
-    chassis: 'PREMIUM EV PACKAGE',
-    rigLabel: 'AUTO + CHARGING INCLUDED',
-  },
-  {
-    id: 'KC-AUR-02',
-    name: 'AURELIA GT',
-    band: 'GT-COUPE',
-    category: 'quad',
-    statusBadge: '[AVAILABLE // LONDON]',
-    statusTone: 'orange',
-    desc: 'Sharp three-door sport coupe with adaptive suspension, premium audio, and a comfortable two-plus-two layout for weekend getaways.',
-    power: 450,
-    powerUnit: 'HP',
-    zeroToSixty: 4.1,
-    drive: 'RWD',
-    driveSub: 'GT',
-    pricePer24h: 149,
-    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCvPqDBevHzE2mjhsF-JMeVghgad9qSYUTzgvCLzI0KkvxmRieRfZr0pwqm5RJeDuGssRaz3nVlO6nuYFLMo-T2k_kWyCHubPlqkE8a4gSmW-YbVfhrYBnl2nXmbA6nK3k60Yi1EFVUN3odiBL66PDl3PHh-CJxNyQwMlP3doFiVs_wKSeb221Iug-aJR58X0DZ6YnJK_ju-yNmjt-inq3ZD38ijsjMnfz-O-bEC5KMnJtmOFSrn0jx',
-    chassis: 'SPORTS PACKAGE',
-    rigLabel: 'MANUAL + AUTO OPTIONS',
-  },
-  {
-    id: 'KC-AEG-03',
-    name: 'AEGIS APEX SUV',
-    band: 'PREMIUM-SUV',
-    category: 'hybrid',
-    statusBadge: '[AVAILABLE // SAN FRANCISCO]',
-    statusTone: 'muted',
-    desc: 'Family-ready hybrid SUV with three rows, generous cargo space, all-wheel drive, and excellent fuel economy for road trips.',
-    power: 362,
-    powerUnit: 'HP',
-    zeroToSixty: 6.2,
-    drive: 'AWD',
-    driveSub: 'HYB',
-    pricePer24h: 129,
-    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7-sKaRwEyWslnRLNeGGetcmIHkq5vWwtCrHXZeQBupG9_mEzUSPh2E9hpvV52YgrN2tgucgFJy_-KgK02Y-hmVs2w1W4AKJKeIElZ55P8CEcJsLsfX9iccdxzz2JdxEX4sx4wNvjcZzwcTCfBf9SWqTXFImbwOCok4dRxQYksqgbjsYK3C68708rnilrxwDKlPao3zb-qAclfL_enrtPSKGfmq5Bsh3MRjhB77u56iCSQX3VgG1SN',
-    chassis: 'FAMILY / ROAD TRIP PACKAGE',
-    rigLabel: 'CARGO + ROOF RACK READY',
-  },
-];
 
 export const PROTOCOL_STEPS: ProtocolStep[] = [
   {

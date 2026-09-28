@@ -8,6 +8,13 @@ export default defineConfig({
   compressHTML: true,
   prefetch: true,
   integrations: [react()],
+  server: {
+    // Pinned, not left to Astro's auto-pick. When this was unset the dev server
+    // fell through to 4321 and then to 4322 whenever anything else held 4321,
+    // so the port moved underneath whatever expected it. `--port` on the CLI
+    // still wins if it is passed explicitly.
+    port: 3620,
+  },
   vite: {
     plugins: [tailwindcss()],
     resolve: {

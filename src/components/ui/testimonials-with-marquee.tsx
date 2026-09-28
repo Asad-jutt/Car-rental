@@ -71,10 +71,19 @@ export function TestimonialsSection({
       {/* Full-Bleed Marquee Feed */}
       <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
         <div className="group flex flex-row overflow-hidden py-2 [--gap:2rem] [gap:var(--gap)] sm:[--gap:2.5rem]">
+          {/* Two passes is exactly what a seamless `-100%` loop needs: the row
+              is N cards plus N-1 gaps, so shifting by 100% plus one more gap
+              lands pass two where pass one started. It was four passes, which
+              doubled the avatar requests for a loop nobody perceives. */}
           <div className="flex shrink-0 flex-row justify-around [gap:var(--gap)] animate-marquee group-hover:[animation-play-state:paused]">
-            {[...Array(4)].map((_, setIndex) =>
+            {Array.from({ length: 2 }).map((_, setIndex) =>
               testimonials.map((testimonial, i) => (
-                <TestimonialCard key={`${setIndex}-${i}`} {...testimonial} />
+                <TestimonialCard
+                  key={`${setIndex}-${i}`}
+                  {...testimonial}
+                  // Only the first pass is real content; the copy is decoration.
+                  aria-hidden={setIndex === 0 ? undefined : true}
+                />
               )),
             )}
           </div>

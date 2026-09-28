@@ -4,7 +4,7 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
 
 <div
   id="hero"
-  class="group relative w-full min-h-screen supports-[height:100svh]:min-h-[100svh] flex flex-col overflow-hidden bg-[#0e0e0e] select-none border-b border-[#1f1f1f]"
+  class="group relative w-full min-h-[calc(100vh-3rem)] supports-[height:100svh]:min-h-[calc(100svh-3rem)] flex flex-col overflow-hidden bg-[#0e0e0e] select-none border-b border-[#1f1f1f]"
 >
   {/* INTERACTIVE PARTICLE SILHOUETTE // HOVER TO DISPERSE */}
   <div class="absolute inset-0 z-0">
@@ -14,10 +14,10 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
       className="absolute inset-0 h-full w-full"
       color="#e8e8e8"
       particleSize={1.5}
-      radius={0.12}
-      strength={180}
-      spring={5}
-      damping={0.93}
+      radius={0.2}
+      strength={1500}
+      spring={5.5}
+      damping={0.9}
       depth={0.25}
       idle={0.12}
       opacity={1}
@@ -28,7 +28,7 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
   </div>
 
   {/* Left Vertical Micro-Running Axis Tracker */}
-  <div class="hidden md:flex absolute left-0 top-0 bottom-0 z-10 w-10 sm:w-12 flex-col items-center justify-between py-6 bg-[#0e0e0e]/70 backdrop-blur-sm border-r border-[#1f1f1f]/80">
+  <div class="hidden md:flex absolute left-0 top-0 bottom-0 z-10 w-10 sm:w-12 flex-col items-center justify-between py-6 bg-[#0e0e0e]/70 backdrop-blur-sm border-r border-[#1f1f1f]/80" aria-hidden="true">
     
     <div class="[writing-mode:vertical-rl] rotate-180 font-mono text-[9px] tracking-[0.25em] text-[#888] uppercase">
       [KINETIC CAR RENTAL] // PICK_UP & DRIVE
@@ -45,13 +45,13 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
   </div>
   <div class="absolute top-4 sm:top-6 right-4 sm:right-6 z-10 pointer-events-none text-right">
     <span class="font-mono text-[10px] text-[#888] uppercase">OPEN 24/7<span class="hidden sm:inline"> // AIRPORT PICKUP</span></span>
-    <span class="font-mono text-xs text-[#ff5a00] font-bold block">┐</span>
+    <span class="font-mono text-xs text-[#ff5a00] font-bold block" aria-hidden="true">┐</span>
   </div>
   <div class="absolute bottom-4 sm:bottom-6 left-4 md:left-14 z-10 pointer-events-none">
-    <span class="font-mono text-xs text-[#ff5a00] font-bold">└</span>
+    <span class="font-mono text-xs text-[#ff5a00] font-bold" aria-hidden="true">└</span>
   </div>
   <div class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-10 pointer-events-none">
-    <span class="font-mono text-xs text-[#ff5a00] font-bold">┘</span>
+    <span class="font-mono text-xs text-[#ff5a00] font-bold" aria-hidden="true">┘</span>
   </div>
 
   {/* Centered Hero Content Overlay */}
@@ -67,7 +67,7 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
     </div>
 
     {/* Massive Typographic Headline // MIDDLE */}
-    <h1 class="font-headline text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-[#ffffff] uppercase tracking-tight leading-[1.08] lg:leading-[0.92] xl:leading-[1.08] m-0 max-w-6xl">
+    <h1 class="font-headline text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-[#ffffff] uppercase tracking-tight leading-[1.08] m-0 max-w-6xl">
       RENT
       <br />
       WITHOUT
@@ -109,7 +109,18 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
       </div>
       <div class="hidden lg:flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-black/15 px-2 py-0.5">
         <span class="font-mono text-[10px] text-black font-bold tracking-widest uppercase">FREE CANCELLATION</span>
-        <span class="material-symbols-outlined text-black text-sm">calendar_today</span>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          class="w-3.5 h-3.5 text-black"
+          aria-hidden="true"
+        >
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M8 3v4M16 3v4M3 11h18" />
+        </svg>
       </div>
     </a>
   </div>
@@ -118,11 +129,46 @@ import CarParticleCanvas from '../components/ui/car-particle-canvas';
 <script>
   const clock = document.querySelector('[data-local-clock]');
   const pad = (n: number) => String(n).padStart(2, '0');
+  let timer = 0;
+
   const update = () => {
     if (!clock) return;
     const now = new Date();
     clock.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   };
-  update();
-  setInterval(update, 1000);
+
+  // Only render the clock while the hero is on screen: a one-second timer
+  // ticking over an off-screen readout is pure wasted work, and on a
+  // client-side navigation an un-cleared interval would stack up.
+  const start = () => {
+    if (timer) return;
+    update();
+    // Aim at the next whole second so the digits do not visibly stutter.
+    const delay = 1000 - (Date.now() % 1000);
+    timer = window.setTimeout(function tick() {
+      update();
+      timer = window.setTimeout(tick, 1000);
+    }, delay);
+  };
+
+  const stop = () => {
+    if (!timer) return;
+    window.clearTimeout(timer);
+    timer = 0;
+  };
+
+  start();
+
+  const observer = new IntersectionObserver(
+    ([entry]) => (entry?.isIntersecting ? start() : stop()),
+  );
+  if (clock) observer.observe(clock);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else start();
+  });
+  // Astro's view transitions swap the page without a reload, so tear the timer
+  // down when this page is discarded.
+  document.addEventListener('astro:before-swap', stop);
 </script>
