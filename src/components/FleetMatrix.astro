@@ -5,7 +5,7 @@ const cars = await getCars();
 const filters = await getCarFilters();
 ---
 
-<section class="relative w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="inventory">
+<section class="relative w-full bg-[#0e0e0e] border-b border-[#1f1f1f] scroll-mt-12" id="inventory" data-fleet-root>
   {/* Ambient Glass Backlight Layer */}
   <div
     class="absolute inset-x-0 top-0 bottom-0 pointer-events-none"
@@ -48,16 +48,44 @@ const filters = await getCarFilters();
         >
           VIEW FULL FLEET <span class="transition-transform group-hover/fleet:translate-x-0.5">→</span>
         </a>
+        {/* Carousel Navigation */}
+        <div class="flex items-center justify-end gap-2">
+          <button
+            type="button"
+            data-fleet-prev
+            aria-label="Previous vehicles"
+            class="h-9 w-9 inline-flex items-center justify-center border border-[#1f1f1f] bg-[#161616] text-[#a0a0a0] font-mono text-sm leading-none transition-all hover:border-[#ff5a00] hover:bg-[#ff5a00] hover:text-black active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a00] disabled:opacity-40 disabled:pointer-events-none"
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <button
+            type="button"
+            data-fleet-next
+            aria-label="Next vehicles"
+            class="h-9 w-9 inline-flex items-center justify-center border border-[#1f1f1f] bg-[#161616] text-[#a0a0a0] font-mono text-sm leading-none transition-all hover:border-[#ff5a00] hover:bg-[#ff5a00] hover:text-black active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a00] disabled:opacity-40 disabled:pointer-events-none"
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </div>
     </div>
 
-    {/* Fleet Matrix Grid */}
-    <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {/* Fleet Matrix Carousel — 3 cards per view */}
+    <div
+      data-fleet-track
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Our fleet and rates"
+      tabindex="0"
+      class="relative flex gap-6 overflow-x-auto snap-x snap-mandatory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a00]"
+    >
       {cars.map((vehicle) => (
         <article
           data-vehicle-card
           data-category={vehicle.category}
-          class="flex flex-col justify-between overflow-hidden bg-[#0e0e0e]/40 backdrop-blur-xl border border-[#222] group hover:bg-[#0e0e0e]/25 hover:border-[#333] transition-colors"
+          role="group"
+          aria-roledescription="slide"
+          class="snap-start shrink-0 w-[85%] sm:w-[calc(50%-0.75rem)] lg:w-[calc(100%/3-1rem)] flex flex-col justify-between overflow-hidden bg-[#0e0e0e]/40 backdrop-blur-xl border border-[#222] group hover:bg-[#0e0e0e]/25 hover:border-[#333] transition-colors"
         >
           {/* Top Micro-Metadata */}
           <div class="p-3 sm:p-4 border-b border-[#1f1f1f] flex items-center justify-between gap-1.5 flex-wrap">
@@ -154,28 +182,101 @@ const filters = await getCarFilters();
     background-color: #ff5a00 !important;
     color: #000 !important;
   }
+
+  [data-fleet-track] {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  [data-fleet-track]::-webkit-scrollbar {
+    display: none;
+  }
 </style>
 
 <script>
-  const buttons = Array.from(document.querySelectorAll('[data-filter]'));
-  const cards = Array.from(document.querySelectorAll('[data-vehicle-card]'));
+  const root = document.querySelector<HTMLElement>('[data-fleet-root]');
 
-  const applyFilter = (id: string) => {
-    buttons.forEach((btn) => {
-      const active = btn.getAttribute('data-filter') === id;
-      btn.classList.toggle('filter-active', active);
-      btn.setAttribute('aria-pressed', String(active));
-      if (!active) btn.classList.remove('text-[#ff5a00]');
-    });
-    cards.forEach((card) => {
-      const category = card.getAttribute('data-category');
-      const show = id === 'all' || category === id;
-      card.classList.toggle('hidden', !show);
-    });
-  };
+  if (root) {
+    const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-vehicle-card]'));
+    const track = root.querySelector<HTMLElement>('[data-fleet-track]');
+    const prevButton = root.querySelector<HTMLButtonElement>('[data-fleet-prev]');
+    const nextButton = root.querySelector<HTMLButtonElement>('[data-fleet-next]');
 
-  buttons.forEach((btn) =>
-    btn.addEventListener('click', () => applyFilter(btn.getAttribute('data-filter') ?? 'all')),
-  );
-  applyFilter('all');
+    const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /** Width of one card plus the track gap — the exact snap step. */
+    const step = () => {
+      if (!track) return 0;
+      const card = track.querySelector<HTMLElement>('[data-vehicle-card]:not(.hidden)');
+      if (!card) return 0;
+      const gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    };
+
+    const syncButtons = () => {
+      if (!track || !prevButton || !nextButton) return;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      prevButton.disabled = track.scrollLeft <= 2;
+      nextButton.disabled = track.scrollLeft >= maxScroll - 2;
+    };
+
+    const slide = (direction: 1 | -1) => {
+      if (!track) return;
+      const amount = step();
+      if (amount <= 0) return;
+      track.scrollBy({ left: amount * direction, behavior: prefersReducedMotion() ? 'instant' : 'smooth' });
+    };
+
+    let ticking = false;
+    track?.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          syncButtons();
+        });
+      },
+      { passive: true },
+    );
+
+    track?.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        slide(1);
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        slide(-1);
+      }
+    });
+
+    prevButton?.addEventListener('click', () => slide(-1));
+    nextButton?.addEventListener('click', () => slide(1));
+
+    const applyFilter = (id: string) => {
+      buttons.forEach((btn) => {
+        const active = btn.getAttribute('data-filter') === id;
+        btn.classList.toggle('filter-active', active);
+        btn.setAttribute('aria-pressed', String(active));
+        if (!active) btn.classList.remove('text-[#ff5a00]');
+      });
+      cards.forEach((card) => {
+        const category = card.getAttribute('data-category');
+        const show = id === 'all' || category === id;
+        card.classList.toggle('hidden', !show);
+      });
+      track?.scrollTo({ left: 0, behavior: 'instant' });
+      syncButtons();
+    };
+
+    buttons.forEach((btn) =>
+      btn.addEventListener('click', () => applyFilter(btn.getAttribute('data-filter') ?? 'all')),
+    );
+
+    if (track) new ResizeObserver(syncButtons).observe(track);
+
+    applyFilter('all');
+  }
 </script>
