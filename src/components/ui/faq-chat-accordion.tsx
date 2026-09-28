@@ -54,7 +54,7 @@ export function FaqAccordion({
     <section
       id="security"
       className={cn(
-        "relative w-full overflow-hidden border-b border-[#1f1f1f] bg-[#0e0e0e] text-foreground scroll-mt-12",
+        "relative w-full overflow-hidden border-b border-[#1f1f1f] bg-black text-foreground scroll-mt-12",
       )}
     >
       {/* Ambient Backlight */}
@@ -63,7 +63,7 @@ export function FaqAccordion({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(800px circle at 85% 0%, rgba(255,90,0,0.16), transparent 60%), radial-gradient(600px circle at 8% 100%, rgba(255,90,0,0.10), transparent 62%)",
+            "radial-gradient(600px circle at 8% 100%, rgba(255,90,0,0.10), transparent 62%)",
         }}
       />
 
@@ -105,7 +105,7 @@ export function FaqAccordion({
               const isOpen = openItem === key;
 
               return (
-                <Accordion.Item value={key} key={key} className="mb-2">
+                <Accordion.Item value={key} key={key} className="mb-4">
                   <Accordion.Header>
                     <Accordion.Trigger className="group flex w-full items-center justify-start gap-x-3 text-left sm:gap-x-4">
                       {item.code && (

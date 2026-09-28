@@ -70,7 +70,7 @@ export function TestimonialsSection({
 
       {/* Full-Bleed Marquee Feed */}
       <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-        <div className="group flex flex-row overflow-hidden py-2 [--gap:2rem] [gap:var(--gap)] sm:[--gap:2.5rem]">
+        <div className="group flex flex-row overflow-hidden py-2 [--gap:2rem] [gap:var(--gap)] sm:[--gap:2.5rem] xl:pt-15 xl:pb-15">
           {/* Two passes is exactly what a seamless `-100%` loop needs: the row
               is N cards plus N-1 gaps, so shifting by 100% plus one more gap
               lands pass two where pass one started. It was four passes, which
@@ -89,8 +89,16 @@ export function TestimonialsSection({
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-1/3 bg-gradient-to-r from-background sm:block" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 bg-gradient-to-l from-background sm:block" />
+        {/* Edge-only masks. These were w-1/3 each, so the pair washed across
+            two thirds of the strip and read as a gradient over the whole thing.
+            A fixed edge keeps the fade pinned to the borders and leaves the
+            cards in the middle at full contrast.
+            The ramp is built with color-mix rather than from-background/75: the
+            theme defines --color-background as a bare hsl() with no
+            `<alpha-value>` slot, so a `/opacity` suffix on it compiles to a
+            fully opaque colour and the modifier is dropped on the floor. */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-32 bg-gradient-to-r from-[hsl(var(--background)/0.75)] sm:block xl:w-48" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-32 bg-gradient-to-l from-[hsl(var(--background)/0.75)] sm:block xl:w-48" />
       </div>
 
       {/* Bottom Bleed */}
